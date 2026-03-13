@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=210mm">
+    <title>Safety Data Sheet - {{ meta.product_name }}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, "Nimbus Sans", sans-serif;
+            font-size: 9.5pt;
+            line-height: 1.25;
+            color: #000000;
+            background-color: #f5f5f5;
+            padding: 10px 0;
+            margin: 0;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            border: 1.5px solid #000000;
+            background-color: #ffffff;
+            margin: 0 auto 10mm auto;
+            padding: 12mm 15mm 18mm 15mm;
+            position: relative;
+            overflow: visible;
+            page-break-inside: avoid;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+        }
+
+        .page-break {
+            page-break-after: always;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #cccccc;
+        }
+
+        .header-left {
+            flex-grow: 1;
+            padding-right: 10mm;
+        }
+
+        .header-right {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .header-logo {
+            width: 35mm;
+            height: auto;
+        }
+
+        .header-logo img {
+            width: 100%;
+            height: auto;
+        }
+
+        .header .title-text {
+            font-weight: 700;
+            font-size: 10pt;
+            margin: 0;
+            line-height: 1.15;
+        }
+        
+        .header .product-name {
+            font-weight: bold;
+            font-size: 10pt;
+            margin-top: 3px;
+            display: inline-block;
+            background-color: #e6e6e6;
+            padding: 1px 4px;
+        }
+
+        .header .meta-row {
+            display: flex;
+            gap: 15px;
+            font-size: 8pt;
+            margin-top: 4px;
+        }
+
+        .header .meta-row span {
+            font-weight: bold;
+        }
+
+        .header .meta-row span.normal {
+            font-weight: normal;
+        }
+
+        .header .page-number {
+            font-size: 8pt;
+            color: #000000;
+        }
+
+        .brand { display: none; }
+        .title-block { display: none; }
+        .meta { display: none; }
+
+        .footer {
+            position: absolute;
+            bottom: 10mm;
+            left: 15mm;
+            right: 15mm;
+            display: flex;
+            justify-content: flex-end;
+            font-size: 8pt;
+            color: #555555;
+            height: 12px;
+        }
+        
+        .footer .lang-indicator {
+            font-weight: bold;
+        }
+
+        .logo-container {
+            display: none;
+        }
+
+        .ghs-pictograms {
+            display: flex;
+            flex-direction: row;
+            gap: 8px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+        
+        .ghs-pictograms img {
+            width: 84px;
+            height: 84px;
+            object-fit: contain;
+        }
+
+        @media print {
+            .ghs-pictograms img {
+                width: 23mm;
+                height: 23mm;
+            }
+        }
+
+        .content {
+            margin-top: 3px;
+        }
+
+        .section {
+            margin-bottom: 8px;
+        }
+
+        p, table, ul, ol {
+            page-break-inside: avoid;
+        }
+
+        .section-title {
+            font-weight: 700;
+            font-size: 10pt;
+            background-color: #e6e6e6;
+            border: 1px solid #000;
+            padding: 2px 5px;
+            margin: 6px 0 4px 0;
+            page-break-after: avoid;
+        }
+
+        .subsection-title {
+            font-weight: 700;
+            font-size: 9.5pt;
+            margin: 6px 0 3px 0;
+            page-break-after: avoid;
+        }
+
+        .subsubsection {
+            font-weight: 700;
+            font-size: 9.5pt;
+            text-decoration: underline;
+            margin: 4px 0 2px 0;
+            page-break-after: avoid;
+        }
+
+        p {
+            margin: 0 0 3px 0;
+            text-align: left;
+        }
+
+        strong {
+            font-weight: 700;
+        }
+
+        table.sds {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 8.5pt;
+            margin: 4px 0;
+            page-break-inside: auto;
+        }
+
+        table.sds thead {
+            display: table-header-group;
+        }
+
+        table.sds tr {
+            page-break-inside: avoid;
+        }
+
+        table.sds th,
+        table.sds td {
+            border: 1px solid #000000;
+            padding: 3px 5px;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        table.sds th {
+            background-color: #F2F2F2;
+            font-weight: 700;
+        }
+
+        ul {
+            list-style: disc;
+            margin: 2px 0 4px 0;
+            padding-left: 18px;
+        }
+        li {
+            margin-bottom: 1px;
+        }
+
+        .data-row {
+            display: flex;
+            margin-bottom: 2px;
+        }
+        .data-label {
+            font-weight: bold;
+            flex-shrink: 0;
+            padding-right: 8px;
+        }
+        .data-value {
+            flex-grow: 1;
+        }
+        .w-200 { width: 200px; }
+        .w-120 { width: 120px; }
+        .w-80 { width: 80px; }
+        .w-50 { width: 50px; }
+
+        .pictograms img {
+            width: 34px;
+            height: 34px;
+        }
+
+        .ghs-placeholder {
+            width: 34px;
+            height: 34px;
+            border: 2px solid #D32F2F;
+            background-color: #ffffff;
+            transform: rotate(45deg);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ghs-placeholder::before {
+            content: attr(data-symbol);
+            transform: rotate(-45deg);
+            font-size: 7pt;
+            font-weight: bold;
+            color: #000;
+            text-align: center;
+        }
+
+        .signal-word {
+            font-weight: 700;
+            font-size: 10pt;
+            color: #D32F2F;
+        }
+
+        .small {
+            font-size: 8pt;
+            color: #555555;
+            margin-bottom: 4px;
+        }
+        
+        .hazard-text { color: #000; font-weight: bold; }
+        .danger-symbol { color: #D32F2F; font-weight: bold; }
+
+        sub {
+            font-size: 7pt;
+            vertical-align: sub;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+    </style>
+</head>
+<body>
+
+<!-- PAGE 1 -->
+<div class="page">
+    <div class="header">
+        <div class="header-left">
+            <div class="title-text">Safety data sheet according to Regulation (EC) No 1907/2006 (REACH)</div>
+            <div class="product-name">{{ meta.product_name }}</div>
+            <div class="meta-row">
+                <span>Revision date:</span> <span class="normal">{{ meta.revision_date }}</span>
+                <span>Print date:</span> <span class="normal">{{ meta.print_date }}</span>
+                <span>Version:</span> <span class="normal">{{ meta.version }}</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="header-logo"><img src="mb_logo.svg" alt="Minerva Biolabs"></div>
+            <div class="page-number">Page 1/11</div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="section">
+            <div class="section-title">SECTION 1: Identification of the substance/mixture and of the company/undertaking</div>
+            
+            <div class="subsection-title">1.1. Product identifier</div>
+            <div class="data-row"><div class="data-label w-200">Trade name/designation:</div><div class="data-value">{{ section_1.product_identifier.trade_name }}</div></div>
+            <div class="data-row"><div class="data-label w-200">Article No.:</div><div class="data-value">{{ section_1.product_identifier.item_no }}</div></div>
+            <div class="data-row"><div class="data-label w-200">UFI:</div><div class="data-value">{{ section_1.product_identifier.ufi }}</div></div>
+
+            <div class="subsection-title">1.2. Relevant identified uses of the substance or mixture and uses advised against</div>
+            <p><strong>Use of the substance/mixture:</strong></p>
+            <p style="margin-left: 15px;">{{ section_1.relevant_uses.product_type }}</p>
+            <p><strong>Relevant identified uses:</strong></p>
+            <table class="sds">
+                <tbody>
+                    <tr><td><strong>Sector of uses [SU]</strong></td><td>{{ section_1.relevant_uses.su }}: {{ section_1.relevant_uses.su_fulltext }}</td></tr>
+                    <tr><td rowspan="2"><strong>Product Categories [PC]</strong></td><td>{{ section_1.relevant_uses.pc1 }}</td></tr>
+                    <tr><td>{{ section_1.relevant_uses.pc2 }}</td></tr>
+                </tbody>
+            </table>
+
+            <div class="subsection-title">1.3. Details of the supplier of the safety data sheet</div>
+            <p><strong>Supplier (manufacturer/importer/only representative/downstream user/distributor):</strong></p>
+            <p>{{ section_1.supplier_details.name }}<br>{{ section_1.supplier_details.address }}<br>{{ section_1.supplier_details.country }}</p>
+            <div class="data-row"><div class="data-label w-80">Telephone:</div><div class="data-value">{{ section_1.supplier_details.phone }}</div></div>
+            <div class="data-row"><div class="data-label w-80">E-mail:</div><div class="data-value">{{ section_1.supplier_details.email }}</div></div>
+            <div class="data-row"><div class="data-label w-80">Website:</div><div class="data-value">{{ section_1.supplier_details.website }}</div></div>
+
+            <div class="subsection-title">1.4. Emergency telephone number</div>
+            <p>{{ section_1.emergency_phone.description }}, {{ section_1.emergency_phone.number }}</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">SECTION 2: Hazards identification</div>
+            <div class="subsection-title">2.1. Classification of the substance or mixture</div>
+            <p class="small">Classification according to Regulation (EC) No 1272/2008 [CLP]</p>
+            <table class="sds">
+                <thead>
+                    <tr><th>Hazard classes and hazard categories</th><th>Hazard statements</th><th>Classification procedure</th></tr>
+                </thead>
+                <tbody>
+                    {% for item in section_2.classification %}
+                    <tr><td>{{ item.category }}</td><td>{{ item.code }}: {{ item.statement }}</td><td>{{ item.procedure }}</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="subsection-title">2.2. Label elements</div>
+            <p class="small">Labelling according to Regulation (EC) No. 1272/2008 [CLP]</p>
+            <p><strong>Hazard pictograms:</strong></p>
+            <div class="pictograms">
+                {% for pictogram in section_2.labelling.pictograms %}
+                <img src="ghs/{{ pictogram }}.png" alt="{{ pictogram }}">
+                {% endfor %}
+            </div>
+            <p><strong>Signal word:</strong> <span class="signal-word">{{ section_2.labelling.signal_word }}</span></p>
+            
+            <p><strong>Hazard components for labelling:</strong></p>
+            <p style="margin-left: 15px;">{{ section_2.labelling.hazard_components }}</p>
+            <p><strong>Hazard statements for physical hazards</strong></p>
+            {% for statement in section_2.labelling.hazard_statements %}<p>{{ statement.code }}: {{ statement.text }}</p>{% endfor %}
+            
+            <p><strong>Precautionary statements Prevention</strong></p>
+            {% for statement in section_2.labelling.precautionary_statements.prevention %}<p>{{ statement }}</p>{% endfor %}
+            <p><strong>Precautionary statements Response</strong></p>
+            {% for statement in section_2.labelling.precautionary_statements.response %}<p>{{ statement }}</p>{% endfor %}
+
+            <div class="subsection-title">2.3. Other hazards</div>
+            <p><strong>Adverse physicochemical effects:</strong></p>
+            <p style="margin-left: 15px;">{{ section_2.other_hazards.physicochemical }}</p>
+            <p><strong>Adverse human health effects and symptoms:</strong></p>
+            <p style="margin-left: 15px;">{{ section_2.other_hazards.health }}</p>
+        </div>
+    </div>
+    <div class="footer"><div>{{ meta.language }} / {{ meta.country }}</div><div>GeSi.de</div></div>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page">
+    <div class="header">
+        <div class="header-left">
+            <div class="title-text">Safety data sheet according to Regulation (EC) No 1907/2006 (REACH)</div>
+            <div class="product-name">{{ meta.product_name }}</div>
+            <div class="meta-row">
+                <span>Revision date:</span> <span class="normal">{{ meta.revision_date }}</span>
+                <span>Print date:</span> <span class="normal">{{ meta.print_date }}</span>
+                <span>Version:</span> <span class="normal">{{ meta.version }}</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="header-logo"><img src="mb_logo.svg" alt="Minerva Biolabs"></div>
+            <div class="page-number">Page 2/11</div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="section">
+            <div class="section-title">SECTION 3: Composition/information on ingredients</div>
+            <div class="subsection-title">3.2. Mixtures</div>
+            <p><strong>Hazardous ingredients / Hazardous impurities / Stabilisers:</strong></p>
+            <table class="sds">
+                <thead>
+                    <tr><th>Product identifiers</th><th>Substance name<br><span style="font-weight:normal; font-size:8pt;">Classification according to Regulation (EC) No 1272/2008 [CLP]</span></th><th>Concentration</th></tr>
+                </thead>
+                <tbody>
+                    {% for component in section_3.mixture_components %}
+                    <tr>
+                        <td>CAS No.: {{ component.cas }}<br>EC No.: {{ component.ec }}</td>
+                        <td><strong>{{ component.name }}</strong><br>
+                            {% for class in component.classification %}
+                            {{ class }}<br>
+                            {% endfor %}
+                        </td>
+                        <td style="white-space: nowrap;">{{ component.concentration }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <p class="small">Full text of H- and EUH-phrases: see section 16.</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">SECTION 4: First aid measures</div>
+            <div class="subsection-title">4.1. Description of first aid measures</div>
+            <div class="subsubsection">General information:</div>
+            <p style="margin-left: 15px;">{{ section_4.description.general }}</p>
+            <div class="subsubsection">Following inhalation:</div>
+            <p style="margin-left: 15px;">{{ section_4.description.inhalation }}</p>
+            <div class="subsubsection">In case of skin contact:</div>
+            <p style="margin-left: 15px;">{{ section_4.description.skin }}</p>
+            <div class="subsubsection">After eye contact:</div>
+            <p style="margin-left: 15px;">{{ section_4.description.eye }}</p>
+            <div class="subsubsection">Following ingestion:</div>
+            <p style="margin-left: 15px;">{{ section_4.description.ingestion }}</p>
+            <div class="subsubsection">Self-protection of the first aider:</div>
+            <p style="margin-left: 15px;">{{ section_4.description.self_protection }}</p>
+            
+            <div class="subsection-title">4.2. Most important symptoms and effects, both acute and delayed</div>
+            <p style="margin-left: 15px;">{{ section_4.symptoms }}</p>
+            
+            <div class="subsection-title">4.3. Indication of any immediate medical attention and special treatment needed</div>
+            <p style="margin-left: 15px;">{{ section_4.treatment }}</p>
+        </div>
+    </div>
+    <div class="footer"><div>{{ meta.language }} / {{ meta.country }}</div><div>GeSi.de</div></div>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page">
+    <div class="header">
+        <div class="header-left">
+            <div class="title-text">Safety data sheet according to Regulation (EC) No 1907/2006 (REACH)</div>
+            <div class="product-name">{{ meta.product_name }}</div>
+            <div class="meta-row">
+                <span>Revision date:</span> <span class="normal">{{ meta.revision_date }}</span>
+                <span>Print date:</span> <span class="normal">{{ meta.print_date }}</span>
+                <span>Version:</span> <span class="normal">{{ meta.version }}</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="header-logo"><img src="mb_logo.svg" alt="Minerva Biolabs"></div>
+            <div class="page-number">Page 3/11</div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="section">
+            <div class="section-title">SECTION 5: Firefighting measures</div>
+            <div class="subsection-title">5.1. Extinguishing media</div>
+            <div class="data-row"><div class="data-label w-200">Suitable extinguishing media:</div><div class="data-value">{{ section_5.suitable_media }}</div></div>
+            <div class="data-row"><div class="data-label w-200">Unsuitable extinguishing media:</div><div class="data-value">{{ section_5.unsuitable_media }}</div></div>
+            
+            <div class="subsection-title">5.2. Special hazards arising from the substance or mixture</div>
+            <p style="margin-left: 15px;">{{ section_5.special_hazards }}</p>
+            <p><strong>Hazardous combustion products:</strong></p>
+            <p style="margin-left: 15px;">{{ section_5.combustion_products }}</p>
+            
+            <div class="subsection-title">5.3. Advice for firefighters</div>
+            <p style="margin-left: 15px;">{{ section_5.firefighter_advice }}</p>
+            
+            <div class="subsection-title">5.4. Additional information</div>
+            <p style="margin-left: 15px;">{{ section_5.additional_info }}</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">SECTION 6: Accidental release measures</div>
+            <div class="subsection-title">6.1. Personal precautions, protective equipment and emergency procedures</div>
+            <div class="subsubsection">6.1.1. For non-emergency personnel</div>
+            <p><strong>Personal precautions:</strong></p>
+            <p style="margin-left: 15px;">{{ section_6.personal_precautions }}</p>
+            <p><strong>Protective equipment:</strong></p>
+            <p style="margin-left: 15px;">{{ section_6.protective_equipment }}</p>
+            <div class="subsubsection">6.1.2. For emergency responders</div>
+            <p><strong>Personal protection equipment:</strong></p>
+            <p style="margin-left: 15px;">{{ section_6.emergency_responders }}</p>
+            
+            <div class="subsection-title">6.2. Environmental precautions</div>
+            <p style="margin-left: 15px;">{{ section_6.environmental_precautions }}</p>
+            
+            <div class="subsection-title">6.3. Methods and material for containment and cleaning up</div>
+            <div class="data-row"><div class="data-label w-120">For containment:</div><div class="data-value">{{ section_6.containment }}</div></div>
+            <div class="data-row"><div class="data-label w-120">For cleaning up:</div><div class="data-value">{{ section_6.cleaning }}</div></div>
+            
+            <div class="subsection-title">6.4. Reference to other sections</div>
+            <p style="margin-left: 15px;">{{ section_6.other_sections }}</p>
+            
+            <div class="subsection-title">6.5. Additional information</div>
+            <p style="margin-left: 15px;">{{ section_6.additional_info }}</p>
+        </div>
+    </div>
+    <div class="footer"><div>{{ meta.language }} / {{ meta.country }}</div><div>GeSi.de</div></div>
+</div>
+<!-- PAGE 4 -->
+<div class="page">
+    <div class="header">
+        <div class="header-left">
+            <div class="title-text">Safety data sheet according to Regulation (EC) No 1907/2006 (REACH)</div>
+            <div class="product-name">{{ meta.product_name }}</div>
+            <div class="meta-row">
+                <span>Revision date:</span> <span class="normal">{{ meta.revision_date }}</span>
+                <span>Print date:</span> <span class="normal">{{ meta.print_date }}</span>
+                <span>Version:</span> <span class="normal">{{ meta.version }}</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="header-logo"><img src="mb_logo.svg" alt="Minerva Biolabs"></div>
+            <div class="page-number">Page 4/11</div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="section">
+            <div class="section-title">SECTION 7: Handling and storage</div>
+            <div class="subsection-title">7.1. Precautions for safe handling</div>
+            <div class="subsubsection">Protective measures</div>
+            <p><strong>Advices on safe handling:</strong></p>
+            <p style="margin-left: 15px;">{{ section_7.safe_handling }}</p>
+            <p><strong>Fire prevent measures:</strong></p>
+            <p style="margin-left: 15px;">{{ section_7.fire_prevention }}</p>
+            <div class="subsubsection">Advices on general occupational hygiene</div>
+            <p>{{ section_7.occupational_hygiene }}</p>
+            
+            <div class="subsection-title">7.2. Conditions for safe storage, including any incompatibilities</div>
+            <div class="subsubsection">Technical measures and storage conditions:</div>
+            <p style="margin-left: 15px;">{{ section_7.storage_conditions }}</p>
+            <div class="subsubsection">Requirements for storage rooms and vessels:</div>
+            <p style="margin-left: 15px;">{{ section_7.storage_rooms }}</p>
+            <div class="subsubsection">Hints on storage assembly:</div>
+            <p style="margin-left: 15px;">{{ section_7.storage_assembly }}</p>
+            <p><strong>Storage class (TRGS 510, Germany):</strong></p>
+            <p style="margin-left: 15px;">{{ section_7.storage_class }}</p>
+            
+            <div class="subsection-title">7.3. Specific end use(s)</div>
+            <p style="margin-left: 15px;">{{ section_7.specific_end_use }}</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">SECTION 8: Exposure controls/personal protection</div>
+            <div class="subsection-title">8.1. Control parameters</div>
+            <div class="subsubsection">8.1.1. Occupational exposure limit values</div>
+            <i>
+            <table class="sds">
+                <thead>
+                    <tr><th>Limit value type (country of origin)</th><th>Substance name</th><th>① Long-term occupational exposure limit value<br>② Short-term occupational exposure limit value<br>③ Instantaneous value<br>④ Monitoring and observation processes<br>⑤ Remark</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>TRGS 900 (DE)<br>from 29 Mar 2019</td>
+                        <td>ethanol<br>CAS No.: 64-17-5<br>EC No.: 200-578-6</td>
+                        <td>① 200 ppm (380 mg/m³)<br>② 800 ppm (1,520 mg/m³)<br>⑤ DFG, Y</td>
+                    </tr>
+                    <tr>
+                        <td>IOELV (EU)</td>
+                        <td>Dipropylene glycol monomethyl ether<br>CAS No.: 34590-94-8<br>EC No.: 252-104-2</td>
+                        <td>① 50 ppm (308 mg/m³)<br>⑤ (may be absorbed through the skin)</td>
+                    </tr>
+                    <tr>
+                        <td>TRGS 900 (DE)</td>
+                        <td>Dipropylene glycol monomethyl ether<br>CAS No.: 34590-94-8<br>EC No.: 252-104-2</td>
+                        <td>① 50 ppm (310 mg/m³)<br>② 50 ppm (310 mg/m³)<br>⑤ (Aerosol und Dampf) DFG, EU, 11</td>
+                    </tr>
+                </tbody>
+            </table>
+            </i>
+            <p>{{ section_8.control_parameters }}</p>
+            
+            <div class="subsection-title">8.2. Exposure controls</div>
+            <div class="subsubsection">8.2.2. Personal protection equipment</div>
+            <p><strong>Eye/face protection:</strong></p>
+            <p style="margin-left: 15px;">{{ section_8.eye_protection }}</p>
+            <p><strong>Skin protection:</strong></p>
+            <p style="margin-left: 15px;">{{ section_8.skin_protection }}</p>
+            <p><strong>Respiratory protection:</strong></p>
+            <p style="margin-left: 15px;">{{ section_8.respiratory_protection }}</p>
+            
+            <div class="subsubsection">8.2.3. Environmental exposure controls</div>
+            <p style="margin-left: 15px;">{{ section_8.environmental_exposure }}</p>
+        </div>
+    </div>
+    <div class="footer"><div>{{ meta.language }} / {{ meta.country }}</div><div>GeSi.de</div></div>
+</div>
+
+<!-- PAGE 5 -->
+<div class="page">
+    <div class="header">
+        <div class="header-left">
+            <div class="title-text">Safety data sheet according to Regulation (EC) No 1907/2006 (REACH)</div>
+            <div class="product-name">{{ meta.product_name }}</div>
+            <div class="meta-row">
+                <span>Revision date:</span> <span class="normal">{{ meta.revision_date }}</span>
+                <span>Print date:</span> <span class="normal">{{ meta.print_date }}</span>
+                <span>Version:</span> <span class="normal">{{ meta.version }}</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="header-logo"><img src="mb_logo.svg" alt="Minerva Biolabs"></div>
+            <div class="page-number">Page 5/11</div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="section">
+            <div class="section-title">SECTION 9: Physical and chemical properties</div>
+            <div class="subsection-title">9.1. Information on basic physical and chemical properties</div>
+            <div class="subsubsection">Appearance</div>
+            <p>{{ section_9.appearance }}</p>
+            
+            <div class="subsubsection">Safety relevant basis data</div>
+            <table class="sds">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Value</th>
+                        <th>at °C</th>
+                        <th>Method</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in section_9.safety_data %}
+                    <tr>
+                        <td>{{ item.parameter }}</td>
+                        <td>{{ item.value }}</td>
+                        <td>{{ item.temperature }}</td>
+                        <td>{{ item.method }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <div class="section-title">SECTION 10: Stability and reactivity</div>
+            <div class="subsection-title">10.1. Reactivity</div>
+            <p style="margin-left: 15px;">{{ section_10.reactivity }}</p>
+            <div class="subsection-title">10.2. Chemical stability</div>
+            <p style="margin-left: 15px;">{{ section_10.chemical_stability }}</p>
+            <div class="subsection-title">10.3. Possibility of hazardous reactions</div>
+            <p style="margin-left: 15px;">{{ section_10.hazardous_reactions }}</p>
+        </div>
+    </div>
+    <div class="footer"><div>{{ meta.language }} / {{ meta.country }}</div><div>GeSi.de</div></div>
+</div>
+<!-- PAGE 6 -->
+<div class="page">
+    <div class="header">
+        <div class="header-left">
+            <div class="title-text">Safety data sheet according to Regulation (EC) No 1907/2006 (REACH)</div>
+            <div class="product-name">{{ meta.product_name }}</div>
+            <div class="meta-row">
+                <span>Revision date:</span> <span class="normal">{{ meta.revision_date }}</span>
+                <span>Print date:</span> <span class="normal">{{ meta.print_date }}</span>
+                <span>Version:</span> <span class="normal">{{ meta.version }}</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="header-logo"><img src="mb_logo.svg" alt="Minerva Biolabs"></div>
+            <div class="page-number">Page 6/11</div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="section">
+            <div class="subsection-title">10.4. Conditions to avoid</div>
+            <p style="margin-left: 15px;">{{ section_10.conditions_to_avoid }}</p>
+            <div class="subsection-title">10.5. Incompatible materials</div>
+            <p style="margin-left: 15px;">{{ section_10.incompatible_materials }}</p>
+            <div class="subsection-title">10.6. Hazardous decomposition products</div>
+            <p style="margin-left: 15px;">{{ section_10.hazardous_decomposition }}</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">SECTION 11: Toxicological information</div>
+            <div class="subsection-title">11.1. Information on hazard classes as defined in Regulation (EC) No 1272/2008</div>
+            
+            {% if section_3 and section_3.mixture_components %}
+            <table class="sds">
+                <tbody>
+                {% for component in section_3.mixture_components %}
+                    {% if component.toxicological_info %}
+                    <tr style="background-color: #f2f2f2;">
+                        <td><strong>{{ component.name }}</strong><br>CAS No.: {{ component.cas }} EC No.: {{ component.ec }}</td>
+                    </tr>
+                    {% for info in component.toxicological_info %}
+                    <tr>
+                        <td>{{ info }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+
+            <p><strong>Acute toxicity:</strong> {{ section_11.acute_toxicity }}</p>
+            <p><strong>Skin corrosion/irritation:</strong> {{ section_11.skin_corrosion }}</p>
+            <p><strong>Serious eye damage/irritation:</strong> {{ section_11.eye_damage }}</p>
+            <p><strong>Respiratory or skin sensitisation:</strong> {{ section_11.sensitisation }}</p>
+            <p><strong>Germ cell mutagenicity:</strong> {{ section_11.mutagenicity }}</p>
+            <p><strong>Carcinogenicity:</strong> {{ section_11.carcinogenicity }}</p>
+            <p><strong>Reproductive toxicity:</strong> {{ section_11.reproductive_toxicity }}</p>
+            <p><strong>STOT-single exposure:</strong> {{ section_11.stot_single }}</p>
+            <p><strong>STOT-repeated exposure:</strong> {{ section_11.stot_repeated }}</p>
+            <p><strong>Aspiration hazard:</strong> {{ section_11.aspiration_hazard }}</p>
+        </div>
+    </div>
+    <div class="footer"><div>{{ meta.language }} / {{ meta.country }}</div><div>GeSi.de</div></div>
+</div>
+<!-- PAGE 7 -->
+<div class="page">
+    <div class="header">
+        <div class="header-left">
+            <div class="title-text">Safety data sheet according to Regulation (EC) No 1907/2006 (REACH)</div>
+            <div class="product-name">{{ meta.product_name }}</div>
+            <div class="meta-row">
+                <span>Revision date:</span> <span class="normal">{{ meta.revision_date }}</span>
+                <span>Print date:</span> <span class="normal">{{ meta.print_date }}</span>
+                <span>Version:</span> <span class="normal">{{ meta.version }}</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="header-logo"><img src="mb_logo.svg" alt="Minerva Biolabs"></div>
+            <div class="page-number">Page 7/11</div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="section">
+            <div class="section-title">SECTION 12: Ecological information</div>
+
+            {% if section_3 and section_3.mixture_components %}
+            <table class="sds">
+                <tbody>
+                {% for component in section_3.mixture_components %}
+                    {% if component.ecological_info %}
+                    <tr style="background-color: #f2f2f2;">
+                        <td><strong>{{ component.name }}</strong><br>CAS No.: {{ component.cas }} EC No.: {{ component.ec }}</td>
+                    </tr>
+                    {% for info in component.ecological_info %}
+                    <tr>
+                        <td>{{ info }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+
+            <p><strong>Aquatic Toxicity:</strong> {{ section_12.aquatic_toxicity }}</p>
+            <p><strong>Sediment Toxicity:</strong> {{ section_12.sediment_toxicity }}</p>
+            <p><strong>Terrestrial Toxicity:</strong> {{ section_12.terrestrial_toxicity }}</p>
+            <p><strong>Persistence and degradability:</strong> {{ section_12.persistence }}</p>
+            <p><strong>Bioaccumulative potential:</strong> {{ section_12.bioaccumulation }}</p>
+            <p><strong>Mobility in soil:</strong> {{ section_12.mobility }}</p>
+            <p><strong>Additional ecotoxicological information:</strong> {{ section_12.additional_ecotox }}</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">SECTION 13: Disposal considerations</div>
+            <p>{{ section_13.waste_treatment }}</p>
+            <p>{{ section_13.eu_requirements }}</p>
+        </div>
+    </div>
+    <div class="footer"><div>{{ meta.language }} / {{ meta.country }}</div><div>GeSi.de</div></div>
+</div>
+<!-- PAGE 8 -->
+<div class="page">
+    <div class="header">
+        <div class="header-left">
+            <div class="title-text">Safety data sheet according to Regulation (EC) No 1907/2006 (REACH)</div>
+            <div class="product-name">{{ meta.product_name }}</div>
+            <div class="meta-row">
+                <span>Revision date:</span> <span class="normal">{{ meta.revision_date }}</span>
+                <span>Print date:</span> <span class="normal">{{ meta.print_date }}</span>
+                <span>Version:</span> <span class="normal">{{ meta.version }}</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="header-logo"><img src="mb_logo.svg" alt="Minerva Biolabs"></div>
+            <div class="page-number">Page 8/11</div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="section">
+            <div class="section-title">SECTION 14: Transport information</div>
+            <table class="sds">
+                <thead>
+                    <tr><th>Land transport (ADR/RID)</th><th>Inland waterway craft (ADN)</th><th>Sea transport (IMDG)</th><th>Air transport (ICAO-TI/IATA-DGR)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td colspan="4"><strong>14.1. UN number or ID number</strong></td></tr>
+                    <tr><td>{{ section_14.land.un_number }}</td><td>{{ section_14.inland.un_number }}</td><td>{{ section_14.sea.un_number }}</td><td>{{ section_14.air.un_number }}</td></tr>
+                    
+                    <tr><td colspan="4"><strong>14.2. UN proper shipping name</strong></td></tr>
+                    <tr><td>{{ section_14.land.shipping_name }}</td><td>{{ section_14.inland.shipping_name }}</td><td>{{ section_14.sea.shipping_name }}</td><td>{{ section_14.air.shipping_name }}</td></tr>
+                    
+                    <tr><td colspan="4"><strong>14.3. Transport hazard class(es)</strong></td></tr>
+                    <tr><td>{{ section_14.land.transport_class }}</td><td>{{ section_14.inland.transport_class }}</td><td>{{ section_14.sea.transport_class }}</td><td>{{ section_14.air.transport_class }}</td></tr>
+                    
+                    <tr><td colspan="4"><strong>14.4. Packing group</strong></td></tr>
+                    <tr><td>{{ section_14.land.packing_group }}</td><td>{{ section_14.inland.packing_group }}</td><td>{{ section_14.sea.packing_group }}</td><td>{{ section_14.air.packing_group }}</td></tr>
+
+                    <tr><td colspan="4"><strong>14.5. Environmental hazards</strong></td></tr>
+                    <tr><td>{{ section_14.land.environmental_hazards }}</td><td>{{ section_14.inland.environmental_hazards }}</td><td>{{ section_14.sea.environmental_hazards }}</td><td>{{ section_14.air.environmental_hazards }}</td></tr>
+                </tbody>
+            </table>
+            
+            <p style="margin-top: 10px;"><strong>14.6. Special precautions for user</strong></p>
+            <table class="sds">
+                 <thead>
+                    <tr><th>Land transport (ADR/RID)</th><th>Inland waterway craft (ADN)</th><th>Sea transport (IMDG)</th><th>Air transport (ICAO-TI/IATA-DGR)</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <strong>Special Provisions:</strong> {{ section_14.land.special_provisions }}<br>
+                            <strong>Limited quantity (LQ):</strong> {{ section_14.land.limited_quantity }}<br>
+                            <strong>Excepted Quantities (EQ):</strong> {{ section_14.land.excepted_quantities }}<br>
+                            <strong>Hazard identification number (Kemler No.):</strong> {{ section_14.land.hazard_id }}<br>
+                            <strong>Classification code:</strong> {{ section_14.land.classification_code }}<br>
+                            <strong>Tunnel restriction code:</strong> {{ section_14.land.tunnel_code }}
+                        </td>
+                        <td>
+                            <strong>Special Provisions:</strong> {{ section_14.inland.special_provisions }}<br>
+                            <strong>Limited quantity (LQ):</strong> {{ section_14.inland.limited_quantity }}<br>
+                            <strong>Excepted Quantities (EQ):</strong> {{ section_14.inland.excepted_quantities }}<br>
+                             <strong>Classification code:</strong> {{ section_14.inland.classification_code }}
+                        </td>
+                        <td>
+                            <strong>Special Provisions:</strong> {{ section_14.sea.special_provisions }}<br>
+                            <strong>Limited quantity (LQ):</strong> {{ section_14.sea.limited_quantity }}<br>
+                            <strong>Excepted Quantities (EQ):</strong> {{ section_14.sea.excepted_quantities }}<br>
+                            <strong>EmS-No.:</strong> {{ section_14.sea.ems_code }}
+                        </td>
+                        <td>
+                            <strong>Special Provisions:</strong> {{ section_14.air.special_provisions }}<br>
+                            <strong>Limited quantity (LQ):</strong> {{ section_14.air.limited_quantity }}<br>
+                            <strong>Excepted Quantities (EQ):</strong> {{ section_14.air.excepted_quantities }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="subsection-title">14.7. Maritime transport in bulk according to IMO instruments</div>
+            <p style="margin-left: 15px;">{{ section_14.bulk_transport }}</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">SECTION 15: Regulatory information</div>
+            <div class="subsection-title">15.1. Safety, health and environmental regulations/legislation specific for the substance or mixture</div>
+            <p><strong>EU legislation:</strong><br>
+            {{ section_15.eu_legislation if section_15.eu_legislation else 'No specific EU legislation information available.' }}
+            </p>
+            <p><strong>National regulations (Germany):</strong><br>
+            {% if section_15.national_legislation %}
+                {% for item in section_15.national_legislation %}
+                    <strong>{{ item.label }}:</strong> {{ item.value }}<br>
+                {% endfor %}
+            {% else %}
+                No specific national legislation information available.
+            {% endif %}
+            </p>
+        </div>
+    </div>
+    <div class="footer"><div>{{ meta.language }} / {{ meta.country }}</div><div>GeSi.de</div></div>
+</div>
+<!-- PAGE 9 -->
+<div class="page">
+    <div class="header">
+        <div class="header-left">
+            <div class="title-text">Safety data sheet according to Regulation (EC) No 1907/2006 (REACH)</div>
+            <div class="product-name">{{ meta.product_name }}</div>
+            <div class="meta-row">
+                <span>Revision date:</span> <span class="normal">{{ meta.revision_date }}</span>
+                <span>Print date:</span> <span class="normal">{{ meta.print_date }}</span>
+                <span>Version:</span> <span class="normal">{{ meta.version }}</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="header-logo"><img src="mb_logo.svg" alt="Minerva Biolabs"></div>
+            <div class="page-number">Page 9/11</div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="section">
+            <div class="section-title">SECTION 16: Other information</div>
+            <i>
+            <div class="subsection-title">16.1. Indication of changes</div>
+            <p>
+            1.3. Details of the supplier of the safety data sheet<br>
+            2.2. Label elements<br>
+            3.2. Mixtures<br>
+            4.1. Description of first aid measures<br>
+            7.1. Precautions for safe handling<br>
+            8.1. Control parameters<br>
+            9.1. Information on basic physical and chemical properties<br>
+            14.3. Transport hazard class(es)<br>
+            15.1. Safety, health and environmental regulations/legislation specific for the substance or mixture<br>
+            16.1. Indication of changes<br>
+            16.5. List of relevant hazard statements and/or precautionary statements from sections 2 to 15
+            </p>
+            
+            <div class="subsection-title">16.2. Abbreviations and acronyms</div>
+            <table class="sds" style="font-size: 8pt;">
+                <tbody>
+                    <tr><td>ACGIH</td><td>American Conference of Governmental Industrial Hygienists</td></tr>
+                    <tr><td>ADN</td><td>European Agreement concerning the International Carriage of Dangerous Goods by Inland Waterways</td></tr>
+                    <tr><td>ADR</td><td>European Agreement concerning the International Carriage of Dangerous Goods by Road</td></tr>
+                    <tr><td>ASTM</td><td>American Society for Testing and Materials</td></tr>
+                    <tr><td>BCF</td><td>Bioconcentration Factor</td></tr>
+                    <tr><td>CAS</td><td>Chemical Abstracts Service</td></tr>
+                    <tr><td>CLP</td><td>Classification, Labelling and Packaging</td></tr>
+                    <tr><td>DIN</td><td>German Institute for Standardization / German Industrial Standard</td></tr>
+                    <tr><td>DNEL</td><td>derived no-effect level</td></tr>
+                    <tr><td>EC<sub>50</sub></td><td>Effective Concentration 50%</td></tr>
+                    <tr><td>ECHA</td><td>European Chemicals Agency</td></tr>
+                    <tr><td>EN</td><td>European Standard</td></tr>
+                    <tr><td>ES</td><td>Exposure scenario</td></tr>
+                    <tr><td>EWC</td><td>European Waste Catalogue</td></tr>
+                    <tr><td>GHS</td><td>Globally Harmonized System of Classification and Labelling of Chemicals</td></tr>
+                    <tr><td>IBC</td><td>Intermediate Bulk Container</td></tr>
+                    <tr><td>ICAO</td><td>International Civil Aviation Organization</td></tr>
+                    <tr><td>IMDG</td><td>International Maritime Dangerous Goods</td></tr>
+                    <tr><td>IMO</td><td>International Maritime Organization</td></tr>
+                    <tr><td>ISO</td><td>International Standards Organisation</td></tr>
+                    <tr><td>LC<sub>50</sub></td><td>Lethal (fatal) Concentration 50%</td></tr>
+                    <tr><td>LD<sub>50</sub></td><td>Lethal (fatal) Dose 50%</td></tr>
+                    <tr><td>NOEC</td><td>No Observed Effect Concentration</td></tr>
+                    <tr><td>OECD</td><td>Organisation for Economic Cooperation and Development</td></tr>
+                    <tr><td>PBT</td><td>persistent and bioaccumulative and toxic</td></tr>
+                    <tr><td>PNEC</td><td>Predicted No Effect Concentration</td></tr>
+                    <tr><td>REACH</td><td>Registration, Evaluation and Authorization of Chemicals</td></tr>
+                    <tr><td>RID</td><td>Dangerous goods regulations for transport by rail</td></tr>
+                    <tr><td>TRGS</td><td>Technische Regeln für Gefahrstoffe</td></tr>
+                    <tr><td>UN</td><td>United Nations</td></tr>
+                </tbody>
+            </table>
+            <p class="small">For abbreviations and acronyms, see: ECHA Guidance on information requirements and chemical safety assessment, chapter R.20 (Table of terms and abbreviations).</p>
+            
+            <div class="subsection-title">16.3. Key literature references and sources for data</div>
+            <p>TRGS 510, TRGS 525, TRGS 900, Safety data sheets for the ingredients, 1907/2006 REACH, 1272/2008 CLP GHS</p>
+            
+            <div class="subsection-title">16.4. Classification for mixtures and used evaluation method according to regulation (EC) No 1272/2008 [CLP]</div>
+            <table class="sds">
+                <thead>
+                    <tr><th>Hazard classes and hazard categories</th><th>Hazard statements</th><th>Classification procedure</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>flammable liquids (Flam. Liq. 3)</td><td>H226: Flammable liquid and vapour.</td><td>On basis of test data.</td></tr>
+                    <tr><td>Serious eye damage/eye irritation (Eye Dam. 1)</td><td>H318: Causes serious eye damage.</td><td>Calculation method.</td></tr>
+                    <tr><td>STOT-single exposure (STOT SE 3)</td><td>H336: May cause drowsiness or dizziness.</td><td>Calculation method.</td></tr>
+                </tbody>
+            </table>
+            
+            <div class="subsection-title">16.5. List of relevant hazard statements and/or precautionary statements from sections 2 to 15</div>
+            <p><strong>Hazard statements</strong></p>
+            <div class="data-row"><div class="data-label w-50">H225</div><div class="data-value">Highly flammable liquid and vapour.</div></div>
+            <div class="data-row"><div class="data-label w-50">H318</div><div class="data-value">Causes serious eye damage.</div></div>
+            <div class="data-row"><div class="data-label w-50">H336</div><div class="data-value">May cause drowsiness or dizziness.</div></div>
+            
+            <div class="subsection-title">16.6. Training advice</div>
+            <p>No data available</p>
+            
+            <div class="subsection-title">16.7. Additional information</div>
+            <p>This data sheet was created in accordance with EU regulation (EC) No. 1907/2006 (REACH).</p>
+            <p>The information is based on the level of knowledge and experience on the date of issue, it do not have the importance of assured properties. The information may not be changed or transferred to other products. Reproduction in the unchanged state is permitted.</p>
+            <p>* Data changed compared with the previous version.</p>
+            </i>
+        </div>
+    </div>
+    <div class="footer"><div>{{ meta.language }} / {{ meta.country }}</div><div>GeSi.de</div></div>
+</div>
+</body>
+</html>
