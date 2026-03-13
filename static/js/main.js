@@ -460,7 +460,7 @@
         function downloadPDF() {
             showToast('PDF-Generierung gestartet...', 'info');
 
-            fetch('/api/download/pdf')
+            return fetch('/api/download/pdf')
                 .then(response => {
                     if (response.ok) {
                         return response.blob();
@@ -967,7 +967,7 @@
                     statBox.style.textAlign = 'left';
                     statBox.innerHTML = `
                         <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                            <div class="stat-label" style="margin:0;">${lang.toUpperCase()} - {{ languages[lang] }}</div>
+                            <div class="stat-label" style="margin:0;">${lang.toUpperCase()} - ${window.appConfig.languages[lang] || ''}</div>
                             <div class="stat-value" style="font-size: 1.5em;">${count}</div>
                         </div>
                         <div class="progress-bar" style="height: 15px; margin-top: 10px;">
