@@ -166,7 +166,7 @@
 <section class="card-container p-6">
 <div class="flex items-center gap-2 mb-6">
 <svg class="w-4 h-4 text-minerva-green" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
-<h2 class="section-header">Datei-Upload</h2>
+<h2 class="text-[10px] font-bold text-white uppercase tracking-widest flex items-center gap-2"><span class="w-1.5 h-1.5 flex items-center justify-center border border-minerva-green text-minerva-green rounded-sm">↑</span> DATEI-UPLOAD</h2>
 </div>
 <div class="flex mb-4 bg-minerva-black p-1 rounded">
 <button class="flex-1 py-1.5 text-[11px] font-bold rounded bg-minerva-hover text-minerva-green file-type-btn" id="type-html" onclick="toggleUploadType('html')">HTML</button>
@@ -178,7 +178,7 @@
 <input class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" id="main-file-input" type="file" onchange="handleUnifiedFileSelect(this)"/>
 <div class="text-minerva-gray group-hover:text-minerva-green transition-colors file-input-label" id="fileLabel">
 <svg class="w-10 h-10 mx-auto mb-3 opacity-60" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
-<p class="text-[11px] font-medium leading-relaxed" id="unified-file-label">HTML Datei auswählen oder per <br/>Drag &amp; Drop hierher ziehen</p>
+<p class="text-[11px] font-medium leading-relaxed" id="unified-file-label">Datei (HTML, PDF, XML)<br/>auswählen oder per<br/>Drag &amp; Drop hierher ziehen</p>
 <p class="text-[11px] font-bold text-white mt-2 file-name" id="fileName">{% if template_loaded %}📄 {{ default_template }} (Standard){% else %}Keine Datei ausgewählt{% endif %}</p>
 </div>
 </div>
@@ -192,7 +192,7 @@
 <!-- GHS Piktogramme -->
 <section class="card-container p-6">
 <div class="flex items-center justify-between mb-6">
-<h2 class="section-header">GHS Piktogramme</h2>
+<h2 class="text-[10px] font-bold text-white uppercase tracking-widest">GHS PIKTOGRAMME</h2>
 <span class="text-[9px] font-bold bg-minerva-black text-minerva-green px-2 py-0.5 rounded border border-minerva-green/20">MAX 3</span>
 </div>
 <div class="grid grid-cols-3 gap-3 mb-5" id="ghsSelectedDisplay">
@@ -214,9 +214,9 @@
 <!-- Target Language -->
 <section class="card-container p-6 space-y-5">
 <div>
-<h2 class="section-header mb-3">Zielsprache</h2>
+<h2 class="text-[10px] font-bold text-white uppercase tracking-widest mb-3">ZIELSPRACHE</h2>
 <div class="relative">
-<select id="languageSelect" class="w-full text-xs font-semibold py-3 pl-4 pr-10 rounded border-minerva-border bg-minerva-black text-white focus:ring-1 focus:ring-minerva-green focus:border-minerva-green appearance-none">
+<select id="languageSelect" class="w-full text-xs font-semibold py-3 pl-4 pr-10 rounded border-[#262626] bg-[#0a0a0a] text-white focus:ring-1 focus:ring-[#8cc63f] focus:border-[#8cc63f] appearance-none">
 {% for code, name in languages.items() %}
 <option value="{{ code }}">{{ name }}</option>
 {% endfor %}
@@ -226,9 +226,9 @@
 </div>
 </div>
 </div>
-<button id="translateBtn" disabled onclick="translateFile()" class="w-full btn-primary py-4 rounded font-bold text-xs uppercase tracking-[0.15em] flex items-center justify-center gap-3">
+<button id="translateBtn" disabled onclick="translateFile()" class="w-full bg-[#8cc63f] hover:bg-[#7bc027] text-black py-4 rounded font-bold text-xs uppercase tracking-[0.15em] flex items-center justify-center gap-3 transition-colors">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
-                Übersetzung Starten
+                ÜBERSETZUNG STARTEN
             </button>
 </section>
 </aside>
@@ -237,23 +237,23 @@
 <!-- BEGIN: Editor & Preview Area -->
 <div class="col-span-12 lg:col-span-9 space-y-5" id="previewContainer" style="display: none;">
 <!-- Headers -->
-<div class="grid grid-cols-2 gap-6 px-1">
+<div class="grid grid-cols-2 gap-8 px-1 relative">
 <div class="flex items-center justify-between">
 <div class="flex items-center gap-3">
-<span class="w-2 h-2 rounded-full bg-minerva-gray/40"></span>
-<h3 class="text-[11px] font-bold text-minerva-gray uppercase tracking-widest">Originaldokument</h3>
+<span class="w-2 h-2 rounded-full bg-[#3f3f46]"></span>
+<h3 class="text-[10px] font-bold text-[#e5e7eb] uppercase tracking-widest">ORIGINALDOKUMENT</h3>
 </div>
-<button onclick="toggleEditMode('original')" id="editOriginalBtn" class="text-[10px] font-bold text-white bg-minerva-card border border-minerva-border px-4 py-1.5 rounded hover:bg-minerva-green hover:border-minerva-green transition-all uppercase tracking-wider">
-                    Bearbeiten
-                </button>
+<div class="text-[10px] italic text-[#9ca3af] -mr-8">
+    Source Language: EN
+</div>
 </div>
 <div class="flex items-center justify-between">
 <div class="flex items-center gap-3">
-<span class="w-2 h-2 rounded-full bg-minerva-green shadow-[0_0_8px_rgba(118,184,42,0.4)]"></span>
-<h3 class="text-[11px] font-bold text-white uppercase tracking-widest">Übersetzungsvorschau</h3>
+<span class="w-2 h-2 rounded-full bg-[#8cc63f] shadow-[0_0_8px_rgba(140,198,63,0.4)]"></span>
+<h3 class="text-[10px] font-bold text-[#e5e7eb] uppercase tracking-widest">ÜBERSETZUNGSVORSCHAU</h3>
 </div>
-<button id="editModeBtn" class="text-[10px] font-bold text-white bg-minerva-card border border-minerva-border px-4 py-1.5 rounded hover:bg-minerva-green hover:border-minerva-green transition-all uppercase tracking-wider" onclick="toggleEditMode('translated')">
-                    Bearbeitungsmodus
+<button id="editModeBtn" class="text-[10px] font-bold text-white bg-transparent border border-[#262626] px-4 py-1.5 rounded hover:bg-[#8cc63f] hover:border-[#8cc63f] hover:text-black transition-all uppercase tracking-wider" onclick="toggleEditMode('translated')">
+                    BEARBEITUNGSMODUS
                 </button>
 </div>
 </div>
@@ -325,7 +325,7 @@
 <!-- Nicht übersetzte Phrasen -->
 <section class="card-container p-6 w-full mt-6" id="downloadNotFoundSection" style="display: none;">
 <div class="flex items-center justify-between mb-4">
-<h2 class="section-header">Nicht übersetzte Phrasen</h2>
+<h2 class="text-[10px] font-bold text-white uppercase tracking-widest">NICHT ÜBERSETZTE PHRASEN</h2>
 <div class="flex gap-2">
 <span class="text-[9px] font-bold bg-red-500/20 text-red-500 px-2 py-0.5 rounded border border-red-500/20"><span id="notFoundBadge">0</span> UNRESOLVED</span>
 </div>
@@ -518,7 +518,7 @@
 <section class="bg-minerva-card border-t border-minerva-border px-8 py-4 glass-effect">
 <div class="max-w-[1800px] mx-auto flex flex-col lg:flex-row items-center gap-8">
 <div class="flex items-center gap-4 border-r border-minerva-border pr-8">
-<h2 class="section-header whitespace-nowrap">Übersetzungs-Status</h2>
+<h2 class="text-[10px] font-bold text-white uppercase tracking-widest whitespace-nowrap">ÜBERSETZUNGS-STATUS</h2>
 <div class="flex items-center gap-2">
 <div class="flex items-center gap-2 px-3 py-1 bg-minerva-black rounded border border-minerva-border">
 <span class="text-xs font-bold text-white" id="totalTexts">0</span>
@@ -558,6 +558,7 @@
 </div>
 <div class="flex gap-8 text-minerva-gray">
 <span class="flex gap-2">User: <span class="text-white">Admin_User</span></span>
+<span class="flex gap-2">Session Expires In: <span class="text-white">119:00</span></span>
 </div>
 </footer>
 </div>
@@ -619,7 +620,7 @@
         activeBtn.classList.add('bg-minerva-hover', 'text-minerva-green');
         activeBtn.classList.remove('text-minerva-gray');
 
-        label.innerHTML = `${type.toUpperCase()} Datei auswählen oder per <br/>Drag &amp; Drop hierher ziehen`;
+        label.innerHTML = `Datei (HTML, PDF, XML)<br/>auswählen oder per<br/>Drag &amp; Drop hierher ziehen`;
     }
 
     // Adapt the unified file input to the specific JS handlers from main.js
