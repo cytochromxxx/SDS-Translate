@@ -1,685 +1,654 @@
 <!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SDS Translator - Dark Edition</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+<html lang="de"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SDS-Translate Pro | Professional Safety Data Sheet Management</title>
+<!-- BEGIN: External Resources -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- END: External Resources -->
+<!-- BEGIN: Tailwind Configuration -->
+<script data-purpose="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        minerva: {
+                            green: '#76B82A',
+                            black: '#0A0A0A', // True deep dark background
+                            card: '#141414',  // Slightly elevated background
+                            border: '#262626', // Subtle borders
+                            gray: '#9CA3AF',   // Muted text
+                            hover: '#1F1F1F'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+<!-- END: Tailwind Configuration -->
+<!-- BEGIN: Custom Styles -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style data-purpose="layout-and-scroll">
+        body {
+            background-color: #0A0A0A;
+            color: #E5E7EB;
+            overflow-x: hidden;
+            padding-bottom: 240px; /* Space for the fixed bottom status bar */
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #141414;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #76B82A;
+            border-radius: 10px;
+        }
+
+        .preview-iframe {
+            width: 100%;
+            height: calc(100vh - 440px);
+            min-height: 500px;
+            border: none;
+            background: #FFFFFF;
+        }
+
+        .edit-mode-active #richTextEditor, .edit-mode-active #originalRichTextEditor {
+            border: 2px solid #76B82A;
+        }
+
+        .glass-effect {
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+<style data-purpose="components">
+        .btn-primary {
+            background-color: #76B82A;
+            color: white;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-primary:hover {
+            background-color: #87C93B;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(118, 184, 42, 0.25);
+        }
+
+        .btn-primary:disabled {
+            background-color: #3f5f1a;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .tab-active {
+            color: #76B82A;
+            position: relative;
+        }
+        .tab-active::after {
+            content: '';
+            position: absolute;
+            bottom: -16px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #76B82A;
+        }
+
+        .card-container {
+            background-color: #141414;
+            border: 1px solid #262626;
+            border-radius: 6px;
+        }
+
+        .section-header {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #9CA3AF;
+        }
+    </style>
+<!-- END: Custom Styles -->
 </head>
-<body>
+<body class="font-sans antialiased">
     <!-- Loading Overlay -->
     <div id="loadingOverlay">
         <div class="spinner"></div>
         <div id="loadingText" style="font-size: 1.2em;">Bitte warten...</div>
     </div>
 
-    <div class="container">
-        <header>
-            <div class="header-left">
-                <button id="sidebarToggle" class="sidebar-toggle" title="Sidebar umschalten">
-                    <span style="font-size: 1.2em;">☰</span>
-                </button>
-                <div class="header-icon">🧪</div>
-                <div>
-                    <h1>SDS Translator Pro</h1>
-                    <p>Sicherheitsdatenblatt Übersetzer mit Datenbank-Editor & PDF-Export</p>
-                </div>
-            </div>
-            <div class="header-right">
-                <button id="themeToggle" class="theme-toggle" title="Theme umschalten">
-                    🌙
-                </button>
-            </div>
-        </header>
-        
-        <div class="tabs">
-            <button class="tab active" onclick="showTab('translate', this)">🚀 Übersetzen</button>
-            <button class="tab" onclick="showTab('database', this)">🗄️ Datenbank</button>
-            <button class="tab" onclick="showTab('ghs', this)">⚠️ GHS Pictograms</button>
-            <button class="tab" onclick="showTab('stats', this)">📊 Statistiken</button>
-        </div>
-        
-        <!-- Translation Tab -->
-        <div id="translate-tab" class="tab-content active">
-            <div class="main-grid" id="mainGrid">
-                <div class="sidebar" id="mainSidebar">
-                <div class="card">
-                    <h2>📁 Datei Upload</h2>
-                    <div class="form-group">
-                        <label>Dateityp auswählen:</label>
-                        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                            <button type="button" class="file-type-btn active" onclick="selectFileType('html')" id="btnHtml">
-                                📄 HTML
-                            </button>
-                            <button type="button" class="file-type-btn" onclick="selectFileType('pdf')" id="btnPdf">
-                                📕 PDF
-                            </button>
-                            <button type="button" class="file-type-btn" onclick="selectFileType('xml')" id="btnXml">
-                                🗂️ XML
-                            </button>
-                        </div>
-                        
-                        <!-- HTML File Input -->
-                        <div id="htmlInputSection">
-                            <div class="file-input-wrapper">
-                                <input type="file" id="fileInput" accept=".html" onchange="handleFileSelect(this)">
-                                <label for="fileInput" class="file-input-label" id="fileLabel">
-                                    <div>📎 HTML Datei auswählen oder hereinziehen</div>
-                                    <div class="file-name" id="fileName">{% if template_loaded %}📄 {{ default_template }} (Standard){% else %}Keine Datei ausgewählt{% endif %}</div>
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <!-- PDF File Input -->
-                        <div id="pdfInputSection" style="display: none;">
-                            <div class="file-input-wrapper">
-                                <input type="file" id="pdfFileInput" accept=".pdf" onchange="handlePdfFileSelect(this)">
-                                <label for="pdfFileInput" class="file-input-label" id="pdfFileLabel">
-                                    <div>📕 PDF Datei auswählen oder hereinziehen</div>
-                                    <div class="file-name" id="pdfFileName">Keine PDF-Datei ausgewählt</div>
-                                </label>
-                            </div>
-                            <div id="pdfInfo" style="margin-top: 10px; display: none;">
-                                <div class="alert alert-info" id="pdfValidationStatus"></div>
-                            </div>
-                        </div>
+<!-- BEGIN: Top Navigation -->
+<header class="sticky top-0 z-50 bg-minerva-black/90 border-b border-minerva-border px-8 py-4 flex items-center justify-between glass-effect">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-3">
+<div class="flex items-center justify-center w-9 h-9 bg-minerva-green rounded">
+<span class="text-white font-bold text-lg">S</span>
+</div>
+<div>
+<h1 class="text-lg font-bold text-white leading-none">SDS-Translate <span class="text-minerva-green">Pro</span></h1>
+<p class="text-[10px] text-minerva-gray uppercase font-semibold tracking-wider mt-1">Scientific Documentation Suite</p>
+</div>
+</div>
+<nav class="hidden lg:flex gap-10 ml-8">
+<button class="text-xs font-semibold uppercase tracking-wider transition-colors tab-active tab" onclick="showTab('translate', this)">Übersetzen</button>
+<button class="text-xs font-semibold uppercase tracking-wider text-minerva-gray hover:text-white transition-colors tab" onclick="showTab('database', this)">Datenbank</button>
+<button class="text-xs font-semibold uppercase tracking-wider text-minerva-gray hover:text-white transition-colors tab" onclick="showTab('ghs', this)">GHS Pictograms</button>
+<button class="text-xs font-semibold uppercase tracking-wider text-minerva-gray hover:text-white transition-colors tab" onclick="showTab('stats', this)">Statistiken</button>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 bg-minerva-card px-3 py-1.5 rounded border border-minerva-border">
+<span class="w-2 h-2 rounded-full bg-minerva-green animate-pulse"></span>
+<span class="text-[10px] font-mono text-minerva-gray" id="currentDbLabel">DB: phrases_library.db</span>
+</div>
+</div>
+</header>
+<!-- END: Top Navigation -->
+<!-- BEGIN: Main Interface -->
+<main class="max-w-[1800px] mx-auto p-8">
 
-                        <!-- XML File Input -->
-                        <div id="xmlInputSection" style="display: none;">
-                            <div class="file-input-wrapper">
-                                <input type="file" id="xmlFileInput" accept=".xml" onchange="handleXmlFileSelect(this)">
-                                <label for="xmlFileInput" class="file-input-label" id="xmlFileLabel">
-                                    <div>🗂️ XML Datei auswählen oder hereinziehen</div>
-                                    <div class="file-name" id="xmlFileName">Keine XML-Datei ausgewählt</div>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="uploadStatus">
-                        {% if template_loaded %}
-                        <div class="alert alert-success">✅ Standard-Template geladen: {{ default_template }}</div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Progress Section -->
-                    <div id="progressSection" style="display: none; margin-top: 15px;">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progressFill" style="width: 0%;">0%</div>
-                        </div>
-                        <div id="progressText" style="margin-top: 8px; font-size: 0.9em; color: var(--text-secondary);"></div>
-                    </div>
+<!-- Translation Tab Content -->
+<div id="translate-tab" class="tab-content active">
+<div class="grid grid-cols-12 gap-8">
+<!-- BEGIN: Sidebar (3 Columns) -->
+<aside class="col-span-12 lg:col-span-3 space-y-6">
+<!-- Upload Section -->
+<section class="card-container p-6">
+<div class="flex items-center gap-2 mb-6">
+<svg class="w-4 h-4 text-minerva-green" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
+<h2 class="section-header">Datei-Upload</h2>
+</div>
+<div class="flex mb-4 bg-minerva-black p-1 rounded">
+<button class="flex-1 py-1.5 text-[11px] font-bold rounded bg-minerva-hover text-minerva-green file-type-btn" id="type-html" onclick="toggleUploadType('html')">HTML</button>
+<button class="flex-1 py-1.5 text-[11px] font-bold rounded text-minerva-gray hover:text-white transition-colors file-type-btn" id="type-pdf" onclick="toggleUploadType('pdf')">PDF</button>
+<button class="flex-1 py-1.5 text-[11px] font-bold rounded text-minerva-gray hover:text-white transition-colors file-type-btn" id="type-xml" onclick="toggleUploadType('xml')">XML</button>
+</div>
+
+<div class="relative border-2 border-dashed border-minerva-border rounded p-8 text-center transition-all hover:border-minerva-green/50 hover:bg-minerva-black/40 group file-input-wrapper">
+<input class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" id="main-file-input" type="file" onchange="handleUnifiedFileSelect(this)"/>
+<div class="text-minerva-gray group-hover:text-minerva-green transition-colors file-input-label" id="fileLabel">
+<svg class="w-10 h-10 mx-auto mb-3 opacity-60" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+<p class="text-[11px] font-medium leading-relaxed" id="unified-file-label">HTML Datei auswählen oder per <br/>Drag &amp; Drop hierher ziehen</p>
+<p class="text-[11px] font-bold text-white mt-2 file-name" id="fileName">{% if template_loaded %}📄 {{ default_template }} (Standard){% else %}Keine Datei ausgewählt{% endif %}</p>
+</div>
+</div>
+<div id="uploadStatus" class="mt-4 text-xs">
+    {% if template_loaded %}
+    <div class="text-minerva-green">✅ Standard-Template geladen: {{ default_template }}</div>
+    {% endif %}
+</div>
+</section>
+
+<!-- GHS Piktogramme -->
+<section class="card-container p-6">
+<div class="flex items-center justify-between mb-6">
+<h2 class="section-header">GHS Piktogramme</h2>
+<span class="text-[9px] font-bold bg-minerva-black text-minerva-green px-2 py-0.5 rounded border border-minerva-green/20">MAX 3</span>
+</div>
+<div class="grid grid-cols-3 gap-3 mb-5" id="ghsSelectedDisplay">
+<div class="aspect-square bg-minerva-black border border-minerva-border rounded flex items-center justify-center hover:border-minerva-green/40 transition-colors cursor-pointer group">
+<span class="text-lg text-minerva-gray group-hover:text-minerva-green">+</span>
+</div>
+<div class="aspect-square bg-minerva-black border border-minerva-border rounded flex items-center justify-center hover:border-minerva-green/40 transition-colors cursor-pointer group">
+<span class="text-lg text-minerva-gray group-hover:text-minerva-green">+</span>
+</div>
+<div class="aspect-square bg-minerva-black border border-minerva-border rounded flex items-center justify-center hover:border-minerva-green/40 transition-colors cursor-pointer group">
+<span class="text-lg text-minerva-gray group-hover:text-minerva-green">+</span>
+</div>
+</div>
+<button class="w-full py-2.5 text-[11px] font-bold border border-minerva-green/40 text-minerva-green rounded hover:bg-minerva-green hover:text-white transition-all uppercase tracking-wider" onclick="showTab('ghs', document.querySelector('nav button:nth-child(3)'))">
+                Piktogramme Verwalten
+            </button>
+</section>
+
+<!-- Target Language -->
+<section class="card-container p-6 space-y-5">
+<div>
+<h2 class="section-header mb-3">Zielsprache</h2>
+<div class="relative">
+<select id="languageSelect" class="w-full text-xs font-semibold py-3 pl-4 pr-10 rounded border-minerva-border bg-minerva-black text-white focus:ring-1 focus:ring-minerva-green focus:border-minerva-green appearance-none">
+{% for code, name in languages.items() %}
+<option value="{{ code }}">{{ name }}</option>
+{% endfor %}
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-minerva-gray">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"></path></svg>
+</div>
+</div>
+</div>
+<button id="translateBtn" disabled onclick="translateFile()" class="w-full btn-primary py-4 rounded font-bold text-xs uppercase tracking-[0.15em] flex items-center justify-center gap-3">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
+                Übersetzung Starten
+            </button>
+</section>
+</aside>
+<!-- END: Sidebar -->
+
+<!-- BEGIN: Editor & Preview Area -->
+<div class="col-span-12 lg:col-span-9 space-y-5" id="previewContainer" style="display: none;">
+<!-- Headers -->
+<div class="grid grid-cols-2 gap-6 px-1">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-minerva-gray/40"></span>
+<h3 class="text-[11px] font-bold text-minerva-gray uppercase tracking-widest">Originaldokument</h3>
+</div>
+<button onclick="toggleEditMode('original')" id="editOriginalBtn" class="text-[10px] font-bold text-white bg-minerva-card border border-minerva-border px-4 py-1.5 rounded hover:bg-minerva-green hover:border-minerva-green transition-all uppercase tracking-wider">
+                    Bearbeiten
+                </button>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-minerva-green shadow-[0_0_8px_rgba(118,184,42,0.4)]"></span>
+<h3 class="text-[11px] font-bold text-white uppercase tracking-widest">Übersetzungsvorschau</h3>
+</div>
+<button id="editModeBtn" class="text-[10px] font-bold text-white bg-minerva-card border border-minerva-border px-4 py-1.5 rounded hover:bg-minerva-green hover:border-minerva-green transition-all uppercase tracking-wider" onclick="toggleEditMode('translated')">
+                    Bearbeitungsmodus
+                </button>
+</div>
+</div>
+
+<!-- Original Edit Toolbar -->
+<div class="hidden bg-minerva-card border border-minerva-green/50 border-b-0 rounded-t-lg p-3 flex-wrap items-center gap-4" id="originalEditModeToolbar">
+    <div class="flex gap-1.5 border-r border-minerva-border pr-4">
+    <button class="p-2 rounded hover:bg-minerva-black text-white" onclick="execEditCmdForOriginal('undo')" title="Rückgängig">↩️</button>
+    <button class="p-2 rounded hover:bg-minerva-black text-white" onclick="execEditCmdForOriginal('redo')" title="Wiederholen">↪️</button>
+    </div>
+    <div class="flex gap-1.5 border-r border-minerva-border pr-4">
+    <button class="p-2 rounded hover:bg-minerva-black text-white" onclick="execEditCmdForOriginal('bold')" title="Fett"><b>B</b></button>
+    <button class="p-2 rounded hover:bg-minerva-black text-white" onclick="execEditCmdForOriginal('italic')" title="Kursiv"><i>I</i></button>
+    </div>
+    <div class="flex gap-1.5">
+    <button class="p-2 rounded hover:bg-minerva-black text-white" onclick="execEditCmdForOriginal('insertUnorderedList')" title="Liste">•</button>
+    <button class="p-2 rounded hover:bg-minerva-black text-white" onclick="insertTable(3, 3)" title="Tabelle">▦</button>
+    </div>
+    <div class="ml-auto flex gap-3">
+    <button class="text-[11px] font-bold text-minerva-gray hover:text-white px-3 py-1.5 transition-colors uppercase tracking-widest" onclick="discardChanges('original')">Abbrechen</button>
+    <button class="text-[11px] font-bold text-white bg-minerva-green px-6 py-1.5 rounded shadow-lg shadow-minerva-green/20 uppercase tracking-widest" onclick="saveChanges('original')">Änderungen Speichern</button>
+    </div>
+</div>
+
+<!-- Translated Edit Toolbar -->
+<div class="hidden bg-minerva-card border border-minerva-green/50 border-b-0 rounded-t-lg p-3 flex-wrap items-center gap-4" id="editModeToolbar">
+<div class="flex gap-1.5 border-r border-minerva-border pr-4">
+    <button class="p-2 rounded hover:bg-minerva-black text-white" onclick="execEditCmd('undo')" title="Rückgängig">↩️</button>
+    <button class="p-2 rounded hover:bg-minerva-black text-white" onclick="execEditCmd('redo')" title="Wiederholen">↪️</button>
+</div>
+<div class="flex gap-1.5 border-r border-minerva-border pr-4">
+<button class="p-2 rounded hover:bg-minerva-black text-white" onclick="execEditCmd('bold')" title="Fett"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><path d="M6 4h8a4 4 0 014 4 4 4 0 01-4 4H6z"></path><path d="M6 12h9a4 4 0 014 4 4 4 0 01-4 4H6z"></path></svg></button>
+<button class="p-2 rounded hover:bg-minerva-black text-white" onclick="execEditCmd('italic')" title="Kursiv"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><line x1="19" x2="10" y1="4" y2="4"></line><line x1="14" x2="5" y1="20" y2="20"></line><line x1="15" x2="9" y1="4" y2="20"></line></svg></button>
+</div>
+<div class="flex gap-1.5">
+<button class="p-2 rounded hover:bg-minerva-black text-white" onclick="execEditCmd('insertUnorderedList')" title="Liste"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><line x1="8" x2="21" y1="6" y2="6"></line><line x1="8" x2="21" y1="12" y2="12"></line><line x1="8" x2="21" y1="18" y2="18"></line><line x1="3" x2="3.01" y1="6" y2="6"></line><line x1="3" x2="3.01" y1="12" y2="12"></line><line x1="3" x2="3.01" y1="18" y2="18"></line></svg></button>
+<button class="p-2 rounded hover:bg-minerva-black text-white" onclick="insertTable(3, 3)" title="Tabelle"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect><line x1="3" x2="21" y1="9" y2="9"></line><line x1="3" x2="21" y1="15" y2="15"></line><line x1="9" x2="9" y1="3" y2="21"></line><line x1="15" x2="15" y1="3" y2="21"></line></svg></button>
+</div>
+<div class="ml-auto flex gap-3">
+<button class="text-[11px] font-bold text-minerva-gray hover:text-white px-3 py-1.5 transition-colors uppercase tracking-widest" onclick="discardChanges('translated')">Abbrechen</button>
+<button class="text-[11px] font-bold text-white bg-minerva-green px-6 py-1.5 rounded shadow-lg shadow-minerva-green/20 uppercase tracking-widest" onclick="saveChanges('translated')">Änderungen Speichern</button>
+</div>
+</div>
+
+<!-- Preview Grid -->
+<div class="grid grid-cols-2 gap-6" id="preview-grid">
+<!-- Original View -->
+<div class="bg-white rounded overflow-hidden shadow-2xl relative group" id="original-container">
+<div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+<button class="bg-black/50 p-2 rounded text-white backdrop-blur-md" onclick="refreshPreview('original')">🔄</button>
+</div>
+<iframe class="preview-iframe" id="originalPreview"></iframe>
+<div class="hidden absolute inset-0 bg-white p-10 outline-none overflow-y-auto text-gray-900 leading-relaxed custom-scrollbar" contenteditable="true" id="originalRichTextEditor">
+</div>
+</div>
+<!-- Translated View -->
+<div class="bg-white rounded overflow-hidden shadow-2xl relative group transition-all duration-300" id="translated-container">
+<div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+<button class="bg-black/50 p-2 rounded text-white backdrop-blur-md" onclick="refreshPreview('translated')">🔄</button>
+</div>
+<div class="relative h-full" id="editModeContainer">
+<iframe class="preview-iframe" id="translatedPreview"></iframe>
+<div class="hidden absolute inset-0 bg-white p-10 outline-none overflow-y-auto text-gray-900 leading-relaxed custom-scrollbar" contenteditable="true" id="richTextEditor">
+</div>
+</div>
+</div>
+</div>
+
+<!-- Nicht übersetzte Phrasen -->
+<section class="card-container p-6 w-full mt-6" id="downloadNotFoundSection" style="display: none;">
+<div class="flex items-center justify-between mb-4">
+<h2 class="section-header">Nicht übersetzte Phrasen</h2>
+<div class="flex gap-2">
+<span class="text-[9px] font-bold bg-red-500/20 text-red-500 px-2 py-0.5 rounded border border-red-500/20"><span id="notFoundBadge">0</span> UNRESOLVED</span>
+</div>
+</div>
+<div class="bg-minerva-black rounded border border-minerva-border overflow-hidden">
+<div class="max-h-[250px] overflow-y-auto custom-scrollbar">
+<table class="w-full text-left text-[11px]">
+<thead class="bg-minerva-card/50 border-b border-minerva-border sticky top-0">
+<tr>
+<th class="px-4 py-2 font-semibold text-minerva-gray uppercase">Original Phrase (EN)</th>
+<th class="px-4 py-2 font-semibold text-minerva-gray uppercase text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-minerva-border" id="notFoundList">
+<!-- Populated by JS -->
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+
+<!-- Database Tab Content -->
+<div id="database-tab" class="tab-content hidden">
+    <div class="grid grid-cols-12 gap-8">
+        <div class="col-span-12 space-y-6">
+            <div class="card-container p-6">
+                <h2 class="section-header mb-4">Datenbank-Auswahl</h2>
+                <select id="databaseSelect" onchange="handleDatabaseChange(this)" class="w-full text-xs font-semibold py-3 pl-4 pr-10 rounded border-minerva-border bg-minerva-black text-white focus:ring-1 focus:ring-minerva-green focus:border-minerva-green appearance-none">
+                    <!-- Loaded dynamically -->
+                </select>
+                <div id="databaseStatus" class="mt-4 text-xs"></div>
+            </div>
+
+            <div class="card-container p-6">
+                <h2 class="section-header mb-4">Phrasen Suchen & Bearbeiten</h2>
+                <div class="flex gap-4 mb-6">
+                    <input type="text" id="searchInput" placeholder="Suchbegriff eingeben..." class="flex-1 text-xs py-2 px-3 rounded bg-minerva-black border-minerva-border text-white" onkeypress="if(event.key==='Enter')searchPhrases()">
+                    <select id="searchLanguage" class="text-xs py-2 px-3 rounded bg-minerva-black border-minerva-border text-white">
+                        {% for code, name in languages.items() %}
+                        <option value="{{ code }}">{{ code.upper() }}</option>
+                        {% endfor %}
+                    </select>
+                    <select id="searchMode" class="text-xs py-2 px-3 rounded bg-minerva-black border-minerva-border text-white">
+                        <option value="global">🌍 Alle Sprachen (Global)</option>
+                        <option value="en">🇬🇧 Nur Englisch</option>
+                        <option value="target">🎯 Nur Zielsprache</option>
+                    </select>
+                    <button onclick="searchPhrases()" class="btn-primary px-4 py-2 rounded text-xs font-bold uppercase">Suchen</button>
+                    <button onclick="showAddModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-xs font-bold uppercase">Neue Phrase</button>
                 </div>
-                    
-                    <div class="card" id="dbManagementCard">
-                        <h2>🗄️ Phrasen-Datenbank</h2>
-                        <div class="form-group">
-                            <label for="databaseSelect">Aktive Datenbank:</label>
-                            <select id="databaseSelect" onchange="handleDatabaseChange(this)">
-                                <!-- Options will be loaded by JS -->
+                
+                <div class="overflow-x-auto bg-minerva-black rounded border border-minerva-border">
+                    <table class="w-full text-left text-[11px]">
+                        <thead class="bg-minerva-card/50 border-b border-minerva-border">
+                            <tr>
+                                <th class="px-4 py-3 font-semibold text-minerva-gray uppercase" style="width: 80px;">ID</th>
+                                <th class="px-4 py-3 font-semibold text-minerva-gray uppercase">English (Original)</th>
+                                <th class="px-4 py-3 font-semibold text-minerva-gray uppercase" id="resultLangHeader">Deutsch</th>
+                                <th class="px-4 py-3 font-semibold text-minerva-gray uppercase text-right" style="width: 150px;">Aktionen</th>
+                            </tr>
+                        </thead>
+                        <tbody id="phrasesTable" class="divide-y divide-minerva-border">
+                            <tr>
+                                <td colspan="4" class="px-4 py-8 text-center text-minerva-gray">
+                                    🔍 Geben Sie einen Suchbegriff ein oder klicken Sie "Suchen" für alle Phrasen
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card-container p-6">
+                <h2 class="section-header mb-4">Bulk-Korrektur (TXT & Quick-Edit)</h2>
+                <div class="grid grid-cols-2 gap-8">
+                    <!-- File Upload -->
+                    <div>
+                        <h3 class="text-[11px] font-bold text-minerva-gray mb-3 uppercase tracking-wider">TXT-Datei Upload</h3>
+                        <div class="mb-3">
+                            <select id="bulkSourceLang" class="w-full text-xs py-2 px-3 rounded bg-minerva-black border-minerva-border text-white">
+                                <option value="auto">Automatisch erkennen</option>
+                                <option value="en" selected>🇬🇧 Englisch</option>
+                                <option value="de">🇩🇪 Deutsch</option>
+                                <option value="fr">🇫🇷 Französisch</option>
+                                <option value="es">🇪🇸 Spanisch</option>
                             </select>
-                            <small id="databaseDescription" style="color: var(--text-secondary); display: block; margin-top: 8px;"></small>
                         </div>
-                        <div id="databaseStatus" style="display: none; margin-top: 15px;"></div>
-                    </div>
-                    
-                    <div class="card">
-                        <h2>⚠️ GHS Piktogramme (max. 3)</h2>
-                        <div id="ghsSelectionCompact">
-                            <div id="ghsSelectedDisplay" style="display: flex; gap: 8px; flex-wrap: wrap; min-height: 84px; background: var(--bg-tertiary); border-radius: 8px; padding: 10px; margin-bottom: 10px; align-items: center; justify-content: center;">
-                                <span style="color: var(--text-secondary); font-size: 0.9em;">Keine Piktogramme ausgewählt</span>
-                            </div>
-                            <button onclick="openGHSModal()" style="width: 100%; margin-bottom: 5px;">➕ Piktogramme wählen</button>
-                            <small style="color: var(--text-secondary);">Wird in Original- und Übersetzungsvorschau angezeigt</small>
+                        <div class="relative border border-dashed border-minerva-border rounded p-4 text-center hover:border-minerva-green/50 bg-minerva-black transition-all file-input-wrapper">
+                            <input class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" type="file" id="bulkFileInput" accept=".txt">
+                            <label for="bulkFileInput" class="file-input-label text-[11px] text-minerva-gray" id="bulkFileLabel">
+                                <div>📂 TXT-Datei auswählen</div>
+                            </label>
                         </div>
-                    </div>
-                    
-                    <div class="card">
-                        <h2>🌍 Sprache wählen</h2>
-                        <div class="form-group">
-                            <label>Zielsprache:</label>
-                            <select id="languageSelect">
-                                {% for code, name in languages.items() %}
-                                <option value="{{ code }}">{{ name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <button onclick="translateFile()" id="translateBtn" disabled style="width: 100%;">
-                            🚀 Übersetzen starten
+                        <button onclick="uploadBulkFile()" class="w-full mt-3 bg-minerva-card hover:bg-minerva-hover border border-minerva-border py-2 rounded text-xs font-bold text-white transition-colors">
+                            📤 Hochladen & Aktualisieren
                         </button>
                     </div>
                     
-                    <div class="card" id="statsCard" style="display: none;">
-                        <h2>📊 Ergebnis</h2>
-                        <div class="stats-grid">
-                            <div class="stat-box">
-                                <div class="stat-value" id="totalTexts">0</div>
-                                <div class="stat-label">Gesamt</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-value" id="translatedCount">0</div>
-                                <div class="stat-label">Übersetzt</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-value" id="notFoundCount">0</div>
-                                <div class="stat-label">Fehlend</div>
-                            </div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="coverageBar" style="width: 0%">0%</div>
-                        </div>
-                    </div>
-                    
-                    <div id="downloadNotFoundSection" style="display: none; gap: 15px; flex-wrap: wrap;">
-                        <div class="card" id="downloadCard" style="flex: 1; min-width: 200px;">
-                            <h2>💾 Download</h2>
-                            <div class="btn-group" style="flex-direction: column;">
-                                <button onclick="downloadHTML()" class="success" style="width: 100%;">
-                                    📄 Als HTML herunterladen
-                                </button>
-                                <button onclick="downloadPDF()" class="secondary" style="width: 100%; margin-top: 10px;">
-                                    📕 Als PDF herunterladen
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="card" id="notFoundCard" style="flex: 2; min-width: 300px;">
-                            <h2>❌ Nicht übersetzte Phrasen <span class="highlight" id="notFoundBadge">0</span></h2>
-                            <div class="not-found-list" id="notFoundList"></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="content-area">
-                    <div class="preview-container" id="previewContainer" style="display: none;">
-                        <div class="preview-box">
-                            <div class="preview-header">
-                                <h3>👁️ Original</h3>
-                                <div style="display: flex; gap: 8px; align-items: center;">
-                                    <button onclick="toggleEditMode('original')" id="editOriginalBtn" class="secondary" style="padding: 8px 15px;" title="Bearbeitungsmodus für Original aktivieren">
-                                        ✏️ Bearbeiten
-                                    </button>
-                                    <button onclick="refreshPreview('original')" class="secondary" style="padding: 8px 15px;">🔄</button>
-                                </div>
-                            </div>
-                            <div class="edit-mode-toolbar" id="originalEditModeToolbar">
-                                <button class="toolbar-btn" onclick="execEditCmdForOriginal('undo')" title="Rückgängig">↩️</button>
-                                <button class="toolbar-btn" onclick="execEditCmdForOriginal('redo')" title="Wiederholen">↪️</button>
-                                <div class="separator"></div>
-                                <button class="toolbar-btn" onclick="execEditCmdForOriginal('bold')" title="Fett"><b>B</b></button>
-                                <button class="toolbar-btn" onclick="execEditCmdForOriginal('italic')" title="Kursiv"><i>I</i></button>
-                                <button class="toolbar-btn" onclick="execEditCmdForOriginal('underline')" title="Unterstrichen"><u>U</u></button>
-                                <button class="toolbar-btn" onclick="execEditCmdForOriginal('strikeThrough')" title="Durchgestrichen"><s>S</s></button>
-                                <div class="separator"></div>
-                                <button class="toolbar-btn" onclick="insertTable(3, 3)" title="Tabelle einfügen">▦</button>
-                                <button class="toolbar-btn" onclick="addTableRow()" title="Zeile hinzufügen">➕=</button>
-                                <button class="toolbar-btn" onclick="addTableColumn()" title="Spalte hinzufügen">➕||</button>
-                                <button class="toolbar-btn" onclick="deleteTableRow()" title="Zeile löschen">➖=</button>
-                                <button class="toolbar-btn" onclick="deleteTableColumn()" title="Spalte löschen">➖||</button>
-                                <div class="separator"></div>
-                                <button class="toolbar-btn" onclick="execEditCmdForOriginal('insertUnorderedList')" title="Aufzählung">•</button>
-                                <button class="toolbar-btn" onclick="execEditCmdForOriginal('insertOrderedList')" title="Nummerierung">1.</button>
-                                <div class="separator"></div>
-                                <select onchange="execEditCmdForOriginal('fontName', this.value)" title="Schriftart">
-                                    <option value="Arial">Arial</option>
-                                    <option value="Helvetica">Helvetica</option>
-                                    <option value="Times New Roman">Times New Roman</option>
-                                    <option value="Courier New">Courier New</option>
-                                </select>
-                                <select onchange="execEditCmdForOriginal('fontSize', this.value)" title="Schriftgröße">
-                                    <option value="1">Sehr klein</option>
-                                    <option value="2">Klein</option>
-                                    <option value="3">Normal</option>
-                                    <option value="4">Groß</option>
-                                    <option value="5">Sehr groß</option>
-                                    <option value="6">Überschrift</option>
-                                    <option value="7">Große Überschrift</option>
-                                </select>
-                                <div class="separator"></div>
-                                <div class="zoom-controls">
-                                    <button onclick="zoomEditOriginal(-10)" title="Verkleinern">−</button>
-                                    <span class="zoom-level" id="originalZoomLevel">100%</span>
-                                    <button onclick="zoomEditOriginal(10)" title="Vergrößern">+</button>
-                                </div>
-                                <div class="separator"></div>
-                                <button class="discard-btn" onclick="discardChanges('original')" title="Änderungen verwerfen">✕ Verwerfen</button>
-                                <button class="confirm-btn" onclick="saveChanges('original')" title="Änderungen speichern">✓ Speichern</button>
-                            </div>
-                            <iframe id="originalPreview" class="preview-frame"></iframe>
-                            <div class="edit-mode-container" id="originalEditModeContainer">
-                                <div class="rich-text-editor" id="originalRichTextEditor" contenteditable="true"></div>
-                            </div>
-                        </div>
-                        <div class="preview-box">
-                            <div class="preview-header">
-                                <h3>✨ Übersetzt</h3>
-                                <div style="display: flex; gap: 8px; align-items: center;">
-                                    <button onclick="toggleEditMode('translated')" id="editModeBtn" class="secondary" style="padding: 8px 15px;" title="Bearbeitungsmodus aktivieren">
-                                        ✏️ Bearbeiten
-                                    </button>
-                                    <button onclick="refreshPreview('translated')" class="secondary" style="padding: 8px 15px;">🔄</button>
-                                </div>
-                            </div>
-                            <!-- Edit mode toolbar -->
-                            <div class="edit-mode-toolbar" id="editModeToolbar">
-                                <button class="toolbar-btn" onclick="execEditCmd('undo')" title="Rückgängig">↩️</button>
-                                <button class="toolbar-btn" onclick="execEditCmd('redo')" title="Wiederholen">↪️</button>
-                                <div class="separator"></div>
-                                <button class="toolbar-btn" onclick="execEditCmd('bold')" title="Fett"><b>B</b></button>
-                                <button class="toolbar-btn" onclick="execEditCmd('italic')" title="Kursiv"><i>I</i></button>
-                                <button class="toolbar-btn" onclick="execEditCmd('underline')" title="Unterstrichen"><u>U</u></button>
-                                <button class="toolbar-btn" onclick="execEditCmd('strikeThrough')" title="Durchgestrichen"><s>S</s></button>
-                                <div class="separator"></div>
-                                <button class="toolbar-btn" onclick="insertTable(3, 3)" title="Tabelle einfügen">▦</button>
-                                <button class="toolbar-btn" onclick="addTableRow()" title="Zeile hinzufügen">➕=</button>
-                                <button class="toolbar-btn" onclick="addTableColumn()" title="Spalte hinzufügen">➕||</button>
-                                <button class="toolbar-btn" onclick="deleteTableRow()" title="Zeile löschen">➖=</button>
-                                <button class="toolbar-btn" onclick="deleteTableColumn()" title="Spalte löschen">➖||</button>
-                                <div class="separator"></div>
-                                <button class="toolbar-btn" onclick="execEditCmd('insertUnorderedList')" title="Aufzählung">•</button>
-                                <button class="toolbar-btn" onclick="execEditCmd('insertOrderedList')" title="Nummerierung">1.</button>
-                                <div class="separator"></div>
-                                <select onchange="execEditCmd('fontName', this.value)" title="Schriftart">
-                                    <option value="Arial">Arial</option>
-                                    <option value="Helvetica">Helvetica</option>
-                                    <option value="Times New Roman">Times New Roman</option>
-                                    <option value="Courier New">Courier New</option>
-                                </select>
-                                <select onchange="execEditCmd('fontSize', this.value)" title="Schriftgröße">
-                                    <option value="1">Sehr klein</option>
-                                    <option value="2">Klein</option>
-                                    <option value="3">Normal</option>
-                                    <option value="4">Groß</option>
-                                    <option value="5">Sehr groß</option>
-                                    <option value="6">Überschrift</option>
-                                    <option value="7">Große Überschrift</option>
-                                </select>
-                                <div class="separator"></div>
-                                <div class="zoom-controls">
-                                    <button onclick="zoomEdit(-10)" title="Verkleinern">−</button>
-                                    <span class="zoom-level" id="zoomLevel">100%</span>
-                                    <button onclick="zoomEdit(10)" title="Vergrößern">+</button>
-                                </div>
-                                <button class="toolbar-btn" onclick="toggleFullscreenEdit()" id="fullscreenBtn" title="Vollbild">⛶</button>
-                                <div class="separator"></div>
-                                <button class="discard-btn" onclick="discardChanges('translated')" title="Änderungen verwerfen">✕ Verwerfen</button>
-                                <button class="confirm-btn" onclick="saveChanges('translated')" title="Änderungen speichern">✓ Speichern</button>
-                            </div>
-                            <iframe id="translatedPreview" class="preview-frame"></iframe>
-                            <div class="edit-mode-container" id="editModeContainer">
-                                <div class="rich-text-editor" id="richTextEditor" contenteditable="true"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Edit Mode Modal Overlay -->
-                <div class="edit-modal-overlay" id="editModalOverlay">
-                    <div class="edit-modal">
-                        <div class="edit-modal-header">
-                            <h3>✏️ Übersetzung bearbeiten</h3>
-                            <button class="edit-modal-close" onclick="closeEditModal()" title="Schließen">✕</button>
-                        </div>
-                        <div class="edit-modal-toolbar">
-                            <button class="toolbar-btn" onclick="execEditCmd('undo')" title="Rückgängig">↩️</button>
-                            <button class="toolbar-btn" onclick="execEditCmd('redo')" title="Wiederholen">↪️</button>
-                            <div class="separator"></div>
-                            <button class="toolbar-btn" onclick="execEditCmd('bold')" title="Fett"><b>B</b></button>
-                            <button class="toolbar-btn" onclick="execEditCmd('italic')" title="Kursiv"><i>I</i></button>
-                            <button class="toolbar-btn" onclick="execEditCmd('underline')" title="Unterstrichen"><u>U</u></button>
-                            <button class="toolbar-btn" onclick="execEditCmd('strikeThrough')" title="Durchgestrichen"><s>S</s></button>
-                            <div class="separator"></div>
-                            <button class="toolbar-btn" onclick="insertTable(3, 3)" title="Tabelle einfügen">▦</button>
-                            <button class="toolbar-btn" onclick="addTableRow()" title="Zeile hinzufügen">➕=</button>
-                            <button class="toolbar-btn" onclick="addTableColumn()" title="Spalte hinzufügen">➕||</button>
-                            <button class="toolbar-btn" onclick="deleteTableRow()" title="Zeile löschen">➖=</button>
-                            <button class="toolbar-btn" onclick="deleteTableColumn()" title="Spalte löschen">➖||</button>
-                            <div class="separator"></div>
-                            <button class="toolbar-btn" onclick="execEditCmd('insertUnorderedList')" title="Aufzählung">•</button>
-                            <button class="toolbar-btn" onclick="execEditCmd('insertOrderedList')" title="Nummerierung">1.</button>
-                            <div class="separator"></div>
-                            <select onchange="execEditCmd('fontName', this.value)" title="Schriftart">
-                                <option value="Arial">Arial</option>
-                                <option value="Helvetica">Helvetica</option>
-                                <option value="Times New Roman">Times New Roman</option>
-                                <option value="Courier New">Courier New</option>
-                            </select>
-                            <select onchange="execEditCmd('fontSize', this.value)" title="Schriftgröße">
-                                <option value="1">Sehr klein</option>
-                                <option value="2">Klein</option>
-                                <option value="3">Normal</option>
-                                <option value="4">Groß</option>
-                                <option value="5">Sehr groß</option>
-                                <option value="6">Überschrift</option>
-                                <option value="7">Große Überschrift</option>
-                            </select>
-                            <div class="separator"></div>
-                            <div class="zoom-controls">
-                                <button onclick="zoomEdit(-10)" title="Verkleinern">−</button>
-                                <span class="zoom-level" id="modalZoomLevel">100%</span>
-                                <button onclick="zoomEdit(10)" title="Vergrößern">+</button>
-                            </div>
-                            <div class="separator"></div>
-                            <button class="discard-btn" onclick="discardChangesInModal()" title="Änderungen verwerfen">✕ Verwerfen</button>
-                            <button class="confirm-btn" onclick="saveChangesInModal()" title="Änderungen speichern">✓ Speichern</button>
-                        </div>
-                        <div class="edit-modal-body">
-                            <div class="rich-text-editor" id="modalRichTextEditor" contenteditable="true"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Database Tab -->
-        <div id="database-tab" class="tab-content">
-            <button class="accordion active">🔍 Phrasen Suchen & Bearbeiten</button>
-            <div class="panel" style="max-height: 2000px;">
-                <div class="card">
-                    <div class="search-box">
-                        <input type="text" id="searchInput" placeholder="Suchbegriff eingeben..." onkeypress="if(event.key==='Enter')searchPhrases()">
-                        <select id="searchLanguage">
-                            {% for code, name in languages.items() %}
-                            <option value="{{ code }}">{{ code.upper() }}</option>
-                            {% endfor %}
-                        </select>
-                        <select id="searchMode">
-                            <option value="global">🌍 Alle Sprachen (Global)</option>
-                            <option value="en">🇬🇧 Nur Englisch</option>
-                            <option value="target">🎯 Nur Zielsprache</option>
-                        </select>
-                        <button onclick="searchPhrases()">🔍 Suchen</button>
-                        <button onclick="showAddModal()" class="success">➕ Neue Phrase</button>
-                    </div>
-                    
-                    <div style="overflow-x: auto;">
-                        <table class="phrase-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 80px;">ID</th>
-                                    <th>English (Original)</th>
-                                    <th id="resultLangHeader">Deutsch</th>
-                                    <th style="width: 150px;">Aktionen</th>
-                                </tr>
-                            </thead>
-                            <tbody id="phrasesTable">
-                                <tr>
-                                    <td colspan="4" style="text-align: center; color: var(--text-secondary); padding: 40px;">
-                                        🔍 Geben Sie einen Suchbegriff ein oder klicken Sie "Suchen" für alle Phrasen
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <button class="accordion">📝 Bulk-Korrektur (TXT & Quick-Edit)</button>
-            <div class="panel">
-                <div class="card" style="margin-top: 15px;">
-                    <p style="color: var(--text-secondary); margin-bottom: 15px;">
-                        Korrigieren Sie mehrere Phrasen gleichzeitig durch TXT-Datei-Upload oder Quick-Edit Textfeld.
-                        Verwenden Sie das Format: "EN: English (Original)" gefolgt vom Text, dann "DE: Deutsch", "FR: Français", etc.
-                    </p>
-
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <!-- File Upload -->
-                        <div>
-                            <h3>📁 TXT-Datei Upload</h3>
-                            <div class="form-group">
-                                <label>Quelldatei:</label>
-                                <select id="bulkSourceLang">
-                                    <option value="auto">Automatisch erkennen</option>
-                                    <option value="en" selected>🇬🇧 Englisch</option>
-                                    <option value="de">🇩🇪 Deutsch</option>
-                                    <option value="fr">🇫🇷 Französisch</option>
-                                    <option value="es">🇪🇸 Spanisch</option>
-                                </select>
-                            </div>
-                            <div class="file-input-wrapper">
-                                <input type="file" id="bulkFileInput" accept=".txt">
-                                <label for="bulkFileInput" class="file-input-label" id="bulkFileLabel">
-                                    <div>📂 TXT-Datei auswählen</div>
-                                </label>
-                            </div>
-                            <button onclick="uploadBulkFile()" style="width: 100%; margin-top: 10px;">
-                                📤 Hochladen & Aktualisieren
-                            </button>
-                        </div>
-
-                        <!-- Quick Edit -->
-                        <div>
-                            <h3>⚡ Quick-Edit</h3>
-                            <div class="form-group">
-                                <label>Quelldatei:</label>
-                                <select id="quickSourceLang">
-                                    <option value="auto">Automatisch erkennen</option>
-                                    <option value="en" selected>🇬🇧 Englisch</option>
-                                    <option value="de">🇩🇪 Deutsch</option>
-                                    <option value="fr">🇫🇷 Französisch</option>
-                                    <option value="es">🇪🇸 Spanisch</option>
-                                </select>
-                            </div>
-                            <textarea id="quickEditText"
-                                class="quick-edit-textarea"
-                                rows="12"
-                                placeholder="EN: English (Original)
-The product is chemically stable under recommended conditions.
-
-DE: Deutsch
-Das Produkt ist chemisch stabil.
-
-FR: Français
-Le produit est chimiquement stable.
-
----
-DE: Deutsch (Original)
-Von Stoffen fernhalten, die miteinander reagieren könnten.
-
-EN: English
-Keep away from substances which could react together."
-                                onpaste="return true;"></textarea>
-                            <button onclick="applyQuickEdit()" style="width: 100%; margin-top: 10px;">
-                                ✅ Quick-Edit anwenden
-                            </button>
-                        </div>
-                    </div>
-
-                    <div id="bulkStatus" style="margin-top: 15px;"></div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- GHS Pictograms Tab -->
-        <div id="ghs-tab" class="tab-content">
-            <div class="card">
-                <h2>⚠️ GHS Pictogramme verwalten (max. 3)</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <!-- Available Pictograms -->
+                    <!-- Quick Edit -->
                     <div>
-                        <h3>Verfuegbare Piktogramme</h3>
-                        <div class="search-box" style="margin-bottom: 15px;">
-                            <select id="ghsFilterClass" onchange="filterGHSPictograms()">
-                                <option value="">Alle Gefahrenklassen</option>
-                                <option value="Explosive">Explosiv</option>
-                                <option value="Flammable">Entzundlich</option>
-                                <option value="Oxidizing">Oxidierend</option>
-                                <option value="Compressed Gas">Unter Druck stehend</option>
-                                <option value="Corrosive">Aetzend</option>
-                                <option value="Toxic">Giftig</option>
-                                <option value="Harmful">Gesundheitsschaedlich</option>
-                                <option value="Health Hazard">Gesundheitsgefahr</option>
-                                <option value="Environmental Hazard">Umweltgefahr</option>
+                        <h3 class="text-[11px] font-bold text-minerva-gray mb-3 uppercase tracking-wider">Quick-Edit</h3>
+                        <div class="mb-3">
+                            <select id="quickSourceLang" class="w-full text-xs py-2 px-3 rounded bg-minerva-black border-minerva-border text-white">
+                                <option value="auto">Automatisch erkennen</option>
+                                <option value="en" selected>🇬🇧 Englisch</option>
+                                <option value="de">🇩🇪 Deutsch</option>
+                                <option value="fr">🇫🇷 Französisch</option>
+                                <option value="es">🇪🇸 Spanisch</option>
                             </select>
                         </div>
-                        <div id="ghsAvailableList" class="ghs-pictogram-grid">
-                            <p style="color: var(--text-secondary);">Lade Piktogramme...</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Selected Pictograms -->
-                    <div>
-                        <h3>Ausgewaehlte Piktogramme (<span id="ghsSelectedCount">0</span>/3)</h3>
-                        <div id="ghsSelectedList" class="ghs-selected-container" style="min-height: 200px; background: var(--bg-tertiary); border-radius: 8px; padding: 15px; border: 2px dashed var(--border-color);">
-                            <p style="color: var(--text-secondary); text-align: center;">Keine Piktogramme ausgewaehlt</p>
-                        </div>
-                        <div id="ghsError" class="alert alert-error" style="display: none; margin-top: 10px;"></div>
-                        <div id="ghsPreview" style="margin-top: 20px; padding: 15px; background: white; border-radius: 8px; text-align: center;">
-                            <p style="color: #333; font-weight: bold; margin-bottom: 10px;">Vorschau (Web: 84x84px @ 72dpi):</p>
-                            <div id="ghsWebPreview" style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;"></div>
-                            <p style="color: #666; font-size: 0.9em; margin-top: 10px;">PDF: 23x23mm @ 300dpi</p>
-                        </div>
+                        <textarea id="quickEditText" class="w-full h-32 text-xs p-3 rounded bg-minerva-black border-minerva-border text-white focus:border-minerva-green font-mono custom-scrollbar" placeholder="EN: English (Original)&#10;The product is chemically stable...&#10;&#10;DE: Deutsch&#10;Das Produkt ist chemisch stabil..."></textarea>
+                        <button onclick="applyQuickEdit()" class="w-full mt-3 bg-minerva-card hover:bg-minerva-hover border border-minerva-border py-2 rounded text-xs font-bold text-white transition-colors">
+                            ✅ Quick-Edit anwenden
+                        </button>
                     </div>
                 </div>
-            </div>
-            
-
-        </div>
-        
-        <!-- Statistics Tab -->
-        <div id="stats-tab" class="tab-content">
-            <div class="card">
-                <h2>📊 Datenbank-Statistiken</h2>
-                <div class="stats-grid" id="dbStats" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-                    <div class="stat-box">
-                        <div class="stat-value" id="totalPhrases">-</div>
-                        <div class="stat-label">Gesamtphrasen</div>
-                    </div>
-                </div>
-                <button onclick="loadStats()" style="margin-top: 20px;">🔄 Statistiken aktualisieren</button>
-            </div>
-            
-            <div class="card">
-                <h2>🌍 Phrasen pro Sprache</h2>
-                <div id="langStats" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px;"></div>
+                <div id="bulkStatus" class="mt-4 text-xs"></div>
             </div>
         </div>
     </div>
-    
-    <!-- Add/Edit Modal with All Languages -->
-    <div id="phraseModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalTitle">✨ Neue Phrase hinzufügen</h2>
-                <span class="close-btn" onclick="closeModal()">&times;</span>
+</div>
+
+<!-- GHS Tab Content -->
+<div id="ghs-tab" class="tab-content hidden">
+    <div class="card-container p-6 max-w-4xl mx-auto">
+        <h2 class="section-header mb-6">GHS Piktogramme Verwalten (Max. 3)</h2>
+        <div class="grid grid-cols-2 gap-8">
+            <div>
+                <h3 class="text-[11px] font-bold text-minerva-gray mb-3 uppercase tracking-wider">Verfügbare Piktogramme</h3>
+                <select id="ghsFilterClass" onchange="filterGHSPictograms()" class="w-full text-xs mb-4 py-2 px-3 rounded bg-minerva-black border-minerva-border text-white">
+                    <option value="">Alle Gefahrenklassen</option>
+                    <option value="Explosive">Explosiv</option>
+                    <option value="Flammable">Entzündlich</option>
+                    <option value="Oxidizing">Oxidierend</option>
+                    <option value="Compressed Gas">Unter Druck stehend</option>
+                    <option value="Corrosive">Ätzend</option>
+                    <option value="Toxic">Giftig</option>
+                    <option value="Harmful">Gesundheitsschädlich</option>
+                    <option value="Health Hazard">Gesundheitsgefahr</option>
+                    <option value="Environmental Hazard">Umweltgefahr</option>
+                </select>
+                <div id="ghsAvailableList" class="grid grid-cols-3 gap-3 max-h-96 overflow-y-auto custom-scrollbar p-2 bg-minerva-black rounded border border-minerva-border">
+                    <p class="text-xs text-minerva-gray">Lade Piktogramme...</p>
+                </div>
             </div>
-            <form id="phraseForm">
-                <input type="hidden" id="phraseId">
-                
-                <div class="form-group">
-                    <label>🇬🇧 English (Original) *</label>
-                    <textarea id="enText" required placeholder="Englische Phrase eingeben..."></textarea>
+            
+            <div>
+                <h3 class="text-[11px] font-bold text-minerva-gray mb-3 uppercase tracking-wider">Ausgewählt (<span id="ghsSelectedCount">0</span>/3)</h3>
+                <div id="ghsSelectedList" class="flex flex-wrap gap-3 p-4 min-h-[120px] bg-minerva-black rounded border border-minerva-border items-start content-start">
+                    <p class="text-xs text-minerva-gray w-full text-center">Keine Piktogramme ausgewählt</p>
                 </div>
-                
-                <div class="language-grid">
-                    <div class="language-section">
-                        <label>🇩🇪 Deutsch</label>
-                        <textarea id="deText" placeholder="Deutsche Übersetzung..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇫🇷 Français</label>
-                        <textarea id="frText" placeholder="Traduction française..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇪🇸 Español</label>
-                        <textarea id="esText" placeholder="Traducción española..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇮🇹 Italiano</label>
-                        <textarea id="itText" placeholder="Traduzione italiana..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇳🇱 Nederlands</label>
-                        <textarea id="nlText" placeholder="Nederlandse vertaling..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇵🇱 Polski</label>
-                        <textarea id="plText" placeholder="Polskie tłumaczenie..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇸🇪 Svenska</label>
-                        <textarea id="svText" placeholder="Svensk översättning..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇩🇰 Dansk</label>
-                        <textarea id="daText" placeholder="Dansk oversættelse..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇫🇮 Suomi</label>
-                        <textarea id="fiText" placeholder="Suomennos..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇬🇷 Ελληνικά</label>
-                        <textarea id="elText" placeholder="Ελληνική μετάφραση..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇨🇿 Čeština</label>
-                        <textarea id="csText" placeholder="Český překlad..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇭🇺 Magyar</label>
-                        <textarea id="huText" placeholder="Magyar fordítás..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇷🇴 Română</label>
-                        <textarea id="roText" placeholder="Traducere română..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇧🇬 Български</label>
-                        <textarea id="bgText" placeholder="Български превод..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇸🇰 Slovenčina</label>
-                        <textarea id="skText" placeholder="Slovenský preklad..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇸🇮 Slovenščina</label>
-                        <textarea id="slText" placeholder="Slovenski prevod..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇪🇪 Eesti</label>
-                        <textarea id="etText" placeholder="Eesti tõlge..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇱🇻 Latviešu</label>
-                        <textarea id="lvText" placeholder="Latviešu tulkojums..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇱🇹 Lietuvių</label>
-                        <textarea id="ltText" placeholder="Lietuvių vertimas..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇭🇷 Hrvatski</label>
-                        <textarea id="hrText" placeholder="Hrvatski prijevod..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇵🇹 Português</label>
-                        <textarea id="ptText" placeholder="Tradução portuguesa..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇳🇴 Norsk</label>
-                        <textarea id="noText" placeholder="Norsk oversettelse..."></textarea>
-                    </div>
-                    <div class="language-section">
-                        <label>🇮🇸 Íslenska</label>
-                        <textarea id="isText" placeholder="Íslensk þýðing..."></textarea>
-                    </div>
+                <div id="ghsPreview" class="mt-6 p-4 bg-white rounded text-center">
+                    <p class="text-xs font-bold text-gray-800 mb-3">Vorschau</p>
+                    <div id="ghsWebPreview" class="flex gap-2 justify-center flex-wrap"></div>
                 </div>
-                
-                <div class="btn-group">
-                    <button type="submit" class="success">💾 Speichern</button>
-                    <button type="button" onclick="closeModal()" class="secondary">Abbrechen</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
+</div>
 
+<!-- Stats Tab Content -->
+<div id="stats-tab" class="tab-content hidden">
+    <div class="card-container p-6 mb-6">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="section-header">Datenbank-Statistiken</h2>
+            <button onclick="loadStats()" class="btn-primary px-4 py-2 rounded text-xs font-bold uppercase">🔄 Aktualisieren</button>
+        </div>
+        <div class="grid grid-cols-4 gap-4">
+            <div class="bg-minerva-black p-4 rounded border border-minerva-border">
+                <div class="text-[10px] text-minerva-gray uppercase font-bold mb-1">Gesamtphrasen</div>
+                <div class="text-2xl font-bold text-white" id="totalPhrases">-</div>
+            </div>
+        </div>
+    </div>
+    <div class="card-container p-6">
+        <h2 class="section-header mb-6">Phrasen pro Sprache</h2>
+        <div id="langStats" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+    </div>
+</div>
 
-    <script>
-        window.appConfig = {
-            languages: {{ languages | tojson | safe }}
-        };
-    </script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</main>
+<!-- END: Main Interface -->
 
-</body>
-</html>
+<!-- BEGIN: Fixed Bottom Status & Footer -->
+<div class="fixed bottom-0 left-0 right-0 z-[60]" id="statsCard" style="display:none;">
+<!-- Translation Status Bar -->
+<section class="bg-minerva-card border-t border-minerva-border px-8 py-4 glass-effect">
+<div class="max-w-[1800px] mx-auto flex flex-col lg:flex-row items-center gap-8">
+<div class="flex items-center gap-4 border-r border-minerva-border pr-8">
+<h2 class="section-header whitespace-nowrap">Übersetzungs-Status</h2>
+<div class="flex items-center gap-2">
+<div class="flex items-center gap-2 px-3 py-1 bg-minerva-black rounded border border-minerva-border">
+<span class="text-xs font-bold text-white" id="totalTexts">0</span>
+<span class="text-[8px] text-minerva-gray font-bold">TOTAL</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1 bg-minerva-green/5 rounded border border-minerva-green/20">
+<span class="text-xs font-bold text-minerva-green" id="translatedCount">0</span>
+<span class="text-[8px] text-minerva-green/70 font-bold">MATCH</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1 bg-red-500/5 rounded border border-red-500/20">
+<span class="text-xs font-bold text-red-500" id="notFoundCount">0</span>
+<span class="text-[8px] text-red-500/70 font-bold">MISSING</span>
+</div>
+</div>
+</div>
+<div class="flex-1 flex items-center gap-4 min-w-[300px]">
+<span class="text-[10px] font-bold text-minerva-gray uppercase">Abdeckung</span>
+<div class="flex-1 bg-minerva-black h-2 rounded-full overflow-hidden border border-minerva-border relative">
+<div class="bg-minerva-green h-full" id="coverageBar" style="width: 0%"></div>
+<span class="absolute inset-0 flex items-center justify-center text-[8px] font-bold text-white" id="coverageBarText">0%</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button onclick="downloadHTML()" class="px-4 py-2 text-[10px] font-bold border border-minerva-border rounded bg-minerva-hover text-white hover:border-minerva-gray transition-colors uppercase tracking-tight">Save HTML</button>
+<button onclick="downloadPDF()" class="px-4 py-2 text-[10px] font-bold border border-minerva-border rounded bg-minerva-hover text-white hover:border-minerva-gray transition-colors uppercase tracking-tight">Export PDF</button>
+</div>
+</div>
+</section>
+<!-- Footer Information -->
+<footer class="bg-minerva-black border-t border-minerva-border py-2 px-8 flex justify-between items-center text-[10px] uppercase tracking-widest font-bold">
+<div class="flex gap-8">
+<span class="text-minerva-gray">SDS-Translate <span class="text-white">Pro v3.2.0</span></span>
+<span class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-minerva-green"></span>
+<span class="text-minerva-green">System Status: Optimal</span>
+</span>
+</div>
+<div class="flex gap-8 text-minerva-gray">
+<span class="flex gap-2">User: <span class="text-white">Admin_User</span></span>
+</div>
+</footer>
+</div>
+<!-- END: Fixed Bottom Status & Footer -->
+
+<!-- Add/Edit Modal with All Languages -->
+<div id="phraseModal" class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center backdrop-blur-sm">
+    <div class="bg-minerva-card border border-minerva-border rounded-lg shadow-2xl w-11/12 max-w-5xl max-h-[90vh] flex flex-col">
+        <div class="flex justify-between items-center p-5 border-b border-minerva-border">
+            <h2 id="modalTitle" class="text-lg font-bold text-white flex items-center gap-2">✨ Neue Phrase hinzufügen</h2>
+            <button onclick="closeModal()" class="text-minerva-gray hover:text-red-500 text-2xl transition-colors">&times;</button>
+        </div>
+        <form id="phraseForm" class="flex-1 overflow-y-auto p-6 custom-scrollbar">
+            <input type="hidden" id="phraseId">
+            <div class="mb-6">
+                <label class="block text-xs font-bold text-minerva-green uppercase tracking-wider mb-2">🇬🇧 English (Original) *</label>
+                <textarea id="enText" required class="w-full text-sm p-3 rounded bg-minerva-black border-minerva-border text-white focus:border-minerva-green h-24 custom-scrollbar" placeholder="Englische Phrase eingeben..."></textarea>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% for lang in ['de', 'fr', 'es', 'it', 'nl', 'pl', 'sv', 'da', 'fi', 'el', 'cs', 'hu', 'ro', 'bg', 'sk', 'sl', 'et', 'lv', 'lt', 'hr', 'pt', 'no', 'is'] %}
+                <div class="bg-minerva-black p-3 rounded border border-minerva-border">
+                    <label class="block text-[10px] font-bold text-minerva-gray uppercase tracking-wider mb-2">{{ lang.upper() }}</label>
+                    <textarea id="{{ lang }}Text" class="w-full text-xs p-2 rounded bg-minerva-card border-transparent text-white focus:border-minerva-green h-16 custom-scrollbar"></textarea>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="mt-6 flex justify-end gap-3 sticky bottom-0 bg-minerva-card pt-4 border-t border-minerva-border">
+                <button type="button" onclick="closeModal()" class="px-5 py-2 text-xs font-bold text-minerva-gray bg-minerva-black border border-minerva-border rounded hover:bg-minerva-hover uppercase">Abbrechen</button>
+                <button type="submit" class="btn-primary px-6 py-2 text-xs font-bold rounded uppercase shadow-lg shadow-minerva-green/20">💾 Speichern</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- BEGIN: Scripts -->
+<script>
+    window.appConfig = {
+        languages: {{ languages | tojson | safe }}
+    };
+</script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script data-purpose="interface-handlers">
+    let currentUploadType = 'html';
+
+    function toggleUploadType(type) {
+        currentUploadType = type;
+        const htmlBtn = document.getElementById('type-html');
+        const pdfBtn = document.getElementById('type-pdf');
+        const xmlBtn = document.getElementById('type-xml');
+        const label = document.getElementById('unified-file-label');
+
+        // Reset all buttons
+        [htmlBtn, pdfBtn, xmlBtn].forEach(btn => {
+            btn.classList.remove('bg-minerva-hover', 'text-minerva-green');
+            btn.classList.add('text-minerva-gray');
+        });
+
+        const activeBtn = document.getElementById(`type-${type}`);
+        activeBtn.classList.add('bg-minerva-hover', 'text-minerva-green');
+        activeBtn.classList.remove('text-minerva-gray');
+
+        label.innerHTML = `${type.toUpperCase()} Datei auswählen oder per <br/>Drag &amp; Drop hierher ziehen`;
+    }
+
+    // Adapt the unified file input to the specific JS handlers from main.js
+    function handleUnifiedFileSelect(input) {
+        if (currentUploadType === 'html') {
+            handleFileSelect(input);
+        } else if (currentUploadType === 'pdf') {
+            handlePdfFileSelect(input);
+        } else if (currentUploadType === 'xml') {
+            handleXmlFileSelect(input);
+        }
+    }
+
+    function switchMainTab(tab) {
+        const btns = document.querySelectorAll('nav button');
+        btns.forEach(btn => {
+            btn.classList.remove('tab-active', 'text-white');
+            btn.classList.add('text-minerva-gray');
+            if (btn.innerText.toLowerCase().includes(tab.toLowerCase().substring(0, 3))) {
+                btn.classList.add('tab-active', 'text-white');
+                btn.classList.remove('text-minerva-gray');
+            }
+        });
+        // We also need to map this back to the main.js showTab logic
+        // find the active button
+        const activeBtn = Array.from(btns).find(b => b.classList.contains('tab-active'));
+        if(activeBtn) window.showTab(tab, activeBtn);
+    }
+
+</script>
+<!-- END: Scripts -->
+</body></html>

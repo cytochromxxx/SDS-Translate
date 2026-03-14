@@ -4,17 +4,31 @@
         let translatedContent = null;
 
         // Tab switching
-        function showTab(tabName, btnElement) {
-            // Update tabs
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            if (btnElement) btnElement.classList.add('active');
+        window.showTab = function(tabName, btnElement) {
+            // Update content containers
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+                content.classList.add('hidden'); // Tailwind hide
+            });
+            const targetTab = document.getElementById(tabName + '-tab');
+            if (targetTab) {
+                targetTab.classList.add('active');
+                targetTab.classList.remove('hidden');
+            }
 
-            // Update content
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            document.getElementById(tabName + '-tab').classList.add('active');
+            // Update top nav visual states
+            const navBtns = document.querySelectorAll('header nav button');
+            navBtns.forEach(btn => {
+                btn.classList.remove('tab-active', 'text-white');
+                btn.classList.add('text-minerva-gray');
+            });
+            if (btnElement) {
+                btnElement.classList.add('tab-active', 'text-white');
+                btnElement.classList.remove('text-minerva-gray');
+            }
 
-            if (tabName === 'stats') {
-                loadStats();
+            if (tabName === 'stats' && window.loadStats) {
+                window.loadStats();
             }
         }
 
@@ -37,46 +51,6 @@
         let isOriginalEditMode = false;
         let originalContentBeforeEdit = '';
 
-        function toggleEditMode(type) {
-            const isOriginal = type === 'original';
-            let currentEditMode = isOriginal ? isOriginalEditMode : isEditMode;
-            currentEditMode = !currentEditMode;
-            if(isOriginal) {
-                isOriginalEditMode = currentEditMode;
-            } else {
-                isEditMode = currentEditMode;
-            }
-
-            const container = document.getElementById(isOriginal ? 'originalPreview' : 'translatedPreview').closest('.preview-box');
-            const editContainer = document.getElementById(isOriginal ? 'originalEditModeContainer' : 'editModeContainer');
-            const previewFrame = document.getElementById(isOriginal ? 'originalPreview' : 'translatedPreview');
-            const editor = document.getElementById(isOriginal ? 'originalRichTextEditor' : 'richTextEditor');
-            const btn = document.getElementById(isOriginal ? 'editOriginalBtn' : 'editModeBtn');
-            const toolbar = document.getElementById(isOriginal ? 'originalEditModeToolbar' : 'editModeToolbar');
-
-            if (currentEditMode) {
-                let content = previewFrame.srcdoc;
-                if(isOriginal) {
-                    originalContentBeforeEdit = content;
-                } else {
-                    originalTranslatedContent = content;
-                }
-                editor.innerHTML = content;
-                container.classList.add('edit-mode-active');
-                editContainer.style.display = 'block';
-                toolbar.style.display = 'flex';
-                previewFrame.style.display = 'none';
-                btn.classList.add('active');
-                btn.innerHTML = '👁️ Vorschau';
-            } else {
-                container.classList.remove('edit-mode-active');
-                editContainer.style.display = 'none';
-                toolbar.style.display = 'none';
-                previewFrame.style.display = 'block';
-                btn.classList.remove('active');
-                btn.innerHTML = '✏️ Bearbeiten';
-            }
-        }
 
         function execEditCmd(command, value = null) {
             // Determine which editor to use
@@ -402,20 +376,17 @@
 
                     if (result.not_found.length > 0) {
                         result.not_found.forEach(phrase => {
-                            const item = document.createElement('div');
-                            item.className = 'phrase-item';
-                            item.innerHTML = `
-                                <div class="phrase-content">
-                                    <span class="phrase-text">${phrase.text}</span>
-                                    <span class="phrase-line">Line: ${phrase.line}</span>
-                                </div>
-                                <div class="phrase-actions">
-                                    <button class="secondary" style="padding: 4px 8px;" onclick="showAddModalWithText('${phrase.text.replace(/'/g, "\\'")}')">➕</button>
-                                </div>`;
-                            notFoundList.appendChild(item);
+                            const row = document.createElement('tr');
+                            row.className = 'hover:bg-minerva-hover/50';
+                            row.innerHTML = `
+                                <td class="px-4 py-2 text-white">"${phrase.text}" <span class="text-minerva-gray text-[9px] ml-2">(Line: ${phrase.line})</span></td>
+                                <td class="px-4 py-2 text-right">
+                                    <button class="text-minerva-green font-bold hover:underline" onclick="showAddModalWithText('${phrase.text.replace(/'/g, "\\'")}')">Translate</button>
+                                </td>`;
+                            notFoundList.appendChild(row);
                         });
                     } else {
-                        notFoundList.innerHTML = '<div style="text-align: center; color: var(--text-secondary);">🎉 Alle Phrasen gefunden!</div>';
+                        notFoundList.innerHTML = '<tr><td colspan="2" class="px-4 py-4 text-center text-minerva-gray">🎉 Alle Phrasen gefunden!</td></tr>';
                     }
 
                     document.getElementById('statsCard').style.display = 'block';
@@ -673,17 +644,19 @@
                 const response = await fetch('/api/databases');
                 const data = await response.json();
 
-                select.innerHTML = '';
-                for (const key in data.available) {
-                    const db = data.available[key];
-                    const option = document.createElement('option');
-                    option.value = key;
-                    option.textContent = `${db.name} ${db.exists ? '✔️' : '❌'}`;
-                    if (db.active) {
-                        option.selected = true;
-                        desc.textContent = db.description;
+                if (select) {
+                    select.innerHTML = '';
+                    for (const key in data.available) {
+                        const db = data.available[key];
+                        const option = document.createElement('option');
+                        option.value = key;
+                        option.textContent = `${db.name} ${db.exists ? '✔️' : '❌'}`;
+                        if (db.active) {
+                            option.selected = true;
+                            if (desc) desc.textContent = db.description;
+                        }
+                        select.appendChild(option);
                     }
-                    select.appendChild(option);
                 }
             } catch (error) {
                 showToast('Fehler beim Laden der Datenbanken.', 'error');
@@ -747,19 +720,22 @@
             tableBody.innerHTML = '';
 
             if (phrases.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color: var(--text-secondary);">Keine Phrasen gefunden.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="4" class="px-4 py-8 text-center text-minerva-gray">Keine Phrasen gefunden.</td></tr>';
                 return;
             }
 
             phrases.forEach(phrase => {
                 const row = document.createElement('tr');
+                row.className = 'hover:bg-minerva-hover/50';
                 row.innerHTML = `
-                    <td>${phrase.id.substring(0, 8)}...</td>
-                    <td>${phrase.en_original || ''}</td>
-                    <td>${phrase.translation || ''}</td>
-                    <td>
-                        <button onclick="showEditModal('${phrase.id}')" class="secondary" style="padding: 6px 12px;">✏️</button>
-                        <button onclick="deletePhrase('${phrase.id}')" class="danger" style="padding: 6px 12px;">🗑️</button>
+                    <td class="px-4 py-3 text-minerva-gray font-mono text-[10px]">${phrase.id.substring(0, 8)}...</td>
+                    <td class="px-4 py-3 text-white">${phrase.en_original || ''}</td>
+                    <td class="px-4 py-3 text-white">${phrase.translation || ''}</td>
+                    <td class="px-4 py-3 text-right">
+                        <div class="flex gap-2 justify-end">
+                            <button onclick="showEditModal('${phrase.id}')" class="text-minerva-green hover:text-white transition-colors" title="Bearbeiten">✏️</button>
+                            <button onclick="deletePhrase('${phrase.id}')" class="text-red-500 hover:text-red-400 transition-colors" title="Löschen">🗑️</button>
+                        </div>
                     </td>
                 `;
                 tableBody.appendChild(row);
@@ -772,7 +748,8 @@
             document.getElementById('phraseForm').reset();
             document.getElementById('phraseId').value = '';
             document.getElementById('modalTitle').textContent = '✨ Neue Phrase hinzufügen';
-            modal.classList.add('active');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
 
         function showAddModalWithText(text) {
@@ -793,7 +770,8 @@
                 }
 
                 document.getElementById('modalTitle').textContent = '✏️ Phrase bearbeiten';
-                modal.classList.add('active');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
 
             } catch (error) {
                 showToast(`Fehler beim Laden der Phrase: ${error}`, 'error');
@@ -801,7 +779,8 @@
         }
 
         function closeModal() {
-            modal.classList.remove('active');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
         }
 
         document.getElementById('phraseForm').addEventListener('submit', async function(e) {
@@ -1188,14 +1167,57 @@ function stopAutoSave() {
     }
 }
 
-// Override toggleEditMode to start/stop auto-save
-const originalToggleEditMode = toggleEditMode;
-toggleEditMode = function(type) {
-    originalToggleEditMode(type);
-    if (isOriginalEditMode || isEditMode) {
-        startAutoSave();
+// Override toggleEditMode to start/stop auto-save and handle new layout
+const originalToggleEditMode = window.toggleEditMode || function(){};
+window.toggleEditMode = function(type) {
+    const isOriginal = type === 'original';
+    let currentEditMode = isOriginal ? window.isOriginalEditMode : window.isEditMode;
+    currentEditMode = !currentEditMode;
+    if(isOriginal) {
+        window.isOriginalEditMode = currentEditMode;
     } else {
-        stopAutoSave();
+        window.isEditMode = currentEditMode;
+    }
+
+    const container = document.getElementById(isOriginal ? 'original-container' : 'translated-container');
+    const editor = document.getElementById(isOriginal ? 'originalRichTextEditor' : 'richTextEditor');
+    const previewFrame = document.getElementById(isOriginal ? 'originalPreview' : 'translatedPreview');
+    const btn = document.getElementById(isOriginal ? 'editOriginalBtn' : 'editModeBtn');
+    const toolbar = document.getElementById(isOriginal ? 'originalEditModeToolbar' : 'editModeToolbar');
+
+    if (currentEditMode) {
+        let content = previewFrame.srcdoc;
+        if(isOriginal) {
+            window.originalContentBeforeEdit = content;
+        } else {
+            window.originalTranslatedContent = content;
+        }
+        editor.innerHTML = content;
+        container.classList.add('edit-mode-active');
+        editor.classList.remove('hidden');
+        toolbar.classList.remove('hidden');
+        toolbar.classList.add('flex');
+        previewFrame.classList.add('hidden');
+
+        btn.innerText = 'Speichern / Vorschau';
+        btn.classList.replace('bg-minerva-card', 'bg-minerva-green');
+        btn.classList.remove('border-minerva-border');
+
+        // start auto save
+        if(window.startAutoSave) window.startAutoSave();
+    } else {
+        container.classList.remove('edit-mode-active');
+        editor.classList.add('hidden');
+        toolbar.classList.add('hidden');
+        toolbar.classList.remove('flex');
+        previewFrame.classList.remove('hidden');
+
+        btn.innerText = 'Bearbeiten';
+        btn.classList.replace('bg-minerva-green', 'bg-minerva-card');
+        btn.classList.add('border-minerva-border');
+
+        // stop auto save
+        if(window.stopAutoSave) window.stopAutoSave();
     }
 };
 
