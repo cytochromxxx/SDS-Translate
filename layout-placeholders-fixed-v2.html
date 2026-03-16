@@ -36,6 +36,7 @@
             position: relative;
             overflow: visible;
             page-break-inside: avoid;
+            page-break-after: always;
         }
 
         .page:last-child {
@@ -141,7 +142,7 @@
         .ghs-pictograms {
             display: flex;
             flex-direction: row;
-            gap: 8px;
+            gap: 15px;
             margin: 10px 0;
             flex-wrap: wrap;
         }
@@ -150,6 +151,26 @@
             width: 84px;
             height: 84px;
             object-fit: contain;
+        }
+        
+        .ghs-pictogram-label {
+            font-size: 9pt;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 2px;
+        }
+        .ghs-pictogram-name {
+            font-size: 8pt;
+            text-align: center;
+            margin-top: 1px;
+            font-style: italic;
+        }
+        .signal-word {
+            font-weight: 700;
+            font-size: 10pt;
+            color: #D32F2F;
+            margin-top: 2px;
+            text-align: center;
         }
 
         @media print {
@@ -343,11 +364,12 @@
             <p><strong>Use of the substance/mixture:</strong></p>
             <p style="margin-left: 15px;">{{ section_1.relevant_uses.product_type }}</p>
             <p><strong>Relevant identified uses:</strong></p>
-            <table class="sds">
+            <table class="sds" style="border-color: white; border-width: 2px; border-style: solid; box-shadow: 0 0 0 2px white, 0 0 0 4px white;">
                 <tbody>
-                    <tr><td><strong>Sector of uses [SU]</strong></td><td>{{ section_1.relevant_uses.su }}: {{ section_1.relevant_uses.su_fulltext }}</td></tr>
-                    <tr><td rowspan="2"><strong>Product Categories [PC]</strong></td><td>{{ section_1.relevant_uses.pc1 }}</td></tr>
-                    <tr><td>{{ section_1.relevant_uses.pc2 }}</td></tr>
+                    <tr><td style="border: 2px solid white;"><strong>Life cycle stage [LCS]</strong></td><td style="border: 2px solid white;">{{ section_1.relevant_uses.lcs }}</td></tr>
+                    <tr><td style="border: 2px solid white;"><strong>Sector of uses [SU]</strong></td><td style="border: 2px solid white;">{{ section_1.relevant_uses.su }}: {{ section_1.relevant_uses.su_fulltext }}</td></tr>
+                    <tr><td rowspan="2" style="border: 2px solid white;"><strong>Product Categories [PC]</strong></td><td style="border: 2px solid white;">{{ section_1.relevant_uses.pc1 }}</td></tr>
+                    <tr><td style="border: 2px solid white;">{{ section_1.relevant_uses.pc2 }}</td></tr>
                 </tbody>
             </table>
 
@@ -382,7 +404,10 @@
             <p><strong>Hazard pictograms:</strong></p>
             <div class="pictograms">
                 {% for pictogram in section_2.labelling.pictograms %}
-                <img src="ghs/{{ pictogram }}.png" alt="{{ pictogram }}">
+                <div style="text-align: center;">
+                    <img src="ghs/{{ pictogram }}.png" alt="{{ pictogram }}">
+                    <div class="ghs-pictogram-label">{{ pictogram }}</div>
+                </div>
                 {% endfor %}
             </div>
             <p><strong>Signal word:</strong> <span class="signal-word">{{ section_2.labelling.signal_word }}</span></p>
@@ -390,12 +415,42 @@
             <p><strong>Hazard components for labelling:</strong></p>
             <p style="margin-left: 15px;">{{ section_2.labelling.hazard_components }}</p>
             <p><strong>Hazard statements for physical hazards</strong></p>
-            {% for statement in section_2.labelling.hazard_statements %}<p>{{ statement.code }}: {{ statement.text }}</p>{% endfor %}
+            <table class="sds">
+                <thead>
+                    <tr><th>H</th><th>Hazard statements</th></tr>
+                </thead>
+                <tbody>
+                    {% for statement in section_2.labelling.hazard_statements %}
+                    <tr><td>{{ statement.code }}</td><td>{{ statement.text }}</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <p><strong>Supplemental hazard information:</strong></p>
+            <p style="margin-left: 15px;">{{ section_2.labelling.supplemental_hazards | default('none') }}</p>
             
             <p><strong>Precautionary statements Prevention</strong></p>
-            {% for statement in section_2.labelling.precautionary_statements.prevention %}<p>{{ statement }}</p>{% endfor %}
+            <table class="sds">
+                <thead>
+                    <tr><th>P-Code</th></tr>
+                </thead>
+                <tbody>
+                    {% for statement in section_2.labelling.precautionary_statements.prevention %}
+                    <tr><td>{{ statement }}</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
             <p><strong>Precautionary statements Response</strong></p>
-            {% for statement in section_2.labelling.precautionary_statements.response %}<p>{{ statement }}</p>{% endfor %}
+            <table class="sds">
+                <thead>
+                    <tr><th>P-Code</th></tr>
+                </thead>
+                <tbody>
+                    {% for statement in section_2.labelling.precautionary_statements.response %}
+                    <tr><td>{{ statement }}</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
 
             <div class="subsection-title">2.3. Other hazards</div>
             <p><strong>Adverse physicochemical effects:</strong></p>
@@ -427,6 +482,8 @@
     <div class="content">
         <div class="section">
             <div class="section-title">SECTION 3: Composition/information on ingredients</div>
+            <div class="subsection-title">3.1. Substances</div>
+            <p class="small">Not applicable - this is a mixture.</p>
             <div class="subsection-title">3.2. Mixtures</div>
             <p><strong>Hazardous ingredients / Hazardous impurities / Stabilisers:</strong></p>
             <table class="sds">
@@ -441,6 +498,12 @@
                             {% for class in component.classification %}
                             {{ class }}<br>
                             {% endfor %}
+                            {% if component.ate_values %}
+                            <span style="font-weight:normal; font-size:8pt;"><strong>Acute Toxicity Estimate</strong><br>
+                            {% for ate in component.ate_values %}
+                            {{ ate }}<br>
+                            {% endfor %}</span>
+                            {% endif %}
                         </td>
                         <td style="white-space: nowrap;">{{ component.concentration }}</td>
                     </tr>
@@ -773,32 +836,84 @@
         <div class="section">
             <div class="section-title">SECTION 12: Ecological information</div>
 
-            {% if section_3 and section_3.mixture_components %}
+            <div class="subsection-title">12.1. Toxicity</div>
+            {% for component in section_12.ecotox_components %}
             <table class="sds">
                 <tbody>
-                {% for component in section_3.mixture_components %}
-                    {% if component.ecological_info %}
                     <tr style="background-color: #f2f2f2;">
-                        <td><strong>{{ component.name }}</strong><br>CAS No.: {{ component.cas }} EC No.: {{ component.ec }}</td>
+                        <td colspan="4"><strong>{{ component.generic_name }}</strong> CAS No.: {{ component.cas_no }} EC No.: {{ component.ec_no }}</td>
                     </tr>
-                    {% for info in component.ecological_info %}
+                    {% for entry in component.aquatic_toxicity_entries %}
                     <tr>
-                        <td>{{ info }}</td>
+                        <td>{{ entry.effect_dose }}: {{ entry.value }} {{ entry.unit }}</td>
+                        <td>{{ entry.exposure_time }}</td>
+                        <td>{{ entry.species }}</td>
+                        <td>{{ entry.method }}</td>
                     </tr>
                     {% endfor %}
-                    {% endif %}
-                {% endfor %}
+                </tbody>
+            </table>
+            {% endfor %}
+
+            <div class="subsection-title">12.2. Persistence and degradability</div>
+            {% for component in section_12.ecotox_components %}
+            {% if component.biodegradation %}
+            <table class="sds">
+                <tbody>
+                    <tr style="background-color: #f2f2f2;">
+                        <td colspan="2"><strong>{{ component.generic_name }}</strong> CAS No.: {{ component.cas_no }} EC No.: {{ component.ec_no }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Biodegradation:</strong></td>
+                        <td>{{ component.biodegradation }}</td>
+                    </tr>
                 </tbody>
             </table>
             {% endif %}
+            {% endfor %}
 
-            <p><strong>Aquatic Toxicity:</strong> {{ section_12.aquatic_toxicity }}</p>
-            <p><strong>Sediment Toxicity:</strong> {{ section_12.sediment_toxicity }}</p>
-            <p><strong>Terrestrial Toxicity:</strong> {{ section_12.terrestrial_toxicity }}</p>
-            <p><strong>Persistence and degradability:</strong> {{ section_12.persistence }}</p>
-            <p><strong>Bioaccumulative potential:</strong> {{ section_12.bioaccumulation }}</p>
-            <p><strong>Mobility in soil:</strong> {{ section_12.mobility }}</p>
-            <p><strong>Additional ecotoxicological information:</strong> {{ section_12.additional_ecotox }}</p>
+            <div class="subsection-title">12.3. Bioaccumulative potential</div>
+            {% for component in section_12.ecotox_components %}
+            {% if component.bcf %}
+            <table class="sds">
+                <tbody>
+                    <tr style="background-color: #f2f2f2;">
+                        <td colspan="2"><strong>{{ component.generic_name }}</strong> CAS No.: {{ component.cas_no }} EC No.: {{ component.ec_no }}</td>
+                    </tr>
+                    {% if component.log_kow %}
+                    <tr><td><strong>Log K<sub>OW</sub>:</strong></td><td>{{ component.log_kow }}</td></tr>
+                    {% endif %}
+                    <tr><td><strong>Bioconcentration factor (BCF):</strong></td><td>{{ component.bcf }}</td></tr>
+                </tbody>
+            </table>
+            {% endif %}
+            {% endfor %}
+
+            <div class="subsection-title">12.4. Mobility in soil</div>
+            <p style="margin-left: 15px;">{{ section_12.mobility_info }}</p>
+
+            <div class="subsection-title">12.5. Results of PBT and vPvB assessment</div>
+            {% for component in section_12.ecotox_components %}
+            {% if component.pbt_result %}
+            <table class="sds">
+                <tbody>
+                    <tr style="background-color: #f2f2f2;">
+                        <td colspan="2"><strong>{{ component.generic_name }}</strong> CAS No.: {{ component.cas_no }} EC No.: {{ component.ec_no }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Results of PBT and vPvB assessment:</strong></td>
+                        <td>{{ component.pbt_result }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {% endif %}
+            {% endfor %}
+
+            <div class="subsection-title">12.6. Endocrine disrupting properties</div>
+            <p style="margin-left: 15px;">{{ section_12.endocrine_disrupting_info }}</p>
+
+            <div class="subsection-title">12.7. Other adverse effects</div>
+            <p style="margin-left: 15px;">{{ section_12.other_adverse_effects_info }}</p>
         </div>
 
         <div class="section">
@@ -933,84 +1048,49 @@
             <i>
             <div class="subsection-title">16.1. Indication of changes</div>
             <p>
-            1.3. Details of the supplier of the safety data sheet<br>
-            2.2. Label elements<br>
-            3.2. Mixtures<br>
-            4.1. Description of first aid measures<br>
-            7.1. Precautions for safe handling<br>
-            8.1. Control parameters<br>
-            9.1. Information on basic physical and chemical properties<br>
-            14.3. Transport hazard class(es)<br>
-            15.1. Safety, health and environmental regulations/legislation specific for the substance or mixture<br>
-            16.1. Indication of changes<br>
-            16.5. List of relevant hazard statements and/or precautionary statements from sections 2 to 15
+            {% for change in other_information.indication_of_changes %}
+            {{ change }}<br>
+            {% endfor %}
             </p>
-            
+
             <div class="subsection-title">16.2. Abbreviations and acronyms</div>
             <table class="sds" style="font-size: 8pt;">
                 <tbody>
-                    <tr><td>ACGIH</td><td>American Conference of Governmental Industrial Hygienists</td></tr>
-                    <tr><td>ADN</td><td>European Agreement concerning the International Carriage of Dangerous Goods by Inland Waterways</td></tr>
-                    <tr><td>ADR</td><td>European Agreement concerning the International Carriage of Dangerous Goods by Road</td></tr>
-                    <tr><td>ASTM</td><td>American Society for Testing and Materials</td></tr>
-                    <tr><td>BCF</td><td>Bioconcentration Factor</td></tr>
-                    <tr><td>CAS</td><td>Chemical Abstracts Service</td></tr>
-                    <tr><td>CLP</td><td>Classification, Labelling and Packaging</td></tr>
-                    <tr><td>DIN</td><td>German Institute for Standardization / German Industrial Standard</td></tr>
-                    <tr><td>DNEL</td><td>derived no-effect level</td></tr>
-                    <tr><td>EC<sub>50</sub></td><td>Effective Concentration 50%</td></tr>
-                    <tr><td>ECHA</td><td>European Chemicals Agency</td></tr>
-                    <tr><td>EN</td><td>European Standard</td></tr>
-                    <tr><td>ES</td><td>Exposure scenario</td></tr>
-                    <tr><td>EWC</td><td>European Waste Catalogue</td></tr>
-                    <tr><td>GHS</td><td>Globally Harmonized System of Classification and Labelling of Chemicals</td></tr>
-                    <tr><td>IBC</td><td>Intermediate Bulk Container</td></tr>
-                    <tr><td>ICAO</td><td>International Civil Aviation Organization</td></tr>
-                    <tr><td>IMDG</td><td>International Maritime Dangerous Goods</td></tr>
-                    <tr><td>IMO</td><td>International Maritime Organization</td></tr>
-                    <tr><td>ISO</td><td>International Standards Organisation</td></tr>
-                    <tr><td>LC<sub>50</sub></td><td>Lethal (fatal) Concentration 50%</td></tr>
-                    <tr><td>LD<sub>50</sub></td><td>Lethal (fatal) Dose 50%</td></tr>
-                    <tr><td>NOEC</td><td>No Observed Effect Concentration</td></tr>
-                    <tr><td>OECD</td><td>Organisation for Economic Cooperation and Development</td></tr>
-                    <tr><td>PBT</td><td>persistent and bioaccumulative and toxic</td></tr>
-                    <tr><td>PNEC</td><td>Predicted No Effect Concentration</td></tr>
-                    <tr><td>REACH</td><td>Registration, Evaluation and Authorization of Chemicals</td></tr>
-                    <tr><td>RID</td><td>Dangerous goods regulations for transport by rail</td></tr>
-                    <tr><td>TRGS</td><td>Technische Regeln für Gefahrstoffe</td></tr>
-                    <tr><td>UN</td><td>United Nations</td></tr>
+                    {% for abbr in other_information.abbreviations %}
+                    <tr><td>{{ abbr.short }}</td><td>{{ abbr.long }}</td></tr>
+                    {% endfor %}
                 </tbody>
             </table>
-            <p class="small">For abbreviations and acronyms, see: ECHA Guidance on information requirements and chemical safety assessment, chapter R.20 (Table of terms and abbreviations).</p>
-            
+            <p class="small">{{ other_information.abbreviations_source_note }}</p>
+
             <div class="subsection-title">16.3. Key literature references and sources for data</div>
-            <p>TRGS 510, TRGS 525, TRGS 900, Safety data sheets for the ingredients, 1907/2006 REACH, 1272/2008 CLP GHS</p>
-            
+            <p>{{ other_information.literature_references }}</p>
+
             <div class="subsection-title">16.4. Classification for mixtures and used evaluation method according to regulation (EC) No 1272/2008 [CLP]</div>
             <table class="sds">
                 <thead>
                     <tr><th>Hazard classes and hazard categories</th><th>Hazard statements</th><th>Classification procedure</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>flammable liquids (Flam. Liq. 3)</td><td>H226: Flammable liquid and vapour.</td><td>On basis of test data.</td></tr>
-                    <tr><td>Serious eye damage/eye irritation (Eye Dam. 1)</td><td>H318: Causes serious eye damage.</td><td>Calculation method.</td></tr>
-                    <tr><td>STOT-single exposure (STOT SE 3)</td><td>H336: May cause drowsiness or dizziness.</td><td>Calculation method.</td></tr>
+                    {% for item in hazard_identification.clp_classifications %}
+                    <tr><td>{{ item.clp_hazard_class_category }}</td><td>H{{ item.clp_hazard_statement_code }}: {{ item.clp_hazard_statement_text }}</td><td>{{ item.clp_classification_procedure }}</td></tr>
+                    {% endfor %}
                 </tbody>
             </table>
-            
+
             <div class="subsection-title">16.5. List of relevant hazard statements and/or precautionary statements from sections 2 to 15</div>
             <p><strong>Hazard statements</strong></p>
-            <div class="data-row"><div class="data-label w-50">H225</div><div class="data-value">Highly flammable liquid and vapour.</div></div>
-            <div class="data-row"><div class="data-label w-50">H318</div><div class="data-value">Causes serious eye damage.</div></div>
-            <div class="data-row"><div class="data-label w-50">H336</div><div class="data-value">May cause drowsiness or dizziness.</div></div>
-            
+            {% for item in hazard_identification.clp_classifications %}
+            <div class="data-row"><div class="data-label w-50">H{{ item.clp_hazard_statement_code }}</div><div class="data-value">{{ item.clp_hazard_statement_text }}</div></div>
+            {% endfor %}
+
             <div class="subsection-title">16.6. Training advice</div>
-            <p>No data available</p>
-            
+            <p>{{ other_information.training_advice }}</p>
+
             <div class="subsection-title">16.7. Additional information</div>
-            <p>This data sheet was created in accordance with EU regulation (EC) No. 1907/2006 (REACH).</p>
-            <p>The information is based on the level of knowledge and experience on the date of issue, it do not have the importance of assured properties. The information may not be changed or transferred to other products. Reproduction in the unchanged state is permitted.</p>
-            <p>* Data changed compared with the previous version.</p>
+            {% for line in other_information.additional_info_lines %}
+            <p>{{ line }}</p>
+            {% endfor %}
             </i>
         </div>
     </div>

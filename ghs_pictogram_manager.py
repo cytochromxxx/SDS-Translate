@@ -11,6 +11,7 @@ import requests
 import hashlib
 from datetime import datetime, timedelta
 from pathlib import Path
+from database import get_db_path
 
 # BGN Symbolbibliothek URL patterns
 BGN_BASE_URL = "https://bgn-branchenwissen.de/symbolbibliothek/gefahrstoffe-ghs"
@@ -29,8 +30,8 @@ GHS_PICTOGRAMS = {
 }
 
 class GHSPictogramManager:
-    def __init__(self, db_path='phrases_library.db', cache_dir='ghs_cache'):
-        self.db_path = db_path
+    def __init__(self, cache_dir='ghs_cache'):
+        self.db_path = get_db_path()
         self.cache_dir = Path(cache_dir)
         self.cache_dir.mkdir(exist_ok=True)
         self.init_database()
@@ -89,49 +90,34 @@ class GHSPictogramManager:
         if code not in GHS_PICTOGRAMS:
             return False
         
-        # Check cache first
         svg_path = self.cache_dir / f"{code}.svg"
-        png_path = self.cache_dir / f"{code}.png"
         
         if not force_refresh and svg_path.exists():
-            # Update database with cached paths
-            self._update_pictogram_paths(code, str(svg_path), str(png_path))
+            self._update_pictogram_paths(code, str(svg_path), None)
             return True
         
-        # For this implementation, we'll use placeholder generation
-        # In production, this would download from BGN or GHS standard source
-        success = self._generate_placeholder_pictogram(code, svg_path, png_path)
+        success = self._generate_placeholder_pictogram(code, svg_path)
         
         if success:
-            self._update_pictogram_paths(code, str(svg_path), str(png_path))
+            self._update_pictogram_paths(code, str(svg_path), None)
         
         return success
     
-    def _generate_placeholder_pictogram(self, code, svg_path, png_path):
+    def _generate_placeholder_pictogram(self, code, svg_path):
         """Generate a placeholder SVG pictogram (for development)."""
-        # Create a simple placeholder SVG
         colors = {
-            'GHS01': '#FF0000',  # Red - Explosive
-            'GHS02': '#FF6600',  # Orange - Flammable
-            'GHS03': '#FF9900',  # Orange - Oxidizing
-            'GHS04': '#0099FF',  # Blue - Compressed Gas
-            'GHS05': '#FF0000',  # Red - Corrosive
-            'GHS06': '#FF0000',  # Red - Toxic
-            'GHS07': '#FF9900',  # Orange - Harmful
-            'GHS08': '#FF0000',  # Red - Health Hazard
-            'GHS09': '#00CC00',  # Green - Environmental
+            'GHS01': '#FF0000', 'GHS02': '#FF6600', 'GHS03': '#FF9900',
+            'GHS04': '#0099FF', 'GHS05': '#FF0000', 'GHS06': '#FF0000',
+            'GHS07': '#FF9900', 'GHS08': '#FF0000', 'GHS09': '#00CC00',
         }
         
         color = colors.get(code, '#666666')
         name = GHS_PICTOGRAMS[code]['name']
         
-        svg_content = f'''<?xml version="1.0" encoding="UTF-8"?>
-<svg width="100mm" height="100mm" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-  <rect width="100" height="100" fill="white"/>
-  <rect x="2" y="2" width="96" height="96" fill="{color}" stroke="black" stroke-width="2"/>
-  <text x="50" y="45" font-family="Arial" font-size="10" text-anchor="middle" fill="white" font-weight="bold">{code}</text>
-  <text x="50" y="65" font-family="Arial" font-size="6" text-anchor="middle" fill="white">{name}</text>
-</svg>'''
+        svg_content = f'''<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100" height="100" fill="{color}"/>
+            <text x="50" y="50" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="12">{code}</text>
+        </svg>'''
         
         try:
             with open(svg_path, 'w', encoding='utf-8') as f:
@@ -164,6 +150,13 @@ class GHSPictogramManager:
         cursor.execute('SELECT * FROM ghs_pictograms ORDER BY code')
         pictograms = [dict(row) for row in cursor.fetchall()]
         
+        for p in pictograms:
+            if not p['svg_path'] or not os.path.exists(p['svg_path']):
+                self.download_pictogram(p['code'], force_refresh=True)
+                # Re-fetch the updated pictogram data
+                updated_p = self.get_pictogram_by_code(p['code'])
+                p.update(updated_p)
+
         conn.close()
         return pictograms
     
@@ -204,7 +197,6 @@ class GHSPictogramManager:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Check current count
         cursor.execute('SELECT COUNT(*) FROM sds_pictograms WHERE sds_id = ?', (sds_id,))
         count = cursor.fetchone()[0]
         
@@ -212,14 +204,12 @@ class GHSPictogramManager:
             conn.close()
             return False, "Maximum of 3 pictograms allowed"
         
-        # Check if already exists
         cursor.execute('SELECT id FROM sds_pictograms WHERE sds_id = ? AND ghs_code = ?', 
                       (sds_id, ghs_code))
         if cursor.fetchone():
             conn.close()
             return False, "Pictogram already added to this SDS"
         
-        # Determine position if not specified
         if position is None:
             position = count
         
@@ -277,18 +267,12 @@ class GHSPictogramManager:
             results[code] = 'success' if success else 'failed'
         return results
 
-
 if __name__ == '__main__':
-    # Test the manager
     manager = GHSPictogramManager()
-    
     print("Initializing GHS Pictograms...")
-    
-    # Download/generate all pictograms
     for code in GHS_PICTOGRAMS.keys():
         success = manager.download_pictogram(code)
         status = "OK" if success else "FAIL"
         print(f"  [{status}] {code}: {GHS_PICTOGRAMS[code]['name']}")
-    
     print("\nAll pictograms initialized!")
     print(f"Cache directory: {manager.cache_dir.absolute()}")

@@ -40,10 +40,11 @@ class SDSTranslator:
     # Minimum phrase length to prevent Teilwort-Ersetzungen
     MIN_PHRASE_LENGTH = 4
     
-    def __init__(self, db_path: str, target_lang: str, debug: bool = True):
+    def __init__(self, db_path: str, target_lang: str, debug: bool = True, mark_untranslated: bool = False):
         self.db_path = db_path
         self.target_lang = target_lang.lower()
         self.debug = debug
+        self.mark_untranslated = mark_untranslated  # Flag to mark untranslated text in red
         
         if self.target_lang not in self.AVAILABLE_LANGUAGES:
             raise ValueError(f"Unsupported language: {target_lang}")
@@ -311,6 +312,12 @@ class SDSTranslator:
                 return False
             parent = parent.parent
         
+        # Don't translate if parent is a script, style, or other non-content elements
+        if element.parent and hasattr(element.parent, 'name'):
+            parent_name = element.parent.name
+            if parent_name in ['script', 'style', 'code', 'pre', 'textarea', 'select']:
+                return False
+        
         return True
         
     def _process_text_node(self, element: NavigableString, text: str):
@@ -345,9 +352,28 @@ class SDSTranslator:
                 self.stats['translated_exact'] += 1
                 return
         
-        # Not found
+        # Not found - wrap in red span for manual review
         self.stats['not_found'] += 1
         self.not_found_log.append({'text': stripped[:100], 'line': -1})
+        
+        # Check if we should mark untranslated text in red
+        if self.mark_untranslated:
+            from bs4 import BeautifulSoup
+            # Get the parent soup to create new elements
+            soup = element.parent
+            while soup and not hasattr(soup, 'find'):
+                soup = soup.parent
+            
+            # Preserve whitespace
+            leading_ws = text[:len(text) - len(text.lstrip())]
+            trailing_ws = text[len(text.rstrip()):]
+            
+            # Create the span element properly
+            if soup:
+                red_span = soup.new_tag('span', style='color: red; font-weight: bold;')
+                red_span.string = stripped
+                final_text = leading_ws + str(red_span) + trailing_ws
+                element.replace_with(BeautifulSoup(final_text, 'html.parser'))
         
         if self.debug and self.stats['not_found'] <= 50:
             try:
@@ -394,17 +420,25 @@ def main():
     import sys
     
     if len(sys.argv) < 3:
-        print("Usage: python sds_translator_v4.py <input.html> <target_language> [output.html]")
+        print("Usage: python sds_translator_v4.py <input.html> <target_language> [output.html] [--mark-untranslated]")
         print("Example: python sds_translator_v4.py input.html de output.html")
+        print("Use --mark-untranslated to enable red marking of untranslated text")
         sys.exit(1)
     
     input_file = sys.argv[1]
     target_lang = sys.argv[2]
     output_file = sys.argv[3] if len(sys.argv) > 3 else None
     
+    # Check for optional flags
+    mark_untranslated = False
+    if len(sys.argv) > 3:
+        for arg in sys.argv[3:]:
+            if arg == '--mark-untranslated':
+                mark_untranslated = True
+    
     db_path = "sds_dictionary_final.db"
     
-    translator = SDSTranslator(db_path, target_lang, debug=True)
+    translator = SDSTranslator(db_path, target_lang, debug=True, mark_untranslated=mark_untranslated)
     
     with open(input_file, 'r', encoding='utf-8') as f:
         html_content = f.read()

@@ -26,10 +26,12 @@ def import_sds_to_html(xml_path: str, template_path: str) -> str:
 
     # 1. Parse the XML file
     try:
+        logger.info(f"Parsing XML file: {xml_path}")
         sds_data = parse_sds_xml(xml_path)
         if not sds_data:
             logger.error("XML parsing resulted in empty data.")
             return ""
+        logger.info(f"XML parsed successfully. Keys: {list(sds_data.keys())}")
     except Exception as e:
         logger.error(f"Failed to parse XML file {xml_path}: {e}", exc_info=True)
         return ""
