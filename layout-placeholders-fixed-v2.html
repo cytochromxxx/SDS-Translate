@@ -31,7 +31,7 @@
             min-height: 297mm;
             border: 1.5px solid #000000;
             background-color: #ffffff;
-            margin: 0 auto 10mm auto;
+            margin: 0 auto 0 auto;
             padding: 12mm 15mm 18mm 15mm;
             position: relative;
             overflow: visible;
@@ -175,8 +175,8 @@
 
         @media print {
             .ghs-pictograms img {
-                width: 23mm;
-                height: 23mm;
+                width: 46mm;
+                height: 46mm;
             }
         }
 
@@ -346,10 +346,10 @@
                 <span>Version:</span> <span class="normal">{{ meta.version }}</span>
             </div>
         </div>
-        <div class="header-right">
-            <div class="header-logo"><img src="mb_logo.svg" alt="Minerva Biolabs"></div>
-            <div class="page-number">Page 1/11</div>
-        </div>
+          <div class="header-right">
+              <div class="header-logo"><img src="mb_logo.svg" alt="Minerva Biolabs"></div>
+              <div class="page-number">Page 1/11</div>
+          </div>
     </div>
     <div class="content">
         <div class="section">
@@ -402,15 +402,27 @@
             <div class="subsection-title">2.2. Label elements</div>
             <p class="small">Labelling according to Regulation (EC) No. 1272/2008 [CLP]</p>
             <p><strong>Hazard pictograms:</strong></p>
-            <div class="pictograms">
+            <div class="ghs-pictograms">
                 {% for pictogram in section_2.labelling.pictograms %}
                 <div style="text-align: center;">
-                    <img src="ghs/{{ pictogram }}.png" alt="{{ pictogram }}">
+                    <img src="ghs/{{ pictogram }}.png" alt="{{ pictogram }}" class="ghs-pictogram">
                     <div class="ghs-pictogram-label">{{ pictogram }}</div>
+                    <div class="ghs-pictogram-name">
+                        {% if pictogram == 'GHS01' %}Explosiv
+                        {% elif pictogram == 'GHS02' %}Flamme
+                        {% elif pictogram == 'GHS03' %}Oxidierend
+                        {% elif pictogram == 'GHS04' %}Gas unter Druck
+                        {% elif pictogram == 'GHS05' %}Ätzend
+                        {% elif pictogram == 'GHS06' %}Gesundheitsgefährdend
+                        {% elif pictogram == 'GHS07' %}Ausrufezeichen
+                        {% elif pictogram == 'GHS08' %}Gesundheitsgefährdend
+                        {% elif pictogram == 'GHS09' %}Umweltgefährdend
+                        {% endif %}
+                    </div>
+                    <div class="signal-word">{{ section_2.labelling.signal_word }}</div>
                 </div>
                 {% endfor %}
             </div>
-            <p><strong>Signal word:</strong> <span class="signal-word">{{ section_2.labelling.signal_word }}</span></p>
             
             <p><strong>Hazard components for labelling:</strong></p>
             <p style="margin-left: 15px;">{{ section_2.labelling.hazard_components }}</p>
@@ -421,13 +433,13 @@
                 </thead>
                 <tbody>
                     {% for statement in section_2.labelling.hazard_statements %}
-                    <tr><td>{{ statement.code }}</td><td>{{ statement.text }}</td></tr>
+                    <tr><td>H{{ statement.code|string|pad(3, '0', true) }}</td><td>{{ statement.text }}</td></tr>
                     {% endfor %}
                 </tbody>
             </table>
             
             <p><strong>Supplemental hazard information:</strong></p>
-            <p style="margin-left: 15px;">{{ section_2.labelling.supplemental_hazards | default('none') }}</p>
+            <!-- SUPPLEMENTAL_HAZARD_INFO_PLACEHOLDER -->
             
             <p><strong>Precautionary statements Prevention</strong></p>
             <table class="sds">
