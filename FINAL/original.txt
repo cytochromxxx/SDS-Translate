@@ -1,0 +1,589 @@
+Safety Data Sheet according to Regulation (EC) No. 1907/2006 (REACH) Page 1/11
+Mycoplasma Off™
+Revision date:21 Aug 2024 Version:5 Print date:21 Aug 2024
+Safety Data Sheet according to Regulation (EC) No. 1907/2006 (REACH)
+SECTION 1: Identification of the substance/mixture and of the company/undertaking
+1.1. Product identifier
+Trade name/designation:
+Mycoplasma Off™
+Article No.:
+15-5000, 15-1000, 15-0050
+UFI:
+XF6K-E0M5-UP1H-N57C
+1.2. Relevant identified uses of the substance or mixture and uses advised against
+Use of the substance/mixture:
+The product is intended for research, analysis and scientific education.
+Relevant identified uses:
+Life cycle stage [LCS]
+PW: Widespread use by professional workers
+Sector of uses [SU]
+SU 24: Scientific research and development
+Product Categories [PC]
+PC 8: Biocidal product
+PC 35: Washing and cleaning products
+* 1.3. Details of the supplier of the safety data sheet
+Supplier (manufacturer/importer/only representative/downstream user/distributor):
+Minerva Biolabs GmbH
+Schkopauer Ring 13
+12681 Berlin
+Germany
+Telephone:+49 30 2000437 0
+E-mail:ehs@minerva-biolabs.com
+Website:www.minerva-biolabs.com
+1.4. Emergency telephone number
+Vergiftungs-Informations-Zentrale Freiburg, 24h: +49 761 19240
+SECTION 2: Hazards identification
+2.1. Classification of the substance or mixture
+Classification according to Regulation (EC) No 1272/2008 [CLP]
+Hazard classes and hazard categories Hazard statements Classification procedure
+flammable liquids (Flam. Liq. 3) H226: Flammable liquid and vapour. On basis of test data.
+Serious eye damage/eye irritation H318: Causes serious eye damage. Calculation method.
+(Eye Dam. 1)
+STOT-single exposure (STOT SE 3) H336: May cause drowsiness or dizziness. Calculation method.
+* 2.2. Label elements
+Labelling according to Regulation (EC) No. 1272/2008 [CLP]
+Hazard pictograms:
+GHS02 GHS05 GHS07
+Flame Corrosion Exclamation mark
+Signal word:Danger
+en / DE
+GeSi.de\n--- Page Break ---\nSafety Data Sheet according to Regulation (EC) No. 1907/2006 (REACH) Page 2/11
+Mycoplasma Off™
+Revision date:21 Aug 2024 Version:5 Print date:21 Aug 2024
+Hazard components for labelling:
+propan-1-ol
+Hazard statements for physical hazards
+H226 Flammable liquid and vapour.
+Hazard statements for health hazards
+H318 Causes serious eye damage.
+H336 May cause drowsiness or dizziness.
+Supplemental hazard information:none
+Precautionary statements Prevention
+P210 Keep away from heat, hot surfaces, sparks, open flames and other ignition sources. No smoking.
+P280 Wear protective gloves/protective clothing and eye protection/face protection.
+Precautionary statements Response
+P303 + P361 + P353 IF ON SKIN (or hair): Take off immediately all contaminated clothing. Rinse skin with water [or shower].
+P304 + P340 IF INHALED: Remove person to fresh air and keep comfortable for breathing.
+P305 + P351 + P338 IF IN EYES: Rinse cautiously with water for several minutes. Remove contact lenses, if present and easy to
+do. Continue rinsing.
+2.3. Other hazards
+Adverse physicochemical effects:
+In case of insufficient ventilation and/or through use, explosive/highly flammable mixtures may develop.
+Adverse human health effects and symptoms:
+This product does not contain a substance that has endocrine disrupting properties with respect to humans as no
+components meets the criteria.
+SECTION 3: Composition/information on ingredients
+* 3.2. Mixtures
+Hazardous ingredients / Hazardous impurities / Stabilisers:
+Product identifiers Substance name Concentration
+Classification according to Regulation (EC) No 1272/2008 [CLP]
+CAS No.:71-23-8 propan-1-ol 30 – < 50
+EC No.:200-746-9 Eye Dam. 1 (H318), Flam. Liq. 2 (H225), STOT SE 3 (H336) weight-%
+Index No.:603-003-00-0 Danger
+REACH No.: Acute Toxicity Estimate
+01-2119486761-29 ATE (oral) 8,000 mg/kg
+ATE (dermal) 4,032 mg/kg
+ATE (inhalation, vapour) > 33.8 mg/L
+ATE (inhalation, dust/mist) > 51.91 mg/L
+CAS No.:64-17-5 ethanol 10 – < 30
+EC No.:200-578-6 Flam. Liq. 2 (H225) weight-%
+Index No.:603-002-00-5 Danger
+REACH No.: Acute Toxicity Estimate
+01-2119457610-43-XXXX ATE (oral) 10,470 mg/kg
+ATE (dermal) > 2,000 mg/kg
+ATE (inhalation, vapour) 116.9 mg/L
+CAS No.:34590-94-8 Dipropylene glycol monomethyl ether 1 – ≤ 5
+EC No.:252-104-2 Substance with a community workplace exposure limit. weight-%
+REACH No.: Acute Toxicity Estimate
+01-2119450011-60-XXXX ATE (oral) > 5,000 mg/kg
+ATE (dermal) 9,510 mg/kg
+Full text of H- and EUH-phrases: see section 16.
+SECTION 4: First aid measures
+* 4.1. Description of first aid measures
+General information:
+In case of accident or unwellness, seek medical advice immediately (show directions for use or safety data sheet if
+possible). Remove victim out of the danger area. Remove contaminated, saturated clothing immediately. Do not leave
+affected person unattended. If unconscious but breathing normally, place in recovery position and seek medical advice.
+Warning First aider: Pay attention to self-protection!
+en / DE
+GeSi.de\n--- Page Break ---\nSafety Data Sheet according to Regulation (EC) No. 1907/2006 (REACH) Page 3/11
+Mycoplasma Off™
+Revision date:21 Aug 2024 Version:5 Print date:21 Aug 2024
+Following inhalation:
+Provide fresh air. In case of respiratory tract irritation, consult a physician. Get medical advice/attention if you feel
+unwell.
+In case of skin contact:
+After contact with skin, wash immediately with plenty of water and soap. Take off immediately all contaminated clothing.
+If skin irritation or rash occurs: Get medical advice/attention.
+After eye contact:
+In case of contact with eyes flush immediately with plenty of flowing water for 10 to 15 minutes holding eyelids apart and
+consult an ophthalmologist.
+Following ingestion:
+Rinse mouth. Get medical advice/attention if you feel unwell. Let 1 glass of water be drunken in little sips (dilution effect).
+Self-protection of the first aider:
+Use personal protection equipment.
+4.2. Most important symptoms and effects, both acute and delayed
+Serious eye damage/eye irritation
+4.3. Indication of any immediate medical attention and special treatment needed
+Treat symptomatically.
+SECTION 5: Firefighting measures
+5.1. Extinguishing media
+Suitable extinguishing media:
+Water spray jet, alcohol resistant foam, Extinguishing powder, Carbon dioxide (CO2)
+Unsuitable extinguishing media:
+Full water jet
+5.2. Special hazards arising from the substance or mixture
+Combustible. Vapours are heavier than air, spread along floors and form explosive mixtures with air.
+Hazardous combustion products:
+In case of fire: Carbon monoxide, Carbon dioxide (CO2). Vapours can form explosive mixtures with air.
+5.3. Advice for firefighters
+Fight fire with normal precautions from a reasonable distance. Wear a self-contained breathing apparatus and chemical
+protective clothing.
+5.4. Additional information
+Collect contaminated fire extinguishing water separately. Do not allow entering drains or surface water.
+SECTION 6: Accidental release measures
+6.1. Personal precautions, protective equipment and emergency procedures
+6.1.1. For non-emergency personnel
+Personal precautions:
+Remove persons to safety. Use personal protective equipment as required. Avoid contact with skin, eyes and clothes.
+Protective equipment:
+Wear protective gloves/protective clothing and eye protection/face protection.
+6.1.2. For emergency responders
+Personal protection equipment:
+Personal protection equipment: see section 8
+6.2. Environmental precautions
+Do not allow to enter into surface water or drains.
+6.3. Methods and material for containment and cleaning up
+For containment:
+Absorb with liquid-binding material (sand, diatomaceous earth, acid- or universal binding agents).
+For cleaning up:
+Water (with cleaning agent)
+6.4. Reference to other sections
+Safe handling: see section 7, Personal protection equipment: see section 8, Disposal: see section 13
+6.5. Additional information
+Use appropriate container to avoid environmental contamination.
+en / DE
+GeSi.de\n--- Page Break ---\nSafety Data Sheet according to Regulation (EC) No. 1907/2006 (REACH) Page 4/11
+Mycoplasma Off™
+Revision date:21 Aug 2024 Version:5 Print date:21 Aug 2024
+SECTION 7: Handling and storage
+* 7.1. Precautions for safe handling
+Protective measures
+Advices on safe handling:
+Wear personal protection equipment (refer to section 8). Wash hands before breaks and after work. Keep away from:
+Food and feedingstuffs.If local exhaust ventilation is not possible or not sufficient, the entire working area should be
+ventilated by technical means. Do not breathe mist/vapours/spray.
+Fire prevent measures:
+Keep away from heat, hot surfaces, sparks, open flames and other ignition sources. No smoking. Vapours can form
+explosive mixtures with air.
+Advices on general occupational hygiene
+Avoid contact with skin, eyes and clothes. When using do not eat, drink, smoke, sniff.
+7.2. Conditions for safe storage, including any incompatibilities
+Technical measures and storage conditions:
+Keep container tightly closed in a cool, well-ventilated place. Keep out of reach of children.
+Requirements for storage rooms and vessels:
+Keep container tightly closed in a cool, well-ventilated place. Recommended storage temperature: at room temperature.
+Protect from sunlight.
+Hints on storage assembly:
+Do not store together with: Food and feedingstuffs (TRGS 510)
+Storage class (TRGS 510, Germany):3 – Flammable liquids
+Further information on storage conditions:
+Keep container tightly closed in a cool, well-ventilated place.
+7.3. Specific end use(s)
+No data available
+SECTION 8: Exposure controls/personal protection
+* 8.1. Control parameters
+8.1.1. Occupational exposure limit values
+Limit value type Substance name ① Long-term occupational exposure limit value
+(country of origin)
+② Short-term occupational exposure limit value
+③ Instantaneous value
+④ Monitoring and observation processes
+⑤ Remark
+TRGS 900 (DE) ethanol ① 200 ppm (380 mg/m³)
+from 29 Mar 2019 CAS No.:64-17-5
+② 800 ppm (1,520 mg/m³)
+EC No.:200-578-6
+⑤ DFG, Y
+IOELV (EU) Dipropylene glycol monomethyl ether ① 50 ppm (308 mg/m³)
+CAS No.:34590-94-8
+⑤ (may be absorbed through the skin)
+EC No.:252-104-2
+TRGS 900 (DE) Dipropylene glycol monomethyl ether ① 50 ppm (310 mg/m³)
+CAS No.:34590-94-8
+② 50 ppm (310 mg/m³)
+EC No.:252-104-2
+⑤ (Aerosol und Dampf) DFG, EU, 11
+8.1.2. Biological limit values
+No data available
+8.1.3. DNEL-/PNEC-values
+No data available
+8.2. Exposure controls
+8.2.1. Appropriate engineering controls
+If local exhaust ventilation is not possible or not sufficient, the entire working area should be ventilated by technical
+means. Avoid breathing vapours and spray.
+en / DE
+GeSi.de\n--- Page Break ---\nSafety Data Sheet according to Regulation (EC) No. 1907/2006 (REACH) Page 5/11
+Mycoplasma Off™
+Revision date:21 Aug 2024 Version:5 Print date:21 Aug 2024
+8.2.2. Personal protection equipment
+Eye/face protection:
+Eye glasses with side protection (EN 166)
+Skin protection:
+Tested protective gloves must be worn (EN ISO 374). Take recovery periods for skin regeneration. Breakthrough times
+and swelling properties of the material must be taken into consideration. Suitable material: Butyl caoutchouc (butyl
+rubber), Thickness of the glove material: > 0,35 mm. In the case of wanting to use the gloves again, clean them before
+taking off and air them well.
+Respiratory protection:
+Usually no personal respirative protection necessary. This product should not be used under conditions of poor
+ventilation unless a protective mask with an appropriate gas filter (i.e. type A1 according to standard EN 14387) is used.
+Other protection measures:
+Wash hands before breaks and after work.
+8.2.3. Environmental exposure controls
+No data available
+SECTION 9: Physical and chemical properties
+* 9.1. Information on basic physical and chemical properties
+Appearance
+Physical state:Liquid Colour:transparent
+Odour:Alcohol
+Safety relevant basis data
+Parameter Value at °C ① Method
+② Remark
+pH ≈ 8 20 °C
+Melting point -114.5 °C ① OECD 102
+Freezing point No data available
+Initial boiling point and boiling range No data available
+Flash point 28 °C ① DIN 51755 part 1
+Evaporation rate No data available
+Auto-ignition temperature No data available
+Upper/lower flammability or explosive 2.5 – 15 Vol-%
+limits
+Vapour pressure No data available
+Vapour density No data available
+Density 0.9 g/cm³ 20 °C
+Bulk density not applicable
+Water solubility completely miscible
+Dynamic viscosity No data available
+Kinematic viscosity No data available
+9.2. Other information
+No data available
+SECTION 10: Stability and reactivity
+10.1. Reactivity
+This material is considered to be non-reactive under normal use conditions.
+10.2. Chemical stability
+The product is chemically stable under recommended conditions of storage, use and temperature.
+10.3. Possibility of hazardous reactions
+No hazardous reaction when handled and stored according to provisions.
+en / DE
+GeSi.de\n--- Page Break ---\nSafety Data Sheet according to Regulation (EC) No. 1907/2006 (REACH) Page 6/11
+Mycoplasma Off™
+Revision date:21 Aug 2024 Version:5 Print date:21 Aug 2024
+10.4. Conditions to avoid
+Further information on proper storage: see section 7.
+10.5. Incompatible materials
+No further relevant information available.
+10.6. Hazardous decomposition products
+No known hazardous decomposition products. Decomposition products in case of fire: see section 5.
+SECTION 11: Toxicological information
+11.1. Information on hazard classes as defined in Regulation (EC) No 1272/2008
+propan-1-ol CAS No.: 71-23-8 EC No.: 200-746-9
+LD50 oral:8,000m g/kg (Rat)
+LD50 dermal:4,032m g/kg (Rabbit)
+LC50 Acute inhalation toxicity (vapour):>33.8m g/L 4h (Rat)
+LC50 Acute inhalation toxicity (dust/mist):>51.91m g/L 8h (rat) OECD Guideline 403 (Acute Inhalation Toxicity)
+ethanol CAS No.: 64-17-5 EC No.: 200-578-6
+LD50 oral:10,470m g/kg (Rat) OECD 401
+LD50 dermal:>2,000m g/kg (Rat) OECD 402
+LC50 Acute inhalation toxicity (vapour):116.9m g/L 4h (Rat) OECD 403
+Dipropylene glycol monomethyl ether CAS No.: 34590-94-8 EC No.: 252-104-2
+LD50 oral:>5,000m g/kg (rat) OECD Guideline 401 (Acute Oral Toxicity)
+LD50 dermal:9,510m g/kg (rabbit) OECD Guideline 402 (Acute Dermal Toxicity)
+Acute oral toxicity:
+Based on available data, the classification criteria are not met.
+Acute dermal toxicity:
+Based on available data, the classification criteria are not met.
+Acute inhalation toxicity:
+Based on available data, the classification criteria are not met.
+Skin corrosion/irritation:
+Based on available data, the classification criteria are not met.
+Serious eye damage/irritation:
+Causes serious eye damage. Causes serious eye damage.
+Respiratory or skin sensitisation:
+Based on available data, the classification criteria are not met.
+Germ cell mutagenicity:
+Based on available data, the classification criteria are not met.
+Carcinogenicity:
+Based on available data, the classification criteria are not met.
+Reproductive toxicity:
+Based on available data, the classification criteria are not met.
+STOT-single exposure:
+Based on available data, the classification criteria are not met.
+STOT-repeated exposure:
+Based on available data, the classification criteria are not met.
+Aspiration hazard:
+Based on available data, the classification criteria are not met.
+Additional information:
+No data available
+11.2. Information on other hazards
+No data available
+en / DE
+GeSi.de\n--- Page Break ---\nSafety Data Sheet according to Regulation (EC) No. 1907/2006 (REACH) Page 7/11
+Mycoplasma Off™
+Revision date:21 Aug 2024 Version:5 Print date:21 Aug 2024
+SECTION 12: Ecological information
+12.1. Toxicity
+propan-1-ol CAS No.: 71-23-8 EC No.: 200-746-9
+LC50:4,555m g/L 4d (fish, Pimephales promelas)
+LC50:4,555m g/L 4d (fish, Pimephales promelas Activated sludge)
+LC50:4,555m g/L 4d (fish, Pimephales promelas) OECD Guideline 203 (Fish, Acute Toxicity Test)
+LC50:1,000m g/L 2d (crustaceans, Gammarus pulex)
+EC50:>1,000m g/L (Belebtschlamm)
+EC50:3,644m g/L 2d (fish, Daphnia magna)
+EC50:>1,000m g/L (Algae/water plant, Activated sludge)
+EC50:9,170m g/L 2d (Algae/water plant, Raphidocelis subcapitata (previous names: Pseudokirchneriella subcapitata, Selenastrum
+capricornutum))
+EC50:3,644m g/L 2d (crustaceans, Daphnia magna) DIN 38412 Part 11, Daphnia- Short term test
+NOEC:>100m g/L 21d (Algae/water plant, Daphnia magna)
+NOEC:1,150m g/L 2d (Algae/water plant)
+NOEC:68.3m g/L 21d (fish, Daphnia magna)
+NOEC:1,150m g/L 2d (Algae/water plant, Chlorella pyrenoidosa)
+ethanol CAS No.: 64-17-5 EC No.: 200-578-6
+LC50:12,340m g/L 2d (Daphnia magna)
+LC50:275m g/L 3d
+LC50:14,200m g/L 4d (fish, Pimephales promelas) US EPA method E03-05
+LC50:5,012m g/L 2d (crustaceans, Ceriodaphnia dubia) ASTM E729-80
+EC50:1,806m g/L (ceriodaphnia dubia, Chlorella vulgaris) OECD 201
+EC50:275m g/L 3d (Algae/water plant, Chlorella vulgaris) OECD Guideline 201 (Alga, Growth Inhibition Test)
+EC50:675m g/L 4d (Algae/water plant, Chlorella vulgaris) OECD Guideline 201 (Alga, Growth Inhibition Test)
+EC50:12,900m g/L 4d (fish, Pimephales promelas) US EPA method E03-05
+NOEC:4,432m g/L (ceriodaphnia dubia)
+NOEC:2m g/L 10d (crustaceans, Ceriodaphnia dubia)
+Dipropylene glycol monomethyl ether CAS No.: 34590-94-8 EC No.: 252-104-2
+LC50:>1,000m g/L 4d (fish, Poecilia reticulata)
+LC50:>1,000m g/L 2d (crustaceans, Crangon crangon) EPA OPP 72-3 (Estuarine/Marine Fish, Mollusk, or Shrimp Acute Toxicity
+Test)
+LC50:>1,000m g/L 3d (crustaceans, Crangon crangon) EPA OPP 72-3 (Estuarine/Marine Fish, Mollusk, or Shrimp Acute Toxicity
+Test)
+LC50:>1,000m g/L 4d (crustaceans, Crangon crangon) EPA OPP 72-3 (Estuarine/Marine Fish, Mollusk, or Shrimp Acute Toxicity
+Test)
+EC50:>969m g/L 3d (Algae/water plant, Raphidocelis subcapitata (previous names: Pseudokirchneriella subcapitata, Selenastrum
+capricornutum))
+EC50:>969m g/L 4d (Algae/water plant, Raphidocelis subcapitata (previous names: Pseudokirchneriella subcapitata, Selenastrum
+capricornutum))
+NOEC:969m g/L 3d (Algae/water plant, Raphidocelis subcapitata (previous names: Pseudokirchneriella subcapitata, Selenastrum
+capricornutum))
+NOEC:969m g/L 4d (Algae/water plant, Raphidocelis subcapitata (previous names: Pseudokirchneriella subcapitata, Selenastrum
+capricornutum))
+LOEC:0.5m g/L 22d (crustaceans, Daphnia magna)
+12.2. Persistence and degradability
+propan-1-ol CAS No.: 71-23-8 EC No.: 200-746-9
+Biodegradation:Yes, rapidly
+ethanol CAS No.: 64-17-5 EC No.: 200-578-6
+Biodegradation:Yes, rapidly
+en / DE
+GeSi.de\n--- Page Break ---\nSafety Data Sheet according to Regulation (EC) No. 1907/2006 (REACH) Page 8/11
+Mycoplasma Off™
+Revision date:21 Aug 2024 Version:5 Print date:21 Aug 2024
+12.3. Bioaccumulative potential
+propan-1-ol CAS No.: 71-23-8 EC No.: 200-746-9
+Log KOW:0.2
+Bioconcentration factor (BCF):0.88
+ethanol CAS No.: 64-17-5 EC No.: 200-578-6
+Log KOW:-0.31
+Bioconcentration factor (BCF):3.2
+Dipropylene glycol monomethyl ether CAS No.: 34590-94-8 EC No.: 252-104-2
+Log KOW:0.004
+12.4. Mobility in soil
+No data available
+12.5. Results of PBT and vPvB assessment
+propan-1-ol CAS No.: 71-23-8 EC No.: 200-746-9
+Results of PBT and vPvB assessment:This substance does not meet the PBT/vPvB criteria of REACH, Annex XIII.
+ethanol CAS No.: 64-17-5 EC No.: 200-578-6
+Results of PBT and vPvB assessment:This substance does not meet the PBT/vPvB criteria of REACH, Annex XIII.
+Dipropylene glycol monomethyl ether CAS No.: 34590-94-8 EC No.: 252-104-2
+Results of PBT and vPvB assessment:This substance does not meet the PBT/vPvB criteria of REACH, Annex XIII.
+12.6. Endocrine disrupting properties
+No data available
+12.7. Other adverse effects
+No data available
+SECTION 13: Disposal considerations
+13.1. Waste treatment methods
+Dispose of waste according to applicable legislation.
+13.1.1. Product/Packaging disposal
+Waste codes/waste designations according to EWC/AVV
+Waste code product
+07 06 04 * other organic solvents, washing liquids and mother liquors
+*: Evidence for disposal must be provided.
+Waste code packaging
+15 01 02 Plastic packaging
+Waste treatment options
+Appropriate disposal / Product:
+Consult the appropriate local waste disposal expert about waste disposal.
+Appropriate disposal / Package:
+Completely emptied packages can be recycled.
+SECTION 14: Transport information
+Land transport (ADR/RID) Inland waterway craft (ADN) Sea transport (IMDG) Air transport (ICAO-TI / IATA-
+DGR)
+14.1. UN number or ID number
+UN 1987 UN 1987 UN 1987 UN 1987
+14.2. UN proper shipping name
+ALCOHOLS, N.O.S. (propan-1- ALCOHOLS, N.O.S. (propan-1- ALCOHOLS, N.O.S. (propan-1- ALCOHOLS, N.O.S. (propan-1-
+ol, ethanol) ol, ethanol) ol, ethanol) ol, ethanol)
+* 14.3. Transport hazard class(es)
+3 3 3 3
+14.4. Packing group
+III III III III
+en / DE
+GeSi.de\n--- Page Break ---\nSafety Data Sheet according to Regulation (EC) No. 1907/2006 (REACH) Page 9/11
+Mycoplasma Off™
+Revision date:21 Aug 2024 Version:5 Print date:21 Aug 2024
+Land transport (ADR/RID) Inland waterway craft (ADN) Sea transport (IMDG) Air transport (ICAO-TI / IATA-
+DGR)
+14.5. Environmental hazards
+No No No No
+14.6. Special precautions for user
+Special Provisions: Special Provisions: Special Provisions: Special Provisions:
+274 | 601 274 | 601 223 | 274 A3 | A180
+Limited quantity (LQ): Limited quantity (LQ): Limited quantity (LQ): Limited quantity (LQ):
+5 L 5 L 5 L Y344
+Excepted Quantities (EQ): Excepted Quantities (EQ): Excepted Quantities (EQ): Excepted Quantities (EQ):
+E1 E1 E1 E1
+Hazard identification number Classification code: EmS-No.:
+(Kemler No.): F1 F-E, S-D
+30
+Classification code:
+F1
+Tunnel restriction code:
+(D/E)
+14.7. Maritime transport in bulk according to IMO instruments
+No transport as bulk according to IBC Code.
+SECTION 15: Regulatory information
+* 15.1. Safety, health and environmental regulations/legislation specific for the substance or mixture
+15.1.1. EU legislation
+Other regulations (EU):
+Hazard categories:
+• P5a Flammable Liquids, Category 1 or 2
+• P5b Flammable liquids
+• P5c Flammable liquids of Categories 2 or 3, not covered by P5a and P5b
+1907/2006 REACH, 1272/2008 CLP GHS, 98/24/EC, Regulation (EC) No. 648/2004 [Detergents regulation], KrW/AbfG
+15.1.2. National regulations
+[DE] National regulations
+Restrictions of occupation
+22 JArbSchG., 4 MuSchRiV., 5 MuSchRiV., Betriebssicherheitsverordnung (BetrSichV)
+Störfallverordnung (12. BImschV)
+for substances contained in the product:
+Hazard categories:
+• P5a Flammable Liquids, Category 1 or 2
+• P5b Flammable liquids
+• P5c Flammable liquids of Categories 2 or 3, not covered by P5a and P5b
+for substances possibly developing during an incident:
+This product is not assigned to a hazard category.
+Betriebssicherheitsverordnung (BetrSichV)
+leichtentzündlich
+Water hazard class
+WGK:
+1 - slightly hazardous to water
+Berufsgenossenschaftliche Vorschriften (DGUV-Vorschriften)
+Berufsgenossenschaftliche Vorschriften (DGUV-Vorschriften)
+Other regulations, restrictions and prohibition regulations
+Hazardous Substances Ordinance (GefStoffV)
+15.2. Chemical Safety Assessment
+For this substance a chemical safety assessment has not been carried out.
+SECTION 16: Other information
+* 16.1. Indication of changes
+1.3. Details of the supplier of the safety data sheet
+2.2. Label elements
+3.2. Mixtures
+en / DE
+GeSi.de\n--- Page Break ---\nSafety Data Sheet according to Regulation (EC) No. 1907/2006 (REACH) Page 10/11
+Mycoplasma Off™
+Revision date:21 Aug 2024 Version:5 Print date:21 Aug 2024
+4.1. Description of first aid measures
+7.1. Precautions for safe handling
+8.1. Control parameters
+9.1. Information on basic physical and chemical properties
+14.3. Transport hazard class(es)
+15.1. Safety, health and environmental regulations/legislation specific for the substance or mixture
+16.1. Indication of changes
+16.5. List of relevant hazard statements and/or precautionary statements from sections 2 to 15
+16.2. Abbreviations and acronyms
+ACGIH American Conference of Governmental Industrial Hygienists
+ADN European Agreement concerning the International Carriage of Dangerous Goods by Inland Waterways
+ADR European Agreement concerning the International Carriage of Dangerous Goods by Road
+ASTM American Society for Testing and Materials
+BCF Bioconcentration Factor
+CAS Chemical Abstracts Service
+CLP Classification, Labelling and Packaging
+DIN German Institute for Standardization / German Industrial Standard
+DNEL derived no-effect level
+EC Effective Concentration 50%
+50
+ECHA European Chemicals Agency
+EN European Standard
+ES Exposure scenario
+EWC European Waste Catalogue
+GHS Globally Harmonized System of Classification and Labelling of Chemicals
+IBC Intermediate Bulk Container
+ICAO International Civil Aviation Organization
+IMDG International Maritime Dangerous Goods
+IMO International Maritime Organization
+ISO International Standards Organisation
+LC Lethal (fatal) Concentration 50%
+50
+LD Lethal (fatal) Dose 50%
+50
+MAK Maximum concentration in the workplace air (CH)
+NFPA National Fire Protection Association
+NIOSH National Institute for Occupational Safety & Health
+NOEC No Observed Effect Concentration
+OECD Organisation for Economic Cooperation and Development
+OEL Threshold Limit Value
+OSHA Occupational Safety & Health Administration
+PBT persistent and bioaccumulative and toxic
+PC Product category
+PNEC Predicted No Effect Concentration
+REACH Registration, Evaluation and Authorization of Chemicals
+RID Dangerous goods regulations for transport by rail
+SU use category
+TRGS Technische Regeln für Gefahrstoffe
+UN United Nations
+For abbreviations and acronyms, see: ECHA Guidance on information requirements and chemical safety assessment,
+chapter R.20 (Table of terms and abbreviations).
+16.3. Key literature references and sources for data
+TRGS 510, TRGS 525, TRGS 900, Safety data sheets for the ingredients , 1907/2006 REACH, 1272/2008 CLP GHS
+Substance name Type source of supply
+propan-1-ol LC50 Acute inhalation toxicity (dust/ Source: European Chemicals Agency,
+CAS No.:71-23-8 mist); LC50; EC50; NOEC http://echa.europa.eu/
+EC No.:200-746-9
+Dipropylene glycol monomethyl ether LD50 oral; LD50 dermal; LC50; EC50; Source: European Chemicals Agency,
+CAS No.:34590-94-8 NOEC; LOEC http://echa.europa.eu/
+EC No.:252-104-2
+ethanol LC50; EC50; NOEC Source: European Chemicals Agency,
+CAS No.:64-17-5 http://echa.europa.eu/
+EC No.:200-578-6
+en / DE
+GeSi.de\n--- Page Break ---\nSafety Data Sheet according to Regulation (EC) No. 1907/2006 (REACH) Page 11/11
+Mycoplasma Off™
+Revision date:21 Aug 2024 Version:5 Print date:21 Aug 2024
+16.4. Classification for mixtures and used evaluation method according to regulation (EC) No
+1272/2008 [CLP]
+Hazard classes and hazard categories Hazard statements Classification procedure
+flammable liquids (Flam. Liq. 3) H226: Flammable liquid and vapour. On basis of test data.
+Serious eye damage/eye irritation H318: Causes serious eye damage. Calculation method.
+(Eye Dam. 1)
+STOT-single exposure (STOT SE 3) H336: May cause drowsiness or dizziness. Calculation method.
+* 16.5. List of relevant hazard statements and/or precautionary statements from sections 2 to 15
+Hazard statements
+H225 Highly flammable liquid and vapour.
+H318 Causes serious eye damage.
+H336 May cause drowsiness or dizziness.
+16.6. Training advice
+No data available
+16.7. Additional information
+This data sheet was created in accordance with EU regulation (EC) No. 1907/2006 (REACH).
+The information is based on the level of knowledge and experience on the date of issue, it do not have the importance
+of assured properties. The information may not be changed or transferred to other products. Reproduction in the
+unchanged state is permitted.
+* Data changed compared with the previous version.
+en / DE
+GeSi.de\n--- Page Break ---\n

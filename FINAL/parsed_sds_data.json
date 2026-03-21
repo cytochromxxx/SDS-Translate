@@ -1,0 +1,663 @@
+{
+  "meta": {
+    "product_name": "Mycoplasma Off™",
+    "version": "5",
+    "revision_date": "2024-08-21",
+    "print_date": "2026-03-12",
+    "language": "en",
+    "country": "DE"
+  },
+  "section_1": {
+    "product_identifier": {
+      "trade_name": "Mycoplasma Off™",
+      "item_no": "15-5000, 15-1000, 15-0050",
+      "ufi": "XF6K-E0M5-UP1H-N57C"
+    },
+    "relevant_uses": {
+      "product_type": "The product is intended for research, analysis and scientific education.",
+      "su": "SU24",
+      "su_fulltext": "Scientific research and development",
+      "pc1": "PC8: Biocidal product",
+      "pc2": "PC35: Washing and cleaning products",
+      "lcs": "PW: Widespread use by professional workers"
+    },
+    "supplier_details": {
+      "name": "Minerva Biolabs GmbH",
+      "address": "Schkopauer Ring 13, 12681 Berlin",
+      "country": "DE",
+      "phone": "+49 30 2000437 0",
+      "email": "ehs@minerva-biolabs.com",
+      "website": "www.minerva-biolabs.com"
+    },
+    "emergency_phone": {
+      "number": "+49 761 19240",
+      "description": "24h"
+    }
+  },
+  "hazard_identification": {
+    "clp_classifications": [
+      {
+        "clp_hazard_class_category": "Flam. Liq. 3",
+        "clp_hazard_statement_code": "226",
+        "clp_hazard_statement_text": "Flammable liquid and vapour.",
+        "clp_classification_procedure": "On basis of test data."
+      },
+      {
+        "clp_hazard_class_category": "Eye Dam. 1",
+        "clp_hazard_statement_code": "318",
+        "clp_hazard_statement_text": "Causes serious eye damage.",
+        "clp_classification_procedure": "Calculation method."
+      },
+      {
+        "clp_hazard_class_category": "STOT SE 3",
+        "clp_hazard_statement_code": "336",
+        "clp_hazard_statement_text": "May cause drowsiness or dizziness.",
+        "clp_classification_procedure": "Calculation method."
+      }
+    ]
+  },
+  "section_2": {
+    "hazard_identification": {
+      "clp_classifications": [
+        {
+          "clp_hazard_class_category": "Flam. Liq. 3",
+          "clp_hazard_statement_code": "226",
+          "clp_hazard_statement_text": "Flammable liquid and vapour.",
+          "clp_classification_procedure": "On basis of test data."
+        },
+        {
+          "clp_hazard_class_category": "Eye Dam. 1",
+          "clp_hazard_statement_code": "318",
+          "clp_hazard_statement_text": "Causes serious eye damage.",
+          "clp_classification_procedure": "Calculation method."
+        },
+        {
+          "clp_hazard_class_category": "STOT SE 3",
+          "clp_hazard_statement_code": "336",
+          "clp_hazard_statement_text": "May cause drowsiness or dizziness.",
+          "clp_classification_procedure": "Calculation method."
+        }
+      ]
+    },
+    "classification": [
+      {
+        "category": "Flam. Liq. 3",
+        "statement": "Flammable liquid and vapour.",
+        "code": "226",
+        "procedure": "On basis of test data."
+      },
+      {
+        "category": "Eye Dam. 1",
+        "statement": "Causes serious eye damage.",
+        "code": "318",
+        "procedure": "Calculation method."
+      },
+      {
+        "category": "STOT SE 3",
+        "statement": "May cause drowsiness or dizziness.",
+        "code": "336",
+        "procedure": "Calculation method."
+      }
+    ],
+    "labelling": {
+      "pictograms": [
+        "GHS02",
+        "GHS05",
+        "GHS07"
+      ],
+      "signal_word": "Danger",
+      "hazard_components": "propan-1-ol",
+      "hazard_statements": [
+        {
+          "code": "226",
+          "text": "Flammable liquid and vapour."
+        },
+        {
+          "code": "318",
+          "text": "Causes serious eye damage."
+        },
+        {
+          "code": "336",
+          "text": "May cause drowsiness or dizziness."
+        }
+      ],
+      "precautionary_statements": {
+        "prevention": [
+          "Keep away from heat, hot surfaces, sparks, open flames and other ignition sources. No smoking.",
+          "Wear protective gloves/protective clothing and eye protection/face protection."
+        ],
+        "response": [
+          "IF ON SKIN (or hair): Take off immediately all contaminated clothing. Rinse skin with water [or shower].",
+          "IF INHALED: Remove person to fresh air and keep comfortable for breathing.",
+          "IF IN EYES: Rinse cautiously with water for several minutes. Remove contact lenses, if present and easy to do. Continue rinsing."
+        ]
+      }
+    },
+    "other_hazards": {
+      "physicochemical": "In case of insufficient ventilation and/or through use, explosive/highly flammable mixtures may develop.",
+      "health": "This product does not contain a substance that has endocrine disrupting properties with respect to humans as no components meets the criteria."
+    }
+  },
+  "section_3": {
+    "mixture_components": [
+      {
+        "name": "Propan-1-ol",
+        "cas": "71-23-8",
+        "ec": "200-746-9",
+        "reach_no": "01-2119486761-29",
+        "concentration": "30.0 - 50.0 Weight-%",
+        "classification": [
+          "Flam. Liq. 2: Highly flammable liquid and vapour.",
+          "Eye Dam. 1: Causes serious eye damage.",
+          "STOT SE 3: May cause drowsiness or dizziness."
+        ],
+        "toxicological_info": [
+          "LD50 Oral: 8000.0 mg/kg Rat (Rat)",
+          "LD50 Dermal: 4032.0 mg/kg Rabbit (Rabbit)",
+          "LC50 Inhalation(Vapour): gt 33.8 mg/L Rat (Rat)",
+          "LC50 Inhalation(Dust/Mist): gt 51.91 mg/L rat (rat)"
+        ]
+      },
+      {
+        "name": "Ethanol",
+        "cas": "64-17-5",
+        "ec": "200-578-6",
+        "reach_no": "01-2119457610-43-XXXX",
+        "concentration": "10.0 - 30.0 Weight-%",
+        "classification": [
+          "Flam. Liq. 2: Highly flammable liquid and vapour."
+        ],
+        "toxicological_info": [
+          "LD50 Oral: 10470.0 mg/kg Rat (Rat)",
+          "LD50 Dermal: gt 2000.0 mg/kg Rat (Rat)",
+          "LC50 Inhalation(Vapour): 116.9 mg/L Rat (Rat)"
+        ]
+      },
+      {
+        "name": "Dipropylenglykolmonomethylether (Isomerengemisch)",
+        "cas": "34590-94-8",
+        "ec": "252-104-2",
+        "reach_no": "01-2119450011-60-XXXX",
+        "concentration": "1.0 - 5.0 Weight-%",
+        "classification": [],
+        "toxicological_info": [
+          "LD50 Oral: gt 5000.0 mg/kg rat (rat)",
+          "LD50 Dermal: 9510.0 mg/kg rabbit (rabbit)"
+        ]
+      }
+    ]
+  },
+  "section_4": {
+    "description": {
+      "general": "In case of accident or unwellness, seek medical advice immediately (show directions for use or safety data sheet if possible). Remove victim out of the danger area. Remove contaminated, saturated clothing immediately. Do not leave affected person unattended. If unconscious but breathing normally, place in recovery position and seek medical advice. Warning First aider: Pay attention to self-protection!",
+      "inhalation": "Provide fresh air. In case of respiratory tract irritation, consult a physician. Get medical advice/attention if you feel unwell.",
+      "skin": "After contact with skin, wash immediately with plenty of water and soap. Take off immediately all contaminated clothing. If skin irritation or rash occurs: Get medical advice/attention.",
+      "eye": "In case of contact with eyes flush immediately with plenty of flowing water for 10 to 15 minutes holding eyelids apart and consult an ophthalmologist.",
+      "ingestion": "Rinse mouth. Get medical advice/attention if you feel unwell. Let 1 glass of water be drunken in little sips (dilution effect).",
+      "self_protection": "Use personal protection equipment."
+    },
+    "symptoms": "Serious eye damage/eye irritation",
+    "treatment": "Treat symptomatically."
+  },
+  "section_5": {
+    "suitable_media": "Water spray jet , alcohol resistant foam , Extinguishing powder , Carbon dioxide (CO2)",
+    "unsuitable_media": "Full water jet",
+    "special_hazards": "Combustible . Vapours are heavier than air, spread along floors and form explosive mixtures with air.",
+    "combustion_products": "In case of fire: Carbon monoxide , Carbon dioxide (CO2) . Vapours can form explosive mixtures with air.",
+    "firefighter_advice": "Fight fire with normal precautions from a reasonable distance. Wear a self-contained breathing apparatus and chemical protective clothing.",
+    "additional_info": "Collect contaminated fire extinguishing water separately. Do not allow entering drains or surface water."
+  },
+  "section_6": {
+    "personal_precautions": "Remove persons to safety. Use personal protective equipment as required. Avoid contact with skin, eyes and clothes.",
+    "protective_equipment": "Wear protective gloves/protective clothing and eye protection/face protection.",
+    "emergency_responders": "Personal protection equipment: see section 8",
+    "environmental_precautions": "Do not allow to enter into surface water or drains.",
+    "containment": "Absorb with liquid-binding material (sand, diatomaceous earth, acid- or universal binding agents).",
+    "cleaning": "Water (with cleaning agent)",
+    "other_sections": "Safe handling: see section 7 , Personal protection equipment: see section 8 , Disposal: see section 13",
+    "additional_info": "Use appropriate container to avoid environmental contamination."
+  },
+  "section_7": {
+    "safe_handling": "Wear personal protection equipment (refer to section 8). Wash hands before breaks and after work. Keep away from: Food and feedingstuffs . If local exhaust ventilation is not possible or not sufficient, the entire working area should be ventilated by technical means. Do not breathe mist/vapours/spray.",
+    "fire_prevention": "Keep away from heat, hot surfaces, sparks, open flames and other ignition sources. No smoking. Vapours can form explosive mixtures with air.",
+    "occupational_hygiene": "Avoid contact with skin, eyes and clothes. When using do not eat, drink, smoke, sniff.",
+    "storage_conditions": "Keep container tightly closed in a cool, well-ventilated place. Keep out of reach of children.",
+    "storage_rooms": "Keep container tightly closed in a cool, well-ventilated place. Recommended storage temperature : at room temperature . Protect from sunlight.",
+    "storage_assembly": "Do not store together with: Food and feedingstuffs ( TRGS 510 )",
+    "specific_end_use": ""
+  },
+  "section_8": {
+    "occupational_exposure_limits": [
+      {
+        "type": "TRGS 900 (DE)",
+        "name": "ethanol<br>CAS No.: 64-17-5<br>EC No.: 200-578-6",
+        "values": "① 200 ppm (380 mg/m³)<br>② 800 ppm (1,520 mg/m³)<br>⑤ DFG, Y"
+      },
+      {
+        "type": "IOELV (EU)",
+        "name": "Dipropylene glycol monomethyl ether<br>CAS No.: 34590-94-8<br>EC No.: 252-104-2",
+        "values": "① 50 ppm (308 mg/m³)<br>⑤ (may be absorbed through the skin)"
+      },
+      {
+        "type": "TRGS 900 (DE)",
+        "name": "Dipropylene glycol monomethyl ether<br>CAS No.: 34590-94-8<br>EC No.: 252-104-2",
+        "values": "① 50 ppm (310 mg/m³)<br>② 50 ppm (310 mg/m³)<br>⑤ (Aerosol und Dampf) DFG, EU, 11"
+      }
+    ],
+    "control_parameters_comments": "If local exhaust ventilation is not possible or not sufficient, the entire working area should be ventilated by technical means. FEITSCH.0093 Avoid breathing vapours and spray.",
+    "respiratory_protection": "Usually no personal respirative protection necessary. This product should not be used under conditions of poor ventilation unless a protective mask with an appropriate gas filter (i.e. type A1 according to standard EN 14387) is used.",
+    "eye_protection": "Eye glasses with side protection ( EN 166 )",
+    "skin_protection": "Tested protective gloves must be worn ( EN ISO 374 ). Take recovery periods for skin regeneration. Breakthrough times and swelling properties of the material must be taken into consideration. Suitable material: Butyl caoutchouc (butyl rubber) , Thickness of the glove material : > 0,35 mm. In the case of wanting to use the gloves again, clean them before taking off and air them well.",
+    "environmental_exposure": ""
+  },
+  "section_9": {
+    "appearance": "other transparent Alcohol",
+    "safety_data": [
+      {
+        "parameter": "pH",
+        "value": "ca 8.0",
+        "temperature": "",
+        "method": ""
+      },
+      {
+        "parameter": "Melting point",
+        "value": "-114.5 C",
+        "temperature": "",
+        "method": ""
+      },
+      {
+        "parameter": "Freezing point",
+        "value": "No data available",
+        "temperature": "",
+        "method": ""
+      },
+      {
+        "parameter": "Initial boiling point and boiling range",
+        "value": "No data available",
+        "temperature": "",
+        "method": ""
+      },
+      {
+        "parameter": "Flash point",
+        "value": "28.0 C",
+        "temperature": "",
+        "method": ""
+      },
+      {
+        "parameter": "Evaporation rate",
+        "value": "No data available",
+        "temperature": "",
+        "method": ""
+      },
+      {
+        "parameter": "Auto-ignition temperature",
+        "value": "No data available",
+        "temperature": "",
+        "method": ""
+      },
+      {
+        "parameter": "Upper/lower flammability or explosive limits",
+        "value": "2.5 Vol-% - 15.0 Vol-%",
+        "temperature": "",
+        "method": ""
+      },
+      {
+        "parameter": "Vapour pressure",
+        "value": "No data available",
+        "temperature": "",
+        "method": ""
+      },
+      {
+        "parameter": "Vapour density",
+        "value": "No data available",
+        "temperature": "",
+        "method": ""
+      },
+      {
+        "parameter": "Density",
+        "value": "0.9 g/cm3",
+        "temperature": "",
+        "method": ""
+      },
+      {
+        "parameter": "Bulk density",
+        "value": "No data available",
+        "temperature": "",
+        "method": ""
+      },
+      {
+        "parameter": "Water solubility",
+        "value": "No data available",
+        "temperature": "",
+        "method": ""
+      },
+      {
+        "parameter": "Dynamic viscosity",
+        "value": "No data available",
+        "temperature": "",
+        "method": ""
+      },
+      {
+        "parameter": "Kinematic viscosity",
+        "value": "No data available",
+        "temperature": "",
+        "method": ""
+      }
+    ]
+  },
+  "section_10": {
+    "reactivity": "This material is considered to be non-reactive under normal use conditions.",
+    "chemical_stability": "The product is chemically stable under recommended conditions of storage, use and temperature.",
+    "hazardous_reactions": "No hazardous reaction when handled and stored according to provisions.",
+    "conditions_to_avoid": "Further information on proper storage: see section 7.",
+    "incompatible_materials": "No further relevant information available.",
+    "hazardous_decomposition": "No known hazardous decomposition products. Decomposition products in case of fire: see section 5."
+  },
+  "section_11": {
+    "acute_toxicity": "Based on available data, the classification criteria are not met. Based on available data, the classification criteria are not met. Based on available data, the classification criteria are not met.",
+    "skin_corrosion": "Based on available data, the classification criteria are not met.",
+    "eye_damage": "Causes serious eye damage.",
+    "sensitisation": "Based on available data, the classification criteria are not met.",
+    "mutagenicity": "Based on available data, the classification criteria are not met.",
+    "carcinogenicity": "Based on available data, the classification criteria are not met.",
+    "reproductive_toxicity": "Based on available data, the classification criteria are not met.",
+    "stot_single": "Based on available data, the classification criteria are not met.",
+    "stot_repeated": "Based on available data, the classification criteria are not met.",
+    "aspiration_hazard": "Based on available data, the classification criteria are not met."
+  },
+  "section_12": {
+    "ecotox_components": [
+      {
+        "generic_name": "Propan-1-ol",
+        "cas_no": "71-23-8",
+        "ec_no": "200-746-9",
+        "aquatic_toxicity_entries": [
+          {
+            "effect_dose": "LC50",
+            "value": "4555.0 mg/L",
+            "exposure_time": "",
+            "species": "Pimephales promelas",
+            "method": ""
+          },
+          {
+            "effect_dose": "LC50",
+            "value": "4555.0 mg/L",
+            "exposure_time": "",
+            "species": "Activated sludge",
+            "method": ""
+          },
+          {
+            "effect_dose": "LC50",
+            "value": "4555.0 mg/L",
+            "exposure_time": "",
+            "species": "Pimephales promelas",
+            "method": "OECD Guideline 203 (Fish, Acute Toxicity Test)"
+          },
+          {
+            "effect_dose": "EC50",
+            "value": "3644.0 mg/L",
+            "exposure_time": "",
+            "species": "Daphnia magna",
+            "method": ""
+          },
+          {
+            "effect_dose": "NOEC",
+            "value": "68.3 mg/L",
+            "exposure_time": "",
+            "species": "Daphnia magna",
+            "method": ""
+          },
+          {
+            "effect_dose": "LC50",
+            "value": "1000.0 mg/L",
+            "exposure_time": "",
+            "species": "Gammarus pulex",
+            "method": ""
+          },
+          {
+            "effect_dose": "EC50",
+            "value": "3644.0 mg/L",
+            "exposure_time": "",
+            "species": "Daphnia magna",
+            "method": "DIN 38412 Part 11, Daphnia- Short term test"
+          },
+          {
+            "effect_dose": "EC50",
+            "value": "gt 1000.0 mg/L",
+            "exposure_time": "",
+            "species": "Activated sludge",
+            "method": ""
+          },
+          {
+            "effect_dose": "EC50",
+            "value": "9170.0 mg/L",
+            "exposure_time": "",
+            "species": "Raphidocelis subcapitata (previous names: Pseudokirchneriella subcapitata, Selenastrum capricornutum)",
+            "method": ""
+          },
+          {
+            "effect_dose": "NOEC",
+            "value": "gt 100.0 mg/L",
+            "exposure_time": "",
+            "species": "Daphnia magna",
+            "method": ""
+          },
+          {
+            "effect_dose": "NOEC",
+            "value": "1150.0 mg/L",
+            "exposure_time": "",
+            "species": "",
+            "method": ""
+          },
+          {
+            "effect_dose": "NOEC",
+            "value": "1150.0 mg/L",
+            "exposure_time": "",
+            "species": "Chlorella pyrenoidosa",
+            "method": ""
+          }
+        ],
+        "biodegradation": "",
+        "bcf": "",
+        "log_kow": "",
+        "pbt_result": ""
+      },
+      {
+        "generic_name": "Ethanol",
+        "cas_no": "64-17-5",
+        "ec_no": "200-578-6",
+        "aquatic_toxicity_entries": [
+          {
+            "effect_dose": "LC50",
+            "value": "14200.0 mg/L",
+            "exposure_time": "",
+            "species": "Pimephales promelas",
+            "method": "US EPA method E03-05"
+          },
+          {
+            "effect_dose": "EC50",
+            "value": "12900.0 mg/L",
+            "exposure_time": "",
+            "species": "Pimephales promelas",
+            "method": "US EPA method E03-05"
+          },
+          {
+            "effect_dose": "LC50",
+            "value": "5012.0 mg/L",
+            "exposure_time": "",
+            "species": "Ceriodaphnia dubia",
+            "method": "ASTM E729-80"
+          },
+          {
+            "effect_dose": "NOEC",
+            "value": "2.0 mg/L",
+            "exposure_time": "",
+            "species": "Ceriodaphnia dubia",
+            "method": ""
+          },
+          {
+            "effect_dose": "EC50",
+            "value": "275.0 mg/L",
+            "exposure_time": "",
+            "species": "Chlorella vulgaris",
+            "method": "OECD Guideline 201 (Alga, Growth Inhibition Test)"
+          },
+          {
+            "effect_dose": "EC50",
+            "value": "675.0 mg/L",
+            "exposure_time": "",
+            "species": "Chlorella vulgaris",
+            "method": "OECD Guideline 201 (Alga, Growth Inhibition Test)"
+          }
+        ],
+        "biodegradation": "",
+        "bcf": "",
+        "log_kow": "",
+        "pbt_result": ""
+      },
+      {
+        "generic_name": "Dipropylenglykolmonomethylether (Isomerengemisch)",
+        "cas_no": "34590-94-8",
+        "ec_no": "252-104-2",
+        "aquatic_toxicity_entries": [
+          {
+            "effect_dose": "LC50",
+            "value": "gt 1000.0 mg/L",
+            "exposure_time": "",
+            "species": "Poecilia reticulata",
+            "method": ""
+          },
+          {
+            "effect_dose": "LC50",
+            "value": "gt 1000.0 mg/L",
+            "exposure_time": "",
+            "species": "Crangon crangon",
+            "method": "EPA OPP 72-3 (Estuarine/Marine Fish, Mollusk, or Shrimp Acute Toxicity Test)"
+          },
+          {
+            "effect_dose": "LC50",
+            "value": "gt 1000.0 mg/L",
+            "exposure_time": "",
+            "species": "Crangon crangon",
+            "method": "EPA OPP 72-3 (Estuarine/Marine Fish, Mollusk, or Shrimp Acute Toxicity Test)"
+          },
+          {
+            "effect_dose": "LC50",
+            "value": "gt 1000.0 mg/L",
+            "exposure_time": "",
+            "species": "Crangon crangon",
+            "method": "EPA OPP 72-3 (Estuarine/Marine Fish, Mollusk, or Shrimp Acute Toxicity Test)"
+          },
+          {
+            "effect_dose": "LOEC",
+            "value": "0.5 mg/L",
+            "exposure_time": "",
+            "species": "Daphnia magna",
+            "method": ""
+          },
+          {
+            "effect_dose": "EC50",
+            "value": "gt 969.0 mg/L",
+            "exposure_time": "",
+            "species": "Raphidocelis subcapitata (previous names: Pseudokirchneriella subcapitata, Selenastrum capricornutum)",
+            "method": ""
+          },
+          {
+            "effect_dose": "EC50",
+            "value": "gt 969.0 mg/L",
+            "exposure_time": "",
+            "species": "Raphidocelis subcapitata (previous names: Pseudokirchneriella subcapitata, Selenastrum capricornutum)",
+            "method": ""
+          },
+          {
+            "effect_dose": "NOEC",
+            "value": "969.0 mg/L",
+            "exposure_time": "",
+            "species": "Raphidocelis subcapitata (previous names: Pseudokirchneriella subcapitata, Selenastrum capricornutum)",
+            "method": ""
+          },
+          {
+            "effect_dose": "NOEC",
+            "value": "969.0 mg/L",
+            "exposure_time": "",
+            "species": "Raphidocelis subcapitata (previous names: Pseudokirchneriella subcapitata, Selenastrum capricornutum)",
+            "method": ""
+          }
+        ],
+        "biodegradation": "",
+        "bcf": "",
+        "log_kow": "",
+        "pbt_result": ""
+      }
+    ],
+    "mobility_info": "",
+    "endocrine_disrupting_info": "",
+    "other_adverse_effects_info": ""
+  },
+  "section_13": {
+    "waste_treatment": "Consult the appropriate local waste disposal expert about waste disposal. Completely emptied packages can be recycled.",
+    "eu_requirements": "07 06 04 other organic solvents, washing liquids and mother liquors true 15 01 02 Plastic packaging false Dispose of waste according to applicable legislation."
+  },
+  "section_14": {
+    "land": {
+      "un_number": "1987",
+      "shipping_name": "ALCOHOLS, N.O.S.",
+      "transport_class": "3",
+      "packing_group": "III",
+      "environmental_hazards": "No",
+      "special_provisions": "274 | 601",
+      "limited_quantity": "5 L",
+      "excepted_quantities": "E1",
+      "hazard_id": "30",
+      "classification_code": "3",
+      "tunnel_code": "D/E"
+    },
+    "inland": {
+      "un_number": "1987",
+      "shipping_name": "ALCOHOLS, N.O.S.",
+      "transport_class": "3",
+      "packing_group": "III",
+      "environmental_hazards": "No",
+      "special_provisions": "274 | 601",
+      "limited_quantity": "5 L",
+      "excepted_quantities": "E1",
+      "classification_code": "3"
+    },
+    "sea": {
+      "un_number": "1987",
+      "shipping_name": "ALCOHOLS, N.O.S.",
+      "transport_class": "3",
+      "packing_group": "III",
+      "environmental_hazards": "No",
+      "special_provisions": "223 | 274",
+      "limited_quantity": "5 L",
+      "excepted_quantities": "E1",
+      "ems_code": "F-E, S-D"
+    },
+    "air": {
+      "un_number": "1987",
+      "shipping_name": "ALCOHOLS, N.O.S.",
+      "transport_class": "3",
+      "packing_group": "III",
+      "environmental_hazards": "No",
+      "special_provisions": "A3 | A180",
+      "limited_quantity": "Y344",
+      "excepted_quantities": "E1"
+    },
+    "bulk_transport": ""
+  },
+  "section_15": {
+    "eu_legislation": "",
+    "national_legislation": [],
+    "wgk": "",
+    "storage_class": ""
+  },
+  "other_information": {
+    "indication_of_changes": [],
+    "abbreviations": [],
+    "abbreviations_source_note": "",
+    "literature_references": "",
+    "training_advice": "",
+    "additional_info_lines": []
+  }
+}

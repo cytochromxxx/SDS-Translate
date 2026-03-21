@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Übersetztes Dokument - Deutsch</title>
+</head>
+<body>
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=210mm" name="viewport"/>
+<title>Safety Data Sheet - Mycoplasma Off™</title>
+<style>
+        @page {
+            size: A4;
+            margin-top: 30mm;
+            margin-bottom: 20mm;
+            margin-left: 15mm;
+            margin-right: 15mm;
+            @top-center {
+                content: element(header);
+                width: 100%;
+            }
+            @bottom-center {
+                content: element(footer);
+                width: 100%;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, "Nimbus Sans", sans-serif;
+            font-size: 9.5pt;
+            line-height: 1.25;
+            color: #000000;
+            background-color: #f5f5f5;
+            padding: 10px 0;
+            margin: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #cccccc;
+        }
+
+        .header-left {
+            flex-grow: 1;
+            padding-right: 10mm;
+        }
+
+        .header-right {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .header-logo {
+            width: 35mm;
+            height: auto;
+        }
+
+        .header-logo img {
+            width: 100%;
+            height: auto;
+        }
+
+        .header .title-text {
+            font-weight: 700;
+            font-size: 10pt;
+            margin: 0;
+            line-height: 1.15;
+        }
+        
+        .header .product-name {
+            font-weight: bold;
+            font-size: 10pt;
+            margin-top: 3px;
+            display: inline-block;
+            background-color: #e6e6e6;
+            padding: 1px 4px;
+        }
+
+        .header .meta-row {
+            display: flex;
+            gap: 15px;
+            font-size: 8pt;
+            margin-top: 4px;
+        }
+
+        .header .meta-row span {
+            font-weight: bold;
+        }
+
+        .header .meta-row span.normal {
+            font-weight: normal;
+        }
+
+        .header .page-number {
+            font-size: 8pt;
+            color: #000000;
+        }
+
+        .brand { display: none; }
+        .title-block { display: none; }
+        .meta { display: none; }
+
+        .footer {
+            position: absolute;
+            bottom: 10mm;
+            left: 15mm;
+            right: 15mm;
+            display: flex;
+            justify-content: flex-end;
+            font-size: 8pt;
+            color: #555555;
+            height: 12px;
+        }
+        
+        .footer .lang-indicator {
+            font-weight: bold;
+        }
+
+        .logo-container {
+            display: none;
+        }
+
+        .ghs-pictograms {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+        
+        .ghs-pictograms img {
+            width: 84px;
+            height: 84px;
+            object-fit: contain;
+        }
+        
+        .ghs-pictogram-label {
+            font-size: 9pt;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 2px;
+        }
+        .ghs-pictogram-name {
+            font-size: 8pt;
+            text-align: center;
+            margin-top: 1px;
+            font-style: italic;
+        }
+        .signal-word {
+            font-weight: 700;
+            font-size: 10pt;
+            color: #D32F2F;
+            margin-top: 2px;
+            text-align: center;
+        }
+
+        @media print {
+            .ghs-pictograms img {
+                width: 46mm;
+                height: 46mm;
+            }
+        }
+
+        .content {
+            margin-top: 3px;
+        }
+
+        .section {
+            margin-bottom: 8px;
+        }
+
+        p, table, ul, ol {
+            page-break-inside: avoid;
+        }
+
+        .section-title {
+            font-weight: 700;
+            font-size: 10pt;
+            background-color: #e6e6e6;
+            border: 1px solid #000;
+            padding: 2px 5px;
+            margin: 6px 0 4px 0;
+            page-break-after: avoid;
+        }
+
+        .subsection-title {
+            font-weight: 700;
+            font-size: 9.5pt;
+            margin: 6px 0 3px 0;
+            page-break-after: avoid;
+        }
+
+        .subsubsection {
+            font-weight: 700;
+            font-size: 9.5pt;
+            text-decoration: underline;
+            margin: 4px 0 2px 0;
+            page-break-after: avoid;
+        }
+
+        p {
+            margin: 0 0 3px 0;
+            text-align: left;
+        }
+
+        strong {
+            font-weight: 700;
+        }
+
+        table.sds {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 8.5pt;
+            margin: 4px 0;
+            page-break-inside: auto;
+        }
+
+        table.sds thead {
+            display: table-header-group;
+        }
+
+        table.sds tr {
+            page-break-inside: avoid;
+        }
+
+        table.sds th,
+        table.sds td {
+            border: 1px solid #000000;
+            padding: 3px 5px;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        table.sds th {
+            background-color: #F2F2F2;
+            font-weight: 700;
+        }
+
+        ul {
+            list-style: disc;
+            margin: 2px 0 4px 0;
+            padding-left: 18px;
+        }
+        li {
+            margin-bottom: 1px;
+        }
+
+        .data-row {
+            display: flex;
+            margin-bottom: 2px;
+        }
+        .data-label {
+            font-weight: bold;
+            flex-shrink: 0;
+            padding-right: 8px;
+        }
+        .data-value {
+            flex-grow: 1;
+        }
+        .w-200 { width: 200px; }
+        .w-120 { width: 120px; }
+        .w-80 { width: 80px; }
+        .w-50 { width: 50px; }
+
+        .pictograms img {
+            width: 34px;
+            height: 34px;
+        }
+
+        .ghs-placeholder {
+            width: 34px;
+            height: 34px;
+            border: 2px solid #D32F2F;
+            background-color: #ffffff;
+            transform: rotate(45deg);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ghs-placeholder::before {
+            content: attr(data-symbol);
+            transform: rotate(-45deg);
+            font-size: 7pt;
+            font-weight: bold;
+            color: #000;
+            text-align: center;
+        }
+
+        .signal-word {
+            font-weight: 700;
+            font-size: 10pt;
+            color: #D32F2F;
+        }
+
+        .small {
+            font-size: 8pt;
+            color: #555555;
+            margin-bottom: 4px;
+        }
+        
+        .hazard-text { color: #000; font-weight: bold; }
+        .danger-symbol { color: #D32F2F; font-weight: bold; }
+
+        sub {
+            font-size: 7pt;
+            vertical-align: sub;
+        }
+    
+        .sds-document {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .running-header {
+            position: running(header);
+        }
+
+        .running-footer {
+            position: running(footer);
+        }
+
+        @media screen {
+            body {
+                background-color: #525659;
+                padding: 10mm;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 0;
+            }
+            .sds-document {
+                width: 210mm;
+                min-height: 297mm;
+                background-color: #ffffff;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                padding: 10mm 15mm;
+                margin-bottom: 20px;
+                box-sizing: border-box;
+            }
+            .running-header {
+                position: static;
+                border-bottom: 1px solid #ccc;
+                padding-bottom: 10px;
+                margin-bottom: 15px;
+            }
+            .running-footer {
+                position: static;
+                border-top: 1px solid #ccc;
+                padding-top: 10px;
+                margin-top: 20px;
+            }
+        }
+        
+        @media print {
+            .page-number-counter::after {
+                content: counter(page) "/" counter(pages);
+            }
+            .sds-document {
+                box-shadow: none;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+            }
+        }
+        
+        .page-number { font-size: 8pt; color: #000000; }
+
+</style>
+</head>
+<body>
+<!-- CONTINUOUS LAYOUT -->
+<div class="sds-document">
+<div class="header running-header">
+<div class="header-left">
+<div class="title-text">Sicherheitsdatenblatt gemäß Verordnung (EG) Nr. 1907/2006 (REACH)</div>
+<div class="product-name">Mycoplasma Off™</div>
+<div class="meta-row">
+<span>Revisionsdatum:</span> <span class="normal">2024-08-21</span>
+<span>Druckdatum:</span> <span class="normal">2026-03-12</span>
+<span>Version:</span> <span class="normal">5</span>
+</div>
+</div>
+<div class="header-right">
+<div class="header-logo"><img alt="Minerva Biolabs" src="mb_logo.svg"/></div>
+<div class="page-number">Seite <span class="page-number-counter"></span></div>
+</div>
+</div>
+<div class="footer running-footer">
+<div>en / DE
+    </div>
+<div class="content">
+<div class="section">
+<div class="section-title">ABSCHNITT 1: Identifikation des Stoffs/Gemischs und des Unternehmens</div>
+<div class="subsection-title">1.1. Produktidentifikator</div>
+<div class="data-row"><div class="data-label w-200">Handelsname/Bezeichnung</div><div class="data-value">Mycoplasma Off™</div></div>
+<div class="data-row"><div class="data-label w-200">Artikelnr.:</div><div class="data-value">15-5000, 15-1000, 15-0050</div></div>
+<div class="data-row"><div class="data-label w-200">UFI:</div><div class="data-value">XF6K-E0M5-UP1H-N57C</div></div>
+<div class="subsection-title">1.2. Relevante identifizierte Verwendungen des Stoffs oder Gemischs und Verwendungen, von denen abgeraten wird</div>
+<p><strong>Verwendung des Stoffs/Gemischs:</strong></p>
+<p style="margin-left: 15px;">Das Produkt ist für Forschung, Analyse und wissenschaftliche Ausbildung bestimmt.</p>
+<p><strong>Relevante identifizierte Verwendungen:</strong></p>
+<table class="sds" style="border-color: white; border-width: 2px; border-style: solid; box-shadow: 0 0 0 2px white, 0 0 0 4px white;">
+<tbody>
+<tr><td style="border: 2px solid white;"><strong>Lebenszyklusstadium [LCS]</strong></td><td style="border: 2px solid white;"></td></tr>
+<tr><td style="border: 2px solid white;"><strong>Verwendungsbereiche [SU]</strong></td><td style="border: 2px solid white;">SU24: Wissenschaftliche Forschung und Entwicklung</td></tr>
+<tr><td rowspan="2" style="border: 2px solid white;"><strong>Produktkategorien [PC]</strong></td><td style="border: 2px solid white;">PC8: Biozidprodukt</td></tr>
+<tr><td style="border: 2px solid white;">PC35: Wasch- und Reinigungsmittel</td></tr>
+</tbody>
+</table>
+<div class="subsection-title">1.3. Einzelheiten zum Lieferanten, der das Sicherheitsdatenblatt bereitstellt</div>
+<p><strong>Lieferant (Hersteller/Importeur/Alleinvertreter/nachgeschalteter Anwender/Händler):</strong></p>
+<p>Minerva Biolabs GmbH<br/>Schkopauer Ring 13, 12681 Berlin<br/>DE</p>
+<div class="data-row"><div class="data-label w-80">Telefon:</div><div class="data-value">+49 30 2000437 0</div></div>
+<div class="data-row"><div class="data-label w-80">E-Mail:</div><div class="data-value">ehs@minerva-biolabs.com</div></div>
+<div class="data-row"><div class="data-label w-80">Website:</div><div class="data-value">www.minerva-biolabs.com</div></div>
+<div class="subsection-title">1.4. Notrufnummer</div>
+<p>24h, +49 761 19240</p>
+</div>
+<div class="section">
+<div class="section-title">ABSCHNITT 2: Mögliche Gefahren</div>
+<div class="subsection-title">2.1. Einstufung des Stoffs oder Gemischs</div>
+<p class="small">Einstufung gemäß Verordnung (EG) Nr. 1272/2008 [CLP]</p>
+<table class="sds">
+<thead>
+<tr><th>Gefahrenklassen und Gefahrenkategorien</th><th>Gefahrenhinweise</th><th>Einstufungsverfahren</th></tr>
+</thead>
+<tbody>
+<tr><td>entzündbar Flüssigkeit Kategorie 3</td><td>226: Flüssigkeit und Dampf entzündbar.</td><td>Auf Grundlage von Prüfdaten.</td></tr>
+<tr><td>Category 1 Kategorie 1</td><td>318: Verursacht schwere Augenschäden.</td><td>Berechnungsmethode.</td></tr>
+<tr><td>Specific target organ toxicity - einmalige Exposition Kategorie 3</td><td>336: Kann Schläfrigkeit und Benommenheit verursachen.</td><td>Berechnungsmethode.</td></tr>
+</tbody>
+</table>
+<div class="subsection-title">2.2. Kennzeichnungselemente</div>
+<p class="small">Kennzeichnung gemäß Verordnung (EG) Nr. 1272/2008 [CLP]</p>
+<p><strong>Gefahrenpiktogramme:</strong></p>
+<div class="ghs-pictograms">
+<div style="text-align: center;">
+<img alt="GHS02" class="ghs-pictogram" src="ghs/GHS02.png"/>
+<div class="ghs-pictogram-label">GHS02</div>
+<div class="ghs-pictogram-name">
+                        Flamme
+                        
+                    </div>
+<div class="signal-word">Gefahr</div>
+</div>
+<div style="text-align: center;">
+<img alt="GHS05" class="ghs-pictogram" src="ghs/GHS05.png"/>
+<div class="ghs-pictogram-label">GHS05</div>
+<div class="ghs-pictogram-name">
+                        Ätzend
+                        
+                    </div>
+<div class="signal-word">Gefahr</div>
+</div>
+<div style="text-align: center;">
+<img alt="GHS07" class="ghs-pictogram" src="ghs/GHS07.png"/>
+<div class="ghs-pictogram-label">GHS07</div>
+<div class="ghs-pictogram-name">
+                        Ausrufezeichen
+                        
+                    </div>
+<div class="signal-word">Gefahr</div>
+</div>
+</div>
+<p><strong>Gefahrbestimmende Komponenten zur Etikettierung</strong></p>
+<p style="margin-left: 15px;">propan-1-ol</p>
+<p><strong>Gefahrenhinweise für physikalische Gefahren</strong></p>
+<table class="sds">
+<thead>
+<tr><th>H</th><th>Gefahrenhinweise</th></tr>
+</thead>
+<tbody>
+<tr><td>H226</td><td>Flüssigkeit und Dampf entzündbar.</td></tr>
+<tr><td>Verursacht schwere Augenschäden</td><td>Verursacht schwere Augenschäden.</td></tr>
+<tr><td>H336</td><td>Kann Schläfrigkeit und Benommenheit verursachen.</td></tr>
+</tbody>
+</table>
+<p><strong>Zusätzliche Gefahrenhinweise:</strong></p>
+<!-- SUPPLEMENTAL_HAZARD_INFO_PLACEHOLDER -->
+<p><strong>Sicherheitshinweise Prävention</strong></p>
+<table class="sds">
+<thead>
+<tr><th>P-Code</th></tr>
+</thead>
+<tbody>
+<tr><td>Von Hitze, heißen Oberflächen, Funken, offenen Flammen und anderen Zündquellen fernhalten. Nicht rauchen.</td></tr>
+<tr><td>Schutzhandschuhe/Schutzkleidung und Augenschutz/Gesichtsschutz tragen.</td></tr>
+</tbody>
+</table>
+<p><strong>Sicherheitshinweise Reaktion</strong></p>
+<table class="sds">
+<thead>
+<tr><th>P-Code</th></tr>
+</thead>
+<tbody>
+<tr><td>BEI BERÜHRUNG MIT DER HAUT (oder dem Haar): Alle kontaminierten Kleidungsstücke sofort ausziehen. Haut mit Wasser abwaschen/duschen.</td></tr>
+<tr><td>BEI EINATMEN: Die Person an die frische Luft bringen und für ungehinderte Atmung sorgen.</td></tr>
+<tr><td>BEI KONTAKT MIT DEN AUGEN: Einige Minuten lang vorsichtig mit Wasser ausspülen. Vorhandene Kontaktlinsen nach Möglichkeit entfernen.. Weiter spülen.</td></tr>
+</tbody>
+</table>
+<div class="subsection-title">2.3. Sonstige Gefahren</div>
+<p><strong>Mögliche schädliche physikalisch-chemische Wirkungen</strong></p>
+<p style="margin-left: 15px;">Bei unzureichender Belüftung und/oder durch Gebrauch können explosive/hochentzündbare Gemische entstehen.</p>
+<p><strong>Schädliche Auswirkungen auf die menschliche Gesundheit und Symptome:</strong></p>
+<p style="margin-left: 15px;">Dieses Produkt ist nach bisherigen Erfahrungen inerfahrungsgemäß nicht bioakkumulierbar.</p>
+</div>
+</div>
+<div class="section">
+<div class="section-title">ABSCHNITT 3: Zusammensetzung/Angaben zu Bestandteilen</div>
+<div class="subsection-title">3.1. Stoffe</div>
+<p class="small">Not applicable - this is a Gemisch.</p>
+<div class="subsection-title">3.2. Gemische</div>
+<p><strong>Gefährliche Inhaltsstoffe / Gefährliche Verunreinigungen / Stabilisatoren:</strong></p>
+<table class="sds">
+<thead>
+<tr><th>Produktidentifikatoren</th><th>Stoffname<br/><span style="font-weight:normal; font-size:8pt;">Einstufung gemäß Verordnung (EG) Nr. 1272/2008 [CLP]</span></th><th>Konzentration</th></tr>
+</thead>
+<tbody>
+<tr>
+<td>CAS No.: 71-23-8<br/>EC No.: 200-746-9</td>
+<td><strong>Propan-1-ol</strong><br/>entzündbar Flüssigkeit Kategorie 2: Flüssigkeit und Dampf leicht entzündbar.<br/>Category 1 Kategorie 1: Verursacht schwere Augenschäden.<br/>
+                            
+                            Specific target organ toxicity - einmalige Exposition Kategorie 3: Kann Schläfrigkeit und Benommenheit verursachen.<br/>
+</td>
+<td style="white-space: nowrap;">30.0 - 50.0 Gew-%</td>
+</tr>
+<tr>
+<td>CAS No.: 64-17-5<br/>EC No.: 200-578-6</td>
+<td><strong>Ethanol</strong><br/>entzündbar Flüssigkeit Kategorie 2: Flüssigkeit und Dampf leicht entzündbar.<br/>
+</td>
+<td style="white-space: nowrap;">10.0 - 30.0 Gew-%</td>
+</tr>
+<tr>
+<td>CAS No.: 34590-94-8<br/>EC No.: 252-104-2</td>
+<td><strong>Dipropylenglykolmonomethylether (Isomerengemisch)</strong><br/>
+</td>
+<td style="white-space: nowrap;">1.0 - 5.0 Gew-%</td>
+</tr>
+</tbody>
+</table>
+<p class="small">Vollständiger Text der H- und EUH-Sätze: siehe Abschnitt 16.</p>
+</div>
+<div class="section">
+<div class="section-title">ABSCHNITT 4: Erste-Hilfe-Maßnahmen</div>
+<div class="subsection-title">4.1. Beschreibung der Erste-Hilfe-Maßnahmen</div>
+<div class="subsubsection">Allgemeine Hinweise</div>
+<p style="margin-left: 15px;">Bei Unfall oder Unwohlsein sofort ärztlichen Rat einholen. Sicherheitsdatenblatt oder Produktetikett nach Möglichkeit vorzeigen. Verunglückten aus der Unfallstelle verlassen. Kontaminierte, durchnässte Kleidung sofort entfernen. Betroffene nicht unbeaufsichtigt lassen. Bei Bewusstlosigkeit, aber normaler Atmung, in die stabile Seitenlage bringen und ärztlichen Rat einholen. Achtung Ersthelfer: Auf Selbstschutz achten!</p>
+<div class="subsubsection">Nach Einatmen</div>
+<p style="margin-left: 15px;">Frischluft zuführen. Bei Reizung der Atemwege Arzt aufsuchen. Bei Unwohlsein ärztlichen Rat einholen / ärztliche Hilfe hinzuziehen.</p>
+<div class="subsubsection">Bei Hautkontakt:</div>
+<p style="margin-left: 15px;">Nach Hautkontakt sofort mit viel Wasser und Seife waschen. Alle kontaminierten Kleidungsstücke sofort ausziehen. Bei Hautreizung oder -ausschlag: Ärztlichen Rat einholen/ärztliche Hilfe hinzuziehen.</p>
+<div class="subsubsection">Nach Augenkontakt:</div>
+<p style="margin-left: 15px;">Bei Berührung mit den Augen sofort bei geöffnetem Lidspalt 10 bis 15 Minuten mit fließendem Wasser ausspülen und Augenarzt aufsuchensuchen</p>
+<div class="subsubsection">Nach Verschlucken</div>
+<p style="margin-left: 15px;">Mund ausspülen. Bei Unwohlsein ärztlichen Rat einholen / ärztliche Hilfe hinzuziehen. 1 Glas Wasser in kleinen Schlucken trinken lassen (Verdünnungseffekt).</p>
+<div class="subsubsection">Selbstschutz des Ersthelfers</div>
+<p style="margin-left: 15px;">Persönliche Schutzausrüstung verwenden.</p>
+<div class="subsection-title">4.2. Wichtigste akute und verzögert auftretende Symptome und Wirkungen</div>
+<p style="margin-left: 15px;">Schwere Augenschädigung/Augenreizung</p>
+<div class="subsection-title">4.3. Hinweise auf ärztliche Soforthilfe oder Spezialbehandlung</div>
+<p style="margin-left: 15px;">Symptomatische Behandlung.</p>
+</div>
+</div>
+<div class="section">
+<div class="section-title">ABSCHNITT 5: Maßnahmen zur Brandbekämpfung</div>
+<div class="subsection-title">5.1. Löschmittel</div>
+<div class="data-row"><div class="data-label w-200">Geeignete Löschmittel</div><div class="data-value">Wassersprühstrahl , alkoholbeständiger Schaum , Löschpulver , Kohlendioxid (CO2)</div></div>
+<div class="data-row"><div class="data-label w-200">Ungeeignete Löschmittel</div><div class="data-value">Wasservollstrahl</div></div>
+<div class="subsection-title">5.2. Besondere vom Stoff oder Gemisch ausgehende Gefahren</div>
+<p style="margin-left: 15px;">Brennbar . Dämpfe sind schwerer als Luft, breiten sich am Boden aus und bilden mit Luft explosionsfähige Gemische.</p>
+<p><strong>Gefährliche Verbrennungsprodukte</strong></p>
+<p style="margin-left: 15px;">Bei Brand: Kohlenmonoxid , Kohlendioxid (CO2) . Dämpfe können mit Luft explosionsfähige Gemische bilden.</p>
+<div class="subsection-title">5.3. Hinweise für die Brandbekämpfung</div>
+<p style="margin-left: 15px;">Brandbekämpfung mit üblichen Vorsichtsmaßnahmen aus angemessener Entfernung. Umgebungsluftunabhängiges Atemschutzgerät und Chemikalienschutzanzug tragen.</p>
+<div class="subsection-title">5.4. Zusätzliche Informationen</div>
+<p style="margin-left: 15px;">Kontaminiertes Löschwasser getrennt sammeln, darf nicht in die Kanalisation gelangen.</p>
+</div>
+<div class="section">
+<div class="section-title">ABSCHNITT 6: Maßnahmen bei unbeabsichtigter Freisetzung</div>
+<div class="subsection-title">6.1. Persönliche Vorsichtsmaßnahmen, Schutzausrüstungen und Notfallmaßnahmen</div>
+<div class="subsubsection">6.1.1. Nicht für Notfälle geschultes Personal</div>
+<p><strong>Persönliche Vorsichtsmaßnahmen:</strong></p>
+<p style="margin-left: 15px;">Personen in Sicherheit bringen. Vorgeschriebene persönliche Schutzausrüstung verwenden. Kontakt mit Haut, Augen und Kleidung vermeiden.</p>
+<p><strong>Schutzausrüstung:</strong></p>
+<p style="margin-left: 15px;">Schutzhandschuhe/Schutzkleidung und Augenschutz/Gesichtsschutz tragen.</p>
+<div class="subsubsection">6.1.2. Einsatzkräfte</div>
+<p><strong>Persönliche Schutzausrüstung verwenden.</strong></p>
+<p style="margin-left: 15px;">Persönliche Schutzausrüstung: siehe Abschnitt 8</p>
+<div class="subsection-title">6.2. Umweltschutzmaßnahmen</div>
+<p style="margin-left: 15px;">Nicht in die Kanalisation oder Gewässer gelangen lassen.</p>
+<div class="subsection-title">6.3. Methoden und Material für Rückhaltung und Reinigung</div>
+<div class="data-row"><div class="data-label w-120">Für Rückhaltung:</div><div class="data-value">Mit flüssigkeitsbindendem Material aufnehmen (Sand, Kieselgur, säure- oder universalbindende Mittel).</div></div>
+<div class="data-row"><div class="data-label w-120">Für Reinigung:</div><div class="data-value">Wasser (mit Reinigungsmittel)</div></div>
+<div class="subsection-title">6.4. Verweis auf andere Abschnitte</div>
+<p style="margin-left: 15px;">Sichere Handhabung: siehe Abschnitt 7 , Persönliche Schutzausrüstung: siehe Abschnitt 8 , Entsorgung: siehe Abschnitt 13</p>
+<div class="subsection-title">6.5. Zusätzliche Informationen</div>
+<p style="margin-left: 15px;">Geeignetes Behältnis verwenden, um Umweltkontamination zu vermeiden.</p>
+</div>
+</div>
+<div class="section">
+<div class="section-title">ABSCHNITT 7: Handhabung und Lagerung</div>
+<div class="subsection-title">7.1. Schutzmaßnahmen zur sicheren Handhabung</div>
+<div class="subsubsection">Schutzmaßnahmen</div>
+<p><strong>Hinweise zum sicheren Umgang:</strong></p>
+<p style="margin-left: 15px;">Persönliche Schutzausrüstung tragen (siehe Abschnitt 8). Vor den Pausen und bei Arbeitsende Hände waschen. Fernhalten von: Nahrungs- und Futtermittel . Wenn eine lokale Absaugung nicht möglich oder nicht ausreichend ist, sollte der gesamte Arbeitsbereich technisch belüftet werden. Dampf/Aerosol nicht einatmen.</p>
+<p><strong>Maßnahmen zur Brandverhütung:</strong></p>
+<p style="margin-left: 15px;">Von Hitze, heißen Oberflächen, Funken, offenen Flammen und anderen Zündquellen fernhalten. Nicht rauchen. Dämpfe können mit Luft explosionsfähige Gemische bilden.</p>
+<div class="subsubsection">Hinweise zur allgemeinen Industriehygiene</div>
+<p>Kontakt mit Haut, Augen und Kleidung vermeiden. Bei der Verwendung nicht essen, trinken, rauchen oder daran riechen.</p>
+<div class="subsection-title">7.2. Bedingungen für die sichere Lagerung unter Berücksichtigung von Unverträglichkeiten</div>
+<div class="subsubsection">Technische Maßnahmen und Lagerbedingungen</div>
+<p style="margin-left: 15px;">Behälter dicht geschlossen an einem kühlen, gut belüfteten Ort aufbewahren. Darf nicht in die Hände von Kindern gelangen.</p>
+<div class="subsubsection">Anforderungen an Lagerräume und Behälter</div>
+<p style="margin-left: 15px;">Behälter dicht geschlossen an einem kühlen, gut belüfteten Ort aufbewahren. Empfohlene Lagerungstemperatur : at room temperature . Vor Sonnenbestrahlung schützen.</p>
+<div class="subsubsection">Hinweise zur Lagerungsgruppe</div>
+<p style="margin-left: 15px;">Nicht zusammen lagern mit: Nahrungs- und Futtermittel ( TRGS 510 )</p>
+<p><strong>Lagerklasse (TRGS 510, Deutschland):</strong></p>
+<p style="margin-left: 15px;"></p>
+<div class="subsection-title">7.3. Spezifische Endverwendung(en)</div>
+<p style="margin-left: 15px;"></p>
+</div>
+<div class="section">
+<div class="section-title">ABSCHNITT 8: Begrenzung und Überwachung der Expos ition/Persönliche Schutzausrüstung</div>
+<div class="subsection-title">8.1. Zu überwachende Parameter</div>
+<div class="subsubsection">8.1.1. Arbeitsplatzgrenzwerte</div>
+<i>
+<table class="sds">
+<thead>
+<tr><th>Grenzwerttyp (Herkunftsland):</th><th>Stoffname</th><th>① Langzeit-Arbeitsplatzgrenzwert<br/>② Kurzzeit-Arbeitsplatzgrenzwert<br/>③ Momentanwert<br/>④ Überwachungs- und Beobachtungsverfahren<br/>⑤ Bemerkung</th></tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+</i>
+<p></p>
+<div class="subsection-title">8.2. Expositionskontrollen</div>
+<div class="subsubsection">8.2.2. Persönliche Schutzausrüstung verwenden.</div>
+<p><strong>Augen-/Gesichtsschutz</strong></p>
+<p style="margin-left: 15px;">Eye glasses with side protection ( DIN EN 166 )</p>
+<p><strong>Hautschutz</strong></p>
+<p style="margin-left: 15px;">Geprüfte Schutzhandschuhe müssen getragen werden (EN ISO 374). Erholungsphasen zur Regeneration der Haut einlegen. Durchbruchzeiten und Quelleigenschaften des Materials sind zu berücksichtigen. Geeignetes Material: Butylkautschuk (Butyl‑Gummi) , Thickness of the glove material : &gt; 0,35 mm. Wenn die Handschuhe erneut verwendet werden sollen, diese vor dem Ausziehen reinigen und gut lüften.</p>
+<p><strong>Atemschutz</strong></p>
+<p style="margin-left: 15px;">Normalerweise kein persönlicher Atemschutz notwendig. Das Produkt nicht bei ungenügender Lüftung verwen den oder Schutzmaske mit entsprechendem Gasfilter (Typ A1 nach EN 14387)</p>
+<div class="subsubsection">8.2.3. Begrenzung und Überwachung der Umweltexposition</div>
+<p style="margin-left: 15px;"></p>
+</div>
+
+<div class="section">
+<div class="section-title">ABSCHNITT 9: Physikalische und chemische Eigenschaften</div>
+<div class="subsection-title">9.1. Angaben zu physikalischen und chemischen Eigenschaften</div>
+<div class="subsubsection">Aussehen</div>
+<p>other transparent Alkohol</p>
+<div class="subsubsection">Sicherheitsrelevante Basisdaten</div>
+<table class="sds">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Wert</th>
+<th>bei °C</th>
+<th>Methode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pH</td>
+<td>ca 8.0</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Schmelzpunkt</td>
+<td>-114.5 C</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Gefrierpunkt</td>
+<td>Keine Daten verfügbar</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Anfangssiedepunkt und Siedebereich</td>
+<td>Keine Daten verfügbar</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Flammpunkt</td>
+<td>28.0 C</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Verdampfungsgeschwindigkeit/Verdunstungszahl</td>
+<td>Keine Daten verfügbar</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Zündtemperatur</td>
+<td>Keine Daten verfügbar</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Obere/untere Entzündbarkeits‑ oder Explosionsgrenzen</td>
+<td>2.5 Vol-% - 15.0 Vol-%</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Dampfdruck</td>
+<td>Keine Daten verfügbar</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Dampfdichte</td>
+<td>Keine Daten verfügbar</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Dichte</td>
+<td>0.9 g/cm3</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Schüttdichte</td>
+<td>Keine Daten verfügbar</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Wasserlöslichkeit (g/l)</td>
+<td>Keine Daten verfügbar</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Dynamische Viskosität</td>
+<td>Keine Daten verfügbar</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Kinematische Viskosität</td>
+<td>Keine Daten verfügbar</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<div class="section-title">ABSCHNITT 10: Stabilität und Reaktivität</div>
+<div class="subsection-title">10.1. Reaktivität</div>
+<p style="margin-left: 15px;">Dieses Material gilt unter normalen Verwendungsbedingungen als nicht reaktiv</p>
+<div class="subsection-title">10.2. Chemische Stabilität</div>
+<p style="margin-left: 15px;">Das Produkt ist unter den empfohlenen Bedingungen hinsichtlich Lagerung, Verwendung und Temperatur chemisch stabil.</p>
+<div class="subsection-title">10.3. Möglichkeit gefährlicher Reaktionen</div>
+<p style="margin-left: 15px;">Handhabung und Lagerung</p>
+</div>
+
+<div class="section">
+<div class="subsection-title">10.4. Zu vermeidende Bedingungen</div>
+<p style="margin-left: 15px;">Weitere Informationen zur sachgemäßen Lagerung: siehe Abschnitt 7.</p>
+<div class="subsection-title">10.5. Unverträgliche Materialien</div>
+<p style="margin-left: 15px;">Keine weiteren relevanten Informationen verfügbar.</p>
+<div class="subsection-title">10.6. Gefährliche Zersetzungsprodukte</div>
+<p style="margin-left: 15px;">Es sind keine gefährlichen Zersetzungsprodukte bekannt. Zersetzungsprodukte bei Brand: siehe Abschnitt 5.</p>
+</div>
+<div class="section">
+<div class="section-title">ABSCHNITT 11: Toxikologische Angaben</div>
+<div class="subsection-title">11.1. Gefahrenklassen und Gefahrenkategorien</div>
+<table class="sds">
+<tbody>
+<tr style="background-color: #f2f2f2;">
+<td><strong>Propan-1-ol</strong><br/>CAS No.: 71-23-8 EC No.: 200-746-9</td>
+</tr>
+<tr>
+<td>LD50 oral: 8000.0 mg/kg Rat (Ratte)</td>
+</tr>
+<tr>
+<td>LD50 dermal: 4032.0 mg/kg Kaninchen (Kaninchen)</td>
+</tr>
+<tr>
+<td>LC50 Inhalation(Vapour): gt 33.8 mg/L Rat (Ratte)</td>
+</tr>
+<tr>
+<td>LC50 akute inhalative Toxizität (Staub/Nebel): gt 51.91 mg/L rat (Ratte)</td>
+</tr>
+<tr style="background-color: #f2f2f2;">
+<td><strong>Ethanol</strong><br/>CAS No.: 64-17-5 EC No.: 200-578-6</td>
+</tr>
+<tr>
+<td>LD50 oral: 10470.0 mg/kg Rat (Ratte)</td>
+</tr>
+<tr>
+<td>LD50 dermal: gt 2000.0 mg/kg Rat (Ratte)</td>
+</tr>
+<tr>
+<td>LC50 Inhalation(Vapour): 116.9 mg/L Rat (Ratte)</td>
+</tr>
+<tr style="background-color: #f2f2f2;">
+<td><strong>Dipropylenglykolmonomethylether (Isomerengemisch)</strong><br/>CAS No.: 34590-94-8 EC No.: 252-104-2</td>
+</tr>
+<tr>
+<td>LD50 oral: gt 5000.0 mg/kg rat (Ratte)</td>
+</tr>
+<tr>
+<td>LD50 dermal: 9510.0 mg/kg Kaninchen (Kaninchen)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Akute Toxizität</strong>Auf Grundlage der verfügbaren Daten sind die Einstufungskriterien nicht erfüllt. Auf Grundlage der verfügbaren Daten sind die Einstufungskriterien nicht erfüllt. Auf Grundlage der verfügbaren Daten sind die Einstufungskriterien nicht erfüllt.</p>
+<p><strong>Ätzwirkung auf die Haut</strong> Auf Grundlage der verfügbaren Daten sind die Einstufungskriterien nicht erfüllt.</p>
+<p><strong>Schwere Augenschädigung/Augenreizung</strong> Verursacht schwere Augenschäden.</p>
+<p><strong>Sensibilisierung der Atemwege</strong> Auf Grundlage der verfügbaren Daten sind die Einstufungskriterien nicht erfüllt.</p>
+<p><strong>Keimzellmutagenität</strong> Auf Grundlage der verfügbaren Daten sind die Einstufungskriterien nicht erfüllt.</p>
+<p><strong>Karzinogenität</strong> Auf Grundlage der verfügbaren Daten sind die Einstufungskriterien nicht erfüllt.</p>
+<p><strong>Reproduktionstoxizität</strong> Auf Grundlage der verfügbaren Daten sind die Einstufungskriterien nicht erfüllt.</p>
+<p><strong>STOT-einmalige Exposition</strong> Auf Grundlage der verfügbaren Daten sind die Einstufungskriterien nicht erfüllt.</p>
+<p><strong>spezifische Zielorgan-Toxizität bei wiederholter Exposition</strong> Auf Grundlage der verfügbaren Daten sind die Einstufungskriterien nicht erfüllt.</p>
+<p><strong>Aspirationsgefahr</strong> Auf Grundlage der verfügbaren Daten sind die Einstufungskriterien nicht erfüllt.</p>
+</div>
+
+<div class="section">
+<div class="section-title">ABSCHNITT 12: Umweltbezogene Angaben</div>
+<div class="subsection-title">12.1. Toxizität</div>
+<table class="sds">
+<tbody>
+<tr style="background-color: #f2f2f2;">
+<td colspan="4"><strong>Propan-1-ol</strong> CAS No.: 71-23-8 EC No.: 200-746-9</td>
+</tr>
+<tr>
+<td>LC50: 4555.0 mg/L </td>
+<td></td>
+<td>Pimephales promelas</td>
+<td></td>
+</tr>
+<tr>
+<td>LC50: 4555.0 mg/L </td>
+<td></td>
+<td>Aktiver Belebtschlamm</td>
+<td></td>
+</tr>
+<tr>
+<td>LC50: 4555.0 mg/L </td>
+<td></td>
+<td>Pimephales promelas</td>
+<td>OECD Guideline 203 (Fisch, Akute Toxizität Test)</td>
+</tr>
+<tr>
+<td>EC50: 3644.0 mg/L </td>
+<td></td>
+<td>Daphnia magna</td>
+<td></td>
+</tr>
+<tr>
+<td>NOEC: 68.3 mg/L </td>
+<td></td>
+<td>Daphnia magna</td>
+<td></td>
+</tr>
+<tr>
+<td>LC50: 1000.0 mg/L </td>
+<td></td>
+<td>Gammarus pulex</td>
+<td></td>
+</tr>
+<tr>
+<td>EC50: 3644.0 mg/L </td>
+<td></td>
+<td>Daphnia magna</td>
+<td>DIN 38412 Part 11, Daphnia- Short term test</td>
+</tr>
+<tr>
+<td>EC50: gt 1000.0 mg/L </td>
+<td></td>
+<td>Aktiver Belebtschlamm</td>
+<td></td>
+</tr>
+<tr>
+<td>EC50: 9170.0 mg/L </td>
+<td></td>
+<td>Raphidocelis subcapitata (previous names: Pseudokirchneriella subcapitata., Selenastrum capricornutum.)</td>
+<td></td>
+</tr>
+<tr>
+<td>NOEC: gt 100.0 mg/L </td>
+<td></td>
+<td>Daphnia magna</td>
+<td></td>
+</tr>
+<tr>
+<td>NOEC: 1150.0 mg/L </td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>NOEC: 1150.0 mg/L </td>
+<td></td>
+<td>Chlorella pyrenoidosa.</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table class="sds">
+<tbody>
+<tr style="background-color: #f2f2f2;">
+<td colspan="4"><strong>Ethanol</strong> CAS No.: 64-17-5 EC No.: 200-578-6</td>
+</tr>
+<tr>
+<td>LC50: 14200.0 mg/L </td>
+<td></td>
+<td>Pimephales promelas</td>
+<td>US EPA method E03-05</td>
+</tr>
+<tr>
+<td>EC50: 12900.0 mg/L </td>
+<td></td>
+<td>Pimephales promelas</td>
+<td>US EPA method E03-05</td>
+</tr>
+<tr>
+<td>LC50: 5012.0 mg/L </td>
+<td></td>
+<td>Ceriodaphnia dubia</td>
+<td>ASTM E729-80</td>
+</tr>
+<tr>
+<td>NOEC: 2.0 mg/L </td>
+<td></td>
+<td>Ceriodaphnia dubia</td>
+<td></td>
+</tr>
+<tr>
+<td>EC50: 275.0 mg/L </td>
+<td></td>
+<td>Chlorella vulgaris.</td>
+<td>OECD Guideline 201 (Alge, Wachstumshemmtest)</td>
+</tr>
+<tr>
+<td>EC50: 675.0 mg/L </td>
+<td></td>
+<td>Chlorella vulgaris.</td>
+<td>OECD Guideline 201 (Alge, Wachstumshemmtest)</td>
+</tr>
+</tbody>
+</table>
+<table class="sds">
+<tbody>
+<tr style="background-color: #f2f2f2;">
+<td colspan="4"><strong>Dipropylenglykolmonomethylether (Isomerengemisch)</strong> CAS No.: 34590-94-8 EC No.: 252-104-2</td>
+</tr>
+<tr>
+<td>LC50: gt 1000.0 mg/L </td>
+<td></td>
+<td>Poecilia reticulata</td>
+<td></td>
+</tr>
+<tr>
+<td>LC50: gt 1000.0 mg/L </td>
+<td></td>
+<td>Crangon crangon</td>
+<td>EPA OPP 72-3 (Ästuarine/marine Fische, Mollusken oder Garnelen Akute Toxizität Test)</td>
+</tr>
+<tr>
+<td>LC50: gt 1000.0 mg/L </td>
+<td></td>
+<td>Crangon crangon</td>
+<td>EPA OPP 72-3 (Ästuarine/marine Fische, Mollusken oder Garnelen Akute Toxizität Test)</td>
+</tr>
+<tr>
+<td>LC50: gt 1000.0 mg/L </td>
+<td></td>
+<td>Crangon crangon</td>
+<td>EPA OPP 72-3 (Ästuarine/marine Fische, Mollusken oder Garnelen Akute Toxizität Test)</td>
+</tr>
+<tr>
+<td>LOEC: 0.5 mg/L </td>
+<td></td>
+<td>Daphnia magna</td>
+<td></td>
+</tr>
+<tr>
+<td>EC50: gt 969.0 mg/L </td>
+<td></td>
+<td>Raphidocelis subcapitata (previous names: Pseudokirchneriella subcapitata., Selenastrum capricornutum.)</td>
+<td></td>
+</tr>
+<tr>
+<td>EC50: gt 969.0 mg/L </td>
+<td></td>
+<td>Raphidocelis subcapitata (previous names: Pseudokirchneriella subcapitata., Selenastrum capricornutum.)</td>
+<td></td>
+</tr>
+<tr>
+<td>NOEC: 969.0 mg/L </td>
+<td></td>
+<td>Raphidocelis subcapitata (previous names: Pseudokirchneriella subcapitata., Selenastrum capricornutum.)</td>
+<td></td>
+</tr>
+<tr>
+<td>NOEC: 969.0 mg/L </td>
+<td></td>
+<td>Raphidocelis subcapitata (previous names: Pseudokirchneriella subcapitata., Selenastrum capricornutum.)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="subsection-title">12.2. Persistenz und Abbaubarkeit</div>
+<table class="sds">
+<tbody>
+<tr style="background-color: #f2f2f2;">
+<td colspan="2"><strong>Propan-1-ol</strong> CAS No.: 71-23-8 EC No.: 200-746-9</td>
+</tr>
+<tr>
+<td><strong>Biologischer Abbau</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table class="sds">
+<tbody>
+<tr style="background-color: #f2f2f2;">
+<td colspan="2"><strong>Ethanol</strong> CAS No.: 64-17-5 EC No.: 200-578-6</td>
+</tr>
+<tr>
+<td><strong>Biologischer Abbau</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table class="sds">
+<tbody>
+<tr style="background-color: #f2f2f2;">
+<td colspan="2"><strong>Dipropylenglykolmonomethylether (Isomerengemisch)</strong> CAS No.: 34590-94-8 EC No.: 252-104-2</td>
+</tr>
+<tr>
+<td><strong>Biologischer Abbau</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="subsection-title">12.3. Bioakkumulationspotenzial</div>
+<table class="sds">
+<tbody>
+<tr style="background-color: #f2f2f2;">
+<td colspan="2"><strong>Propan-1-ol</strong> CAS No.: 71-23-8 EC No.: 200-746-9</td>
+</tr>
+<tr><td><strong>Log K<sub>OW</sub>:</strong></td><td></td></tr>
+<tr><td><strong>Biokonzentrationsfaktor (BCF)</strong></td><td></td></tr>
+</tbody>
+</table>
+<table class="sds">
+<tbody>
+<tr style="background-color: #f2f2f2;">
+<td colspan="2"><strong>Ethanol</strong> CAS No.: 64-17-5 EC No.: 200-578-6</td>
+</tr>
+<tr><td><strong>Log K<sub>OW</sub>:</strong></td><td></td></tr>
+<tr><td><strong>Biokonzentrationsfaktor (BCF)</strong></td><td></td></tr>
+</tbody>
+</table>
+<table class="sds">
+<tbody>
+<tr style="background-color: #f2f2f2;">
+<td colspan="2"><strong>Dipropylenglykolmonomethylether (Isomerengemisch)</strong> CAS No.: 34590-94-8 EC No.: 252-104-2</td>
+</tr>
+<tr><td><strong>Log K<sub>OW</sub>:</strong></td><td></td></tr>
+<tr><td><strong>Biokonzentrationsfaktor (BCF)</strong></td><td></td></tr>
+</tbody>
+</table>
+<div class="subsection-title">12.4. Mobilität im Boden</div>
+<p style="margin-left: 15px;"></p>
+<div class="subsection-title">12.5. Ergebnisse der PBT- und vPvB-Beurteilung</div>
+<table class="sds">
+<tbody>
+<tr style="background-color: #f2f2f2;">
+<td colspan="2"><strong>Propan-1-ol</strong> CAS No.: 71-23-8 EC No.: 200-746-9</td>
+</tr>
+<tr>
+<td><strong>Ergebnisse der PBT- und vPvB-Beurteilung</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table class="sds">
+<tbody>
+<tr style="background-color: #f2f2f2;">
+<td colspan="2"><strong>Ethanol</strong> CAS No.: 64-17-5 EC No.: 200-578-6</td>
+</tr>
+<tr>
+<td><strong>Ergebnisse der PBT- und vPvB-Beurteilung</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table class="sds">
+<tbody>
+<tr style="background-color: #f2f2f2;">
+<td colspan="2"><strong>Dipropylenglykolmonomethylether (Isomerengemisch)</strong> CAS No.: 34590-94-8 EC No.: 252-104-2</td>
+</tr>
+<tr>
+<td><strong>Ergebnisse der PBT- und vPvB-Beurteilung</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="subsection-title">12.6. Endokrinschädliche Eigenschaften</div>
+<p style="margin-left: 15px;"></p>
+<div class="subsection-title">12.7. Andere schädliche Wirkungen</div>
+<p style="margin-left: 15px;"></p>
+</div>
+<div class="section">
+<div class="section-title">ABSCHNITT 13: Hinweise zur Entsorgung</div>
+<p>Wenden Sie sich bezüglich der Entsorgung an den zuständigen örtlichen Entsorgungsexperten. Vollständig entleerte Verpackungen können einer V erwertung zugeführt werden.</p>
+<p>07 06 04 other organic solvents, washing liquids and mother liquors true 15 01 02 Kunststoff Verpackung false Entsorgung gemäß den behördlichen Vorschriften.</p>
+</div>
+
+<div class="section">
+<div class="section-title">ABSCHNITT 14: Angaben zum Transport</div>
+<table class="sds">
+<thead>
+<tr><th>Landtransport (ADR/RID)</th><th>Inland waterway craft (ADN)</th><th>Seeschiffstransport (IMDG)</th><th>Lufttransport (ICAO-TI / IATA-DGR)</th></tr>
+</thead>
+<tbody>
+<tr><td colspan="4"><strong>14.1. UN Nummer oder ID Nummer</strong></td></tr>
+<tr><td>1987</td><td>1987</td><td>1987</td><td>1987</td></tr>
+<tr><td colspan="4"><strong>Name</strong></td></tr>
+<tr><td>ALCOHOLS, N.O.S.</td><td>ALCOHOLS, N.O.S.</td><td>ALCOHOLS, N.O.S.</td><td>ALCOHOLS, N.O.S.</td></tr>
+<tr><td colspan="4"><strong>14.3. Transportgefahrenklassen</strong></td></tr>
+<tr><td>3</td><td>3</td><td>3</td><td>3</td></tr>
+<tr><td colspan="4"><strong>14.4. Verpackungsgruppe</strong></td></tr>
+<tr><td>III</td><td>III</td><td>III</td><td>III</td></tr>
+<tr><td colspan="4"><strong>14.5. Umweltgefahren</strong></td></tr>
+<tr><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+</tbody>
+</table>
+<p style="margin-top: 10px;"><strong>14.6. Special precautions for user</strong></p>
+<table class="sds">
+<thead>
+<tr><th>Landtransport (ADR/RID)</th><th>Inland waterway craft (ADN)</th><th>Seeschiffstransport (IMDG)</th><th>Lufttransport (ICAO-TI / IATA-DGR)</th></tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<strong>Sondervorschriften</strong> 274 | 601<br/>
+<strong>Begrenzte Menge (LQ)</strong> 5 L<br/>
+<strong>Freigestellte Mengen (EQ)</strong> E1<br/>
+<strong>Gefahr-Nr. (Kemlerzahl)</strong> 30<br/>
+<strong>Klassifizierungscode</strong> 3<br/>
+<strong>Tunnelbeschränkungscode</strong> D/E
+                        </td>
+<td>
+<strong>Sondervorschriften</strong> 274 | 601<br/>
+<strong>Begrenzte Menge (LQ)</strong> 5 L<br/>
+<strong>Freigestellte Mengen (EQ)</strong> E1<br/>
+<strong>Klassifizierungscode</strong> 3
+                        </td>
+<td>
+<strong>Sondervorschriften</strong> 223 | 274<br/>
+<strong>Begrenzte Menge (LQ)</strong> 5 L<br/>
+<strong>Freigestellte Mengen (EQ)</strong> E1<br/>
+<strong>EmS-No.:</strong> F-E, S-D
+                        </td>
+<td>
+<strong>Sondervorschriften</strong> A3 | A180<br/>
+<strong>Begrenzte Menge (LQ)</strong> Y344<br/>
+<strong>Freigestellte Mengen (EQ)</strong> E1
+                        </td>
+</tr>
+</tbody>
+</table>
+<div class="subsection-title">14.7. Massengutbeförderung gemäß Anhang II des MARPOL-Ü bereinkommens 73/78 und gemäß IBC-Code</div>
+<p style="margin-left: 15px;"></p>
+</div>
+<div class="section">
+<div class="section-title">ABSCHNITT 15: Rechtsvorschriften</div>
+<div class="subsection-title">15.1. Für den Stoff oder das Gemisch spezifische Sicherheits‑, Gesundheits‑ und Umweltvorschriften/‑gesetzgebung</div>
+<p><strong>EU-Vorschriften</strong><br/>
+            Sonstiges
+            </p>
+<p><strong>Nationale Vorschriften (Deutschland):</strong><br/>
+<strong>regulation:</strong> s/legislation specific for the substance or Gemisch<br/>
+<strong>regulation:</strong> s (EU):<br/>
+<strong>Regulation:</strong> (EC) No. 648/2004 [Detergents regulation], KrW/AbfG<br/>
+<strong>regulation:</strong> s<br/>
+<strong>regulation:</strong> s<br/>
+<strong>regulation:</strong> s, restrictions and prohibition regulations<br/>
+</p>
+</div>
+
+<div class="section">
+<div class="section-title">SECTION 16: Sonstige Angaben</div>
+<i>
+<div class="subsection-title">16.1. Änderungshinweise</div>
+<p>
+</p>
+<div class="subsection-title">16.2. Abkürzungen und Akronyme</div>
+<table class="sds" style="font-size: 8pt;">
+<tbody>
+<tr><td>STOT</td><td>einmalige Exposition (STOT SE 3) H336: Kann Schläfrigkeit und Benommenheit verursachen. Berechnungsmethode.</td></tr>
+</tbody>
+</table>
+<p class="small"></p>
+<div class="subsection-title">16.3. Wesentliche Literaturhinweise und Datenquellen</div>
+<p></p>
+<div class="subsection-title">16.4. Einstufung für Gemische und verwendete Bewertungsmethode gemäß Verordnung (EG) Nr. 1272/2008 [CLP]</div>
+<table class="sds">
+<thead>
+<tr><th>Gefahrenklassen und Gefahrenkategorien</th><th>Gefahrenhinweise</th><th>Einstufungsverfahren</th></tr>
+</thead>
+<tbody>
+<tr><td>Entzündbare Flüssigkeit 3</td><td>H226: Flüssigkeit und Dampf entzündbar.</td><td>Auf Grundlage von Prüfdaten.</td></tr>
+<tr><td>Schwere Augenschädigung 1</td><td>H318: Verursacht schwere Augenschäden.</td><td>Berechnungsmethode.</td></tr>
+<tr><td>STOT SE 3</td><td>H336: Kann Schläfrigkeit und Benommenheit verursachen.</td><td>Berechnungsmethode.</td></tr>
+</tbody>
+</table>
+<div class="subsection-title">16.5. Gefahrenhinweise</div>
+<p><strong>Gefahrenhinweise</strong></p>
+<div class="data-row"><div class="data-label w-50">H226</div><div class="data-value">Flüssigkeit und Dampf entzündbar.</div></div>
+<div class="data-row"><div class="data-label w-50">Verursacht schwere Augenschäden</div><div class="data-value">Verursacht schwere Augenschäden.</div></div>
+<div class="data-row"><div class="data-label w-50">H336</div><div class="data-value">Kann Schläfrigkeit und Benommenheit verursachen.</div></div>
+<div class="subsection-title">16.6. Schulungshinweise</div>
+<p>No data available
+16.7. Zusätzliche Informationen
+This data sheet was created in accordance with EU regulation (EC) No. 1907/2006 (REACH).
+The information is based on the level of knowledge and experience on the date of issue, it do not have the importance
+of assured properties. The information may not be changed or transferred to other products. Reproduction in the
+unchanged state is permitted.
+* Daten gegenüber der Vorversion geändert.</p>
+<div class="subsection-title">16.7. Zusätzliche Informationen</div>
+</i>
+</div>
+
+
+
+</body>
+</html>
+</body>
+</html>

@@ -1,0 +1,13 @@
+analysiere die app und schlage verbesserungen vor. speziell das einlesen der 
+Sdb_EU-REACH_MycoplasmaOff™_15-5000,15-1000,15-0050_V5_en_DE.xml
+ und entsprechenden  
+SDS_Mycoplasma_Off_15-5xxx_en_DE_Ver.05.pdf
+ in 
+layout-placeholders-fixed-v2.html
+ gibt noch manchmal probleme: manche tabellen und abschnitte werden gar nicht in der vorschau in der ui angezeigt, da manche wenige daten nicht in der xml stehen sondern dann aus der pdf geholt werden müssten. zudem kann das layout/die formatierung etc. von 
+layout-placeholders-fixed-v2.html
+ noch näher an das original 
+SDS_Mycoplasma_Off_15-5xxx_en_DE_Ver.05.pdf
+ gebracht werden. in 
+layout-placeholders-fixed-v2.html
+ gibt es zudem probleme, dass der übergang zwischen den seiten nicht korrekt mit headern erfolgt oder die seite unendlich lang werden könnte.

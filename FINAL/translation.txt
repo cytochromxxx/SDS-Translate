@@ -1,0 +1,476 @@
+Sicherheitsdatenblatt gemäß Verordnung (EG) Nr. 1907/2006 (REACH)
+Mycoplasma Off™
+Revisionsdatum:21.08.2024Druckdatum:12.03.2026Version:5 Seite
+1/10
+ABSCHNITT 1: Identifikation des Stoffs/Gemischs und des Unternehmens
+1.1. Produktidentifikator
+Mycoplasma Off™
+Artikelnr.:
+15-5000, 15-1000, 15-0050
+UFI:
+XF6K-E0M5-UP1H-N57C
+1.2. Relevante identifizierte Verwendungen des Stoffs oder Gemischs und Verwendungen, von denen
+abgeraten wird
+Verwendung des Stoffs/Gemischs:
+Das Produkt ist für Forschung, Analyse und wissenschaftliche Ausbildung bestimmt.
+Relevante identifizierte Verwendungen:
+Lebenszyklusstadium [LCS] PW: Breite Anwendung durch gewerbliche Anwender
+Verwendungsbereiche [SU] SU24: Wissenschaftliche Forschung und Entwicklung
+Produktkategorien [PC] PC8: Biozidprodukt
+PC35: Wasch- und Reinigungsmittel
+1.3. Einzelheiten zum Lieferanten, der das Sicherheitsdatenblatt bereitstellt
+Lieferant (Hersteller/Importeur/Alleinvertreter/nachgeschalteter Anwender/Händler):
+Minerva Biolabs GmbH
+Schkopauer Ring 13, 12681 Berlin
+DE
+Telefon: +49 30 2000437 0
+E-Mail: ehs@minerva-biolabs.com
+Website: www.minerva-biolabs.com
+1.4. Notrufnummer
+24h: +49 761 19240
+ABSCHNITT 2: Mögliche Gefahren
+2.1. Einstufung des Stoffs oder Gemischs
+Einstufung gemäß Verordnung (EG) Nr. 1272/2008 [CLP]
+Gefahrenklassen und Gefahrenkategorien Gefahrenhinweise Einstufungsverfahren
+entzündbar Flüssigkeit Kategorie 3 226: Flüssigkeit und Dampf entzündbar. Auf Grundlage von
+Prüfdaten.
+Category 1 Kategorie 1 318: Verursacht schwere Augenschäden. Berechnungsmethode.
+Specific target organ toxicity - einmalige 336: Kann Schläfrigkeit und Benommenheit Berechnungsmethode.
+Exposition Kategorie 3 verursachen.
+2.2. Kennzeichnungselemente
+Kennzeichnung gemäß Verordnung (EG) Nr. 1272/2008 [CLP]
+Gefahrenpiktogramme:
+GHS02 GHS05 GHS07
+entzündbar ätzend gesundheitsschädlich
+Gefahr
+en / DE\n--- Page Break ---\nSicherheitsdatenblatt gemäß Verordnung (EG) Nr. 1907/2006 (REACH)
+Mycoplasma Off™
+Revisionsdatum:21.08.2024Druckdatum:12.03.2026Version:5 Seite
+2/10
+Gefahrbestimmende Komponenten zur Etikettierung
+['Propan-1-ol', 'Ethanol', 'Dipropylenglykolmonomethylether (Isomerengemisch)']
+Gefahrenhinweise für physikalische Gefahren
+Code Gefahrenhinweis
+H226 Flüssigkeit und Dampf entzündbar.
+H318: Verursacht schwere Augenschäden.
+H336 Kann Schläfrigkeit und Benommenheit verursachen.
+Zusätzliche Gefahrenhinweise: keine
+Sicherheitshinweise Prävention
+Code Kontakt mit Luft verhindern
+P210 Von Hitze, heißen Oberflächen, Funken, offenen Flammen und anderen Zündquellen fernhalten. Nicht
+rauchen.
+P280.4 Schutzhandschuhe/Schutzkleidung und Augenschutz/Gesichtsschutz tragen.
+Sicherheitshinweise Reaktion
+Code Kontakt mit Luft verhindern
+P303 BEI BERÜHRUNG MIT DER HAUT (oder dem Haar): Alle kontaminierten Kleidungsstücke sofort
+ausziehen. Haut mit Wasser abwaschen/duschen.
+P304 BEI EINATMEN: Die Person an die frische Luft bringen und für ungehinderte Atmung sorgen.
+P305 BEI KONTAKT MIT DEN AUGEN: Einige Minuten lang vorsichtig mit Wasser ausspülen. Vorhandene
+Kontaktlinsen nach Möglichkeit entfernen.. Weiter spülen.
+2.3. Sonstige Gefahren
+Mögliche schädliche physikalisch-chemische Wirkungen
+Bei unzureichender Belüftung und/oder durch Gebrauch können explosive/hochentzündbare Gemische
+entstehen.
+Schädliche Auswirkungen auf die menschliche Gesundheit und Symptome:
+Dieses Produkt ist nach bisherigen Erfahrungen inerfahrungsgemäß nicht bioakkumulierbar.
+ABSCHNITT 3: Zusammensetzung/Angaben zu Bestandteilen
+3.1. Stoffe
+Not applicable - this is a Gemisch.
+* 3.2. Gemische
+Gefährliche Inhaltsstoffe / Gefährliche Verunreinigungen / Stabilisatoren:
+Produktidentifikatoren Stoffname Konzentration
+Einstufung gemäß Verordnung (EG) Nr. 1272/2008 [CLP]
+CAS No.: 71-23-8 Propan-1-ol 30.0 - 50.0 Gew-%
+EC No.: 200-746-9 entzündbar Flüssigkeit Kategorie 2: Flüssigkeit und Dampf leicht
+entzündbar.
+Category 1 Kategorie 1: Verursacht schwere Augenschäden.
+Specific target organ toxicity - einmalige Exposition Kategorie 3:
+Kann Schläfrigkeit und Benommenheit verursachen.
+CAS No.: 64-17-5 Ethanol 10.0 - 30.0 Gew-%
+EC No.: 200-578-6 entzündbar Flüssigkeit Kategorie 2: Flüssigkeit und Dampf leicht
+entzündbar.
+CAS No.: 34590-94-8 Dipropylenglykolmonomethylether (Isomerengemisch) 1.0 - 5.0 Gew-%
+EC No.: 252-104-2
+Vollständiger Text der H- und EUH-Sätze: siehe Abschnitt 16.
+en / DE\n--- Page Break ---\nSicherheitsdatenblatt gemäß Verordnung (EG) Nr. 1907/2006 (REACH)
+Mycoplasma Off™
+Revisionsdatum:21.08.2024Druckdatum:12.03.2026Version:5 Seite
+3/10
+ABSCHNITT 4: Erste-Hilfe-Maßnahmen
+* 4.1. Beschreibung der Erste-Hilfe-Maßnahmen
+Allgemeine Hinweise
+Bei Unfall oder Unwohlsein sofort ärztlichen Rat einholen. Sicherheitsdatenblatt oder Produktetikett nach
+Möglichkeit vorzeigen. Verunglückten aus der Unfallstelle verlassen. Kontaminierte, durchnässte Kleidung sofort
+entfernen. Betroffene nicht unbeaufsichtigt lassen. Bei Bewusstlosigkeit, aber normaler Atmung, in die stabile
+Seitenlage bringen und ärztlichen Rat einholen. Achtung Ersthelfer: Auf Selbstschutz achten!
+Nach Einatmen
+Frischluft zuführen. Bei Reizung der Atemwege Arzt aufsuchen. Bei Unwohlsein ärztlichen Rat einholen / ärztliche
+Hilfe hinzuziehen.
+Bei Hautkontakt:
+Nach Hautkontakt sofort mit viel Wasser und Seife waschen. Alle kontaminierten Kleidungsstücke sofort ausziehen.
+Bei Hautreizung oder -ausschlag: Ärztlichen Rat einholen/ärztliche Hilfe hinzuziehen.
+Nach Augenkontakt:
+Bei Berührung mit den Augen sofort bei geöffnetem Lidspalt 10 bis 15 Minuten mit fließendem Wasser ausspülen
+und Augenarzt aufsuchen
+Nach Verschlucken
+Mund ausspülen. Bei Unwohlsein ärztlichen Rat einholen / ärztliche Hilfe hinzuziehen. 1 Glas Wasser in kleinen
+Schlucken trinken lassen (Verdünnungseffekt).
+Selbstschutz des Ersthelfers
+Persönliche Schutzausrüstung verwenden.
+4.2. Wichtigste akute und verzögert auftretende Symptome und Wirkungen
+Schwere Augenschädigung/Augenreizung
+4.3. Hinweise auf ärztliche Soforthilfe oder Spezialbehandlung
+Symptomatische Behandlung.
+ABSCHNITT 5: Maßnahmen zur Brandbekämpfung
+5.1. Löschmittel
+Geeignete Löschmittel
+Wassersprühstrahl , alkoholbeständiger Schaum , Löschpulver , Kohlendioxid (CO2)
+Ungeeignete Löschmittel
+Wasservollstrahl
+5.2. Besondere vom Stoff oder Gemisch ausgehende Gefahren
+Brennbar . Dämpfe sind schwerer als Luft, breiten sich am Boden aus und bilden mit Luft explosionsfähige Gemische.
+Gefährliche Verbrennungsprodukte
+Bei Brand: Kohlenmonoxid , Kohlendioxid (CO2) . Dämpfe können mit Luft explosionsfähige Gemische bilden.
+5.3. Hinweise für die Brandbekämpfung
+Brandbekämpfung mit üblichen Vorsichtsmaßnahmen aus angemessener Entfernung. Umgebungsluftunabhängiges
+Atemschutzgerät und Chemikalienschutzanzug tragen.
+5.4. Zusätzliche Informationen
+Kontaminiertes Löschwasser getrennt sammeln, darf nicht in die Kanalisation gelangen.
+ABSCHNITT 6: Maßnahmen bei unbeabsichtigter Freisetzung
+6.1. Persönliche Vorsichtsmaßnahmen, Schutzausrüstungen und Notfallmaßnahmen
+6.1.1. Nicht für Notfälle geschultes Personal
+Persönliche Vorsichtsmaßnahmen:
+Personen in Sicherheit bringen. Vorgeschriebene persönliche Schutzausrüstung verwenden. Kontakt mit Haut,
+Augen und Kleidung vermeiden.
+Schutzausrüstung:
+en / DE\n--- Page Break ---\nSicherheitsdatenblatt gemäß Verordnung (EG) Nr. 1907/2006 (REACH)
+Mycoplasma Off™
+Revisionsdatum:21.08.2024Druckdatum:12.03.2026Version:5 Seite
+4/10
+Schutzhandschuhe/Schutzkleidung und Augenschutz/Gesichtsschutz tragen.
+6.1.2. Einsatzkräfte
+Persönliche Schutzausrüstung verwenden.
+Persönliche Schutzausrüstung: siehe Abschnitt 8
+6.2. Umweltschutzmaßnahmen
+Nicht in die Kanalisation oder Gewässer gelangen lassen.
+6.3. Methoden und Material für Rückhaltung und Reinigung
+Für Rückhaltung:
+Mit flüssigkeitsbindendem Material aufnehmen (Sand, Kieselgur, säure- oder universalbindende Mittel).
+Für Reinigung:
+Wasser (mit Reinigungsmittel)
+6.4. Verweis auf andere Abschnitte
+Sichere Handhabung: siehe Abschnitt 7 , Persönliche Schutzausrüstung: siehe Abschnitt 8 , Entsorgung: siehe
+Abschnitt 13
+6.5. Zusätzliche Informationen
+Geeignetes Behältnis verwenden, um Umweltkontamination zu vermeiden.
+ABSCHNITT 7: Handhabung und Lagerung
+* 7.1. Schutzmaßnahmen zur sicheren Handhabung
+Schutzmaßnahmen
+Hinweise zum sicheren Umgang:
+Persönliche Schutzausrüstung tragen (siehe Abschnitt 8). Vor den Pausen und bei Arbeitsende Hände waschen.
+Fernhalten von: Nahrungs- und Futtermittel . Wenn eine lokale Absaugung nicht möglich oder nicht ausreichend ist,
+sollte der gesamte Arbeitsbereich technisch belüftet werden. Dampf/Aerosol nicht einatmen.
+Maßnahmen zur Brandverhütung:
+Von Hitze, heißen Oberflächen, Funken, offenen Flammen und anderen Zündquellen fernhalten. Nicht rauchen.
+Dämpfe können mit Luft explosionsfähige Gemische bilden.
+Hinweise zur allgemeinen Industriehygiene
+Kontakt mit Haut, Augen und Kleidung vermeiden. Bei der Verwendung nicht essen, trinken, rauchen oder daran
+riechen.
+7.2. Bedingungen für die sichere Lagerung unter Berücksichtigung von Unverträglichkeiten
+Technische Maßnahmen und Lagerbedingungen
+Behälter dicht geschlossen an einem kühlen, gut belüfteten Ort aufbewahren. Darf nicht in die Hände von Kindern
+gelangen.
+Anforderungen an Lagerräume und Behälter
+Behälter dicht geschlossen an einem kühlen, gut belüfteten Ort aufbewahren. Empfohlene Lagerungstemperatur :
+at room temperature . Vor Sonnenbestrahlung schützen.
+Hinweise zur Lagerungsgruppe
+Nicht zusammen lagern mit: Nahrungs- und Futtermittel ( TRGS 510 )
+Lagerklasse (TRGS 510, Deutschland):
+7.3. Spezifische Endverwendung(en)
+GISCODE:
+N/A
+ABSCHNITT 8: Begrenzung und Überwachung der Exposition/Persönliche Schutzausrüstung
+8.1. Zu überwachende Parameter
+8.1.1. Arbeitsplatzgrenzwerte
+en / DE\n--- Page Break ---\nSicherheitsdatenblatt gemäß Verordnung (EG) Nr. 1907/2006 (REACH)
+Mycoplasma Off™
+Revisionsdatum:21.08.2024Druckdatum:12.03.2026Version:5 Seite
+5/10
+Grenzwerttyp Stoffname ① Langzeit-Arbeitsplatzgrenzwert
+(Herkunftsland): ② Kurzzeit-Arbeitsplatzgrenzwert
+③ Momentanwert
+④ Überwachungs- und Beobachtungsverfahren
+⑤ Bemerkung
+TRGS 900 (DE) Ethanol ① 200 ppm (380 mg/m³)
+CAS No.: 64-17-5 ② 800 ppm (1,520 mg/m³)
+EC No.: 200-578-6 ⑤ DFG, Y
+IOELV (EU) Dipropylenglykolmonomethylether ① 50 ppm (308 mg/m³)
+CAS No.: 34590-94-8 ⑤ (kann über die Haut aufgenommen werden)
+EC No.: 252-104-2
+TRGS 900 (DE) Dipropylenglykolmonomethylether ① 50 ppm (310 mg/m³)
+CAS No.: 34590-94-8 ② 50 ppm (310 mg/m³)
+EC No.: 252-104-2 ⑤ (Aerosol und Dampf) DFG, EU, 11
+8.2. Expositionskontrollen
+8.2.2. Persönliche Schutzausrüstung verwenden.
+Augen-/Gesichtsschutz
+Schutzbrille mit Seitenschutz (EN 166)
+Hautschutz
+Geprüfte Schutzhandschuhe müssen getragen werden (EN ISO 374). Erholungsphasen zur Regeneration der Haut
+einlegen. Durchbruchzeiten und Quelleigenschaften des Materials sind zu berücksichtigen. Geeignetes Material:
+Butylkautschuk. Dicke des Handschuhmaterials: > 0,35 mm. Wenn die Handschuhe erneut verwendet werden
+sollen, diese vor dem Ausziehen reinigen und gut lüften.
+Atemschutz
+Normalerweise kein persönlicher Atemschutz notwendig. Das Produkt nicht bei ungenügender Lüftung verwen den
+oder Schutzmaske mit entsprechendem Gasfilter (Typ A1 nach EN 14387)
+8.2.3. Begrenzung und Überwachung der Umweltexposition
+ABSCHNITT 9: Physikalische und chemische Eigenschaften
+9.1. Angaben zu physikalischen und chemischen Eigenschaften
+Aussehen
+other transparent Alkohol
+Sicherheitsrelevante Basisdaten
+Parameter Wert bei °C Methode
+pH ca 8.0
+Schmelzpunkt -114.5 C
+Gefrierpunkt Keine Daten verfügbar
+Anfangssiedepunkt und Siedebereich Keine Daten verfügbar
+Flammpunkt 28.0 C
+Verdampfungsgeschwindigkeit/Verdunstungszahl Keine Daten verfügbar
+Zündtemperatur Keine Daten verfügbar
+Obere/untere Entzündbarkeits‑ oder Explosionsgrenzen 2.5 Vol-% - 15.0 Vol-%
+Dampfdruck Keine Daten verfügbar
+Dampfdichte Keine Daten verfügbar
+Dichte 0.9 g/cm3
+Schüttdichte Keine Daten verfügbar
+Wasserlöslichkeit (g/l) Keine Daten verfügbar
+Dynamische Viskosität Keine Daten verfügbar
+Kinematische Viskosität Keine Daten verfügbar
+en / DE\n--- Page Break ---\nSicherheitsdatenblatt gemäß Verordnung (EG) Nr. 1907/2006 (REACH)
+Mycoplasma Off™
+Revisionsdatum:21.08.2024Druckdatum:12.03.2026Version:5 Seite
+6/10
+ABSCHNITT 10: Stabilität und Reaktivität
+10.1. Reaktivität
+Dieses Material gilt unter normalen Verwendungsbedingungen als nicht reaktiv
+10.2. Chemische Stabilität
+Das Produkt ist unter den empfohlenen Bedingungen hinsichtlich Lagerung, Verwendung und Temperatur chemisch
+stabil.
+10.3. Möglichkeit gefährlicher Reaktionen
+Handhabung und Lagerung
+10.4. Zu vermeidende Bedingungen
+Weitere Informationen zur sachgemäßen Lagerung: siehe Abschnitt 7.
+10.5. Unverträgliche Materialien
+Keine weiteren relevanten Informationen verfügbar.
+10.6. Gefährliche Zersetzungsprodukte
+Es sind keine gefährlichen Zersetzungsprodukte bekannt. Zersetzungsprodukte bei Brand: siehe Abschnitt 5.
+ABSCHNITT 11: Toxikologische Angaben
+11.1. Gefahrenklassen und Gefahrenkategorien
+Propan-1-ol (CAS No.: 71-23-8, EC No.: 200-746-9)
+LD50 oral: 8000.0 mg/kg Rat (Ratte)
+LD50 dermal: 4032.0 mg/kg Kaninchen (Kaninchen)
+LC50 Inhalation(Vapour): gt 33.8 mg/L Rat (Ratte)
+LC50 akute inhalative Toxizität (Staub/Nebel): gt 51.91 mg/L rat (Ratte)
+Ethanol (CAS No.: 64-17-5, EC No.: 200-578-6)
+LD50 oral: 10470.0 mg/kg Rat (Ratte)
+LD50 dermal: gt 2000.0 mg/kg Rat (Ratte)
+LC50 Inhalation(Vapour): 116.9 mg/L Rat (Ratte)
+Dipropylenglykolmonomethylether (Isomerengemisch) (CAS No.: 34590-94-8, EC No.: 252-104-2)
+LD50 oral: gt 5000.0 mg/kg rat (Ratte)
+LD50 dermal: 9510.0 mg/kg Kaninchen (Kaninchen)
+Akute ToxizitätAuf Grundlage der verfügbaren Daten sind die Einstufungskriterien nicht erfüllt. Auf Grundlage der
+verfügbaren Daten sind die Einstufungskriterien nicht erfüllt. Auf Grundlage der verfügbaren Daten sind die
+Einstufungskriterien nicht erfüllt.
+Ätzwirkung auf die Haut Auf Grundlage der verfügbaren Daten sind die Einstufungskriterien nicht erfüllt.
+Schwere Augenschädigung/Augenreizung Verursacht schwere Augenschäden.
+Sensibilisierung der Atemwege Auf Grundlage der verfügbaren Daten sind die Einstufungskriterien nicht erfüllt.
+Keimzellmutagenität Auf Grundlage der verfügbaren Daten sind die Einstufungskriterien nicht erfüllt.
+Karzinogenität Auf Grundlage der verfügbaren Daten sind die Einstufungskriterien nicht erfüllt.
+Reproduktionstoxizität Auf Grundlage der verfügbaren Daten sind die Einstufungskriterien nicht erfüllt.
+STOT-einmalige Exposition Auf Grundlage der verfügbaren Daten sind die Einstufungskriterien nicht erfüllt.
+spezifische Zielorgan-Toxizität bei wiederholter Exposition Auf Grundlage der verfügbaren Daten sind die
+Einstufungskriterien nicht erfüllt.
+Aspirationsgefahr Auf Grundlage der verfügbaren Daten sind die Einstufungskriterien nicht erfüllt.
+en / DE\n--- Page Break ---\nSicherheitsdatenblatt gemäß Verordnung (EG) Nr. 1907/2006 (REACH)
+Mycoplasma Off™
+Revisionsdatum:21.08.2024Druckdatum:12.03.2026Version:5 Seite
+7/10
+ABSCHNITT 12: Umweltbezogene Angaben
+Propan-1-ol (CAS No.: 71-23-8, EC No.: 200-746-9)
+12.1. Toxizität
+Aquatische Toxizität Expositionszeit Spezies Methode
+LC50: 4555.0 mg/L Pimephales promelas
+LC50: 4555.0 mg/L Aktiver Belebtschlamm
+LC50: 4555.0 mg/L Pimephales promelas OECD Guideline 203
+(Fisch, Akute Toxizität
+Test)
+EC50: 3644.0 mg/L Daphnia magna
+NOEC: 68.3 mg/L Daphnia magna
+LC50: 1000.0 mg/L Gammarus pulex
+EC50: 3644.0 mg/L Daphnia magna DIN 38412 Part 11,
+Daphnia- Short term
+test
+EC50: gt 1000.0 mg/L Aktiver Belebtschlamm
+EC50: 9170.0 mg/L Raphidocelis subcapitata (previous names:
+Pseudokirchneriella subcapitata.,
+Selenastrum capricornutum.)
+NOEC: gt 100.0 mg/L Daphnia magna
+NOEC: 1150.0 mg/L
+NOEC: 1150.0 mg/L Chlorella pyrenoidosa.
+12.2. Persistenz und Abbaubarkeit
+Biologischer Abbau
+12.3. Bioakkumulationspotenzial
+Octanol/Wasser-Verteilungskoeffizient
+BCF
+12.5. Ergebnisse der PBT- und vPvB-Beurteilung
+Ethanol (CAS No.: 64-17-5, EC No.: 200-578-6)
+12.1. Toxizität
+Aquatische Toxizität Expositionszeit Spezies Methode
+LC50: 14200.0 mg/L Pimephales promelas US EPA method E03-05
+EC50: 12900.0 mg/L Pimephales promelas US EPA method E03-05
+LC50: 5012.0 mg/L Ceriodaphnia dubia ASTM E729-80
+NOEC: 2.0 mg/L Ceriodaphnia dubia
+EC50: 275.0 mg/L Chlorella vulgaris. OECD Guideline 201
+(Alge,
+Wachstumshemmtest)
+EC50: 675.0 mg/L Chlorella vulgaris. OECD Guideline 201
+(Alge,
+Wachstumshemmtest)
+12.2. Persistenz und Abbaubarkeit
+Biologischer Abbau
+12.3. Bioakkumulationspotenzial
+Octanol/Wasser-Verteilungskoeffizient
+BCF
+12.5. Ergebnisse der PBT- und vPvB-Beurteilung
+en / DE\n--- Page Break ---\nSicherheitsdatenblatt gemäß Verordnung (EG) Nr. 1907/2006 (REACH)
+Mycoplasma Off™
+Revisionsdatum:21.08.2024Druckdatum:12.03.2026Version:5 Seite
+8/10
+Dipropylenglykolmonomethylether (Isomerengemisch) (CAS No.: 34590-94-8, EC No.: 252-104-2)
+12.1. Toxizität
+Aquatische Toxizität Expositionszeit Spezies Methode
+LC50: gt 1000.0 mg/L Poecilia reticulata
+LC50: gt 1000.0 mg/L Crangon crangon EPA OPP 72-3
+(Ästuarine/marine
+Fische, Mollusken oder
+Garnelen Akute
+Toxizität Test)
+LC50: gt 1000.0 mg/L Crangon crangon EPA OPP 72-3
+(Ästuarine/marine
+Fische, Mollusken oder
+Garnelen Akute
+Toxizität Test)
+LC50: gt 1000.0 mg/L Crangon crangon EPA OPP 72-3
+(Ästuarine/marine
+Fische, Mollusken oder
+Garnelen Akute
+Toxizität Test)
+LOEC: 0.5 mg/L Daphnia magna
+EC50: gt 969.0 mg/L Raphidocelis subcapitata (previous names:
+Pseudokirchneriella subcapitata.,
+Selenastrum capricornutum.)
+EC50: gt 969.0 mg/L Raphidocelis subcapitata (previous names:
+Pseudokirchneriella subcapitata.,
+Selenastrum capricornutum.)
+NOEC: 969.0 mg/L Raphidocelis subcapitata (previous names:
+Pseudokirchneriella subcapitata.,
+Selenastrum capricornutum.)
+NOEC: 969.0 mg/L Raphidocelis subcapitata (previous names:
+Pseudokirchneriella subcapitata.,
+Selenastrum capricornutum.)
+12.2. Persistenz und Abbaubarkeit
+Biologischer Abbau
+12.3. Bioakkumulationspotenzial
+Octanol/Wasser-Verteilungskoeffizient
+BCF
+12.5. Ergebnisse der PBT- und vPvB-Beurteilung
+12.4. Mobilität im Boden
+12.6. Endokrinschädliche Eigenschaften
+12.7. Andere schädliche Wirkungen
+ABSCHNITT 13: Hinweise zur Entsorgung
+Wenden Sie sich bezüglich der Entsorgung an den zuständigen örtlichen Entsorgungsexperten. Vollständig entleerte
+Verpackungen können einer V erwertung zugeführt werden.
+ABSCHNITT 14: Angaben zum Transport
+Landtransport (ADR/RID) Inland waterway craft Seeschiffstransport (IMDG) Lufttransport (ICAO-TI /
+(ADN) IATA-DGR)
+14.1. UN Nummer oder ID Nummer
+en / DE\n--- Page Break ---\nSicherheitsdatenblatt gemäß Verordnung (EG) Nr. 1907/2006 (REACH)
+Mycoplasma Off™
+Revisionsdatum:21.08.2024Druckdatum:12.03.2026Version:5 Seite
+9/10
+Landtransport (ADR/RID) Inland waterway craft Seeschiffstransport (IMDG) Lufttransport (ICAO-TI /
+(ADN) IATA-DGR)
+UN 1987 UN 1987 UN 1987 UN 1987
+Name
+ALCOHOLS, N.O.S. ALCOHOLS, N.O.S. ALCOHOLS, N.O.S. ALCOHOLS, N.O.S.
+14.3. Transportgefahrenklassen
+3 3 3 3
+14.4. Verpackungsgruppe
+III III III III
+14.5. Umweltgefahren
+No No No No
+14.6. Special precautions for user
+Sondervorschriften 274 | Sondervorschriften 274 | Sondervorschriften 223 | Sondervorschriften A3 |
+601 601 274 A180
+Begrenzte Menge (LQ) 5 L Begrenzte Menge (LQ) 5 L Begrenzte Menge (LQ) 5 L Begrenzte Menge (LQ)
+Freigestellte Mengen (EQ) Freigestellte Mengen (EQ) Freigestellte Mengen (EQ) Y344
+E1 E1 E1 Freigestellte Mengen (EQ)
+Gefahr id. no. (Kemler No.): Klassifizierungscode 3 EmS-No.: F-E, S-D E1
+30
+Klassifizierungscode 3
+Tunnelbeschränkungscode
+D/E
+14.7. Massengutbeförderung gemäß Anhang II des MARPOL-Ü bereinkommens 73/78 und gemäß IBC-Code
+ABSCHNITT 15: Rechtsvorschriften
+15.1. Für den Stoff oder das Gemisch spezifische Sicherheits‑, Gesundheits‑ und
+Umweltvorschriften/‑gesetzgebung
+EU-Vorschriften
+Sonstiges
+Nationale Vorschriften (Deutschland):
+Wassergefährdungsklasse (WGK) (WGK):Klasse 1 - schwach wassergefährdend (WGK 1)
+15.2. Stoffsicherheitsbeurteilung
+Für dieses Gemisch wurde keine Stoffsicherheitsbeurteilung durchgeführt.
+SECTION 16: Sonstige Angaben
+16.1. Änderungshinweise
+1.3. Einzelheiten zum Lieferanten, der das Sicherheitsdatenblatt bereitstellt
+2.2. Kennzeichnungselemente
+3.2. Gemische
+16.2. Abkürzungen und Akronyme
+STOT
+einmalige Exposition (STOT SE 3) H336: Kann Schläfrigkeit und Benommenheit verursachen. Berechnungsmethode.
+ECHA Guidance on information requirements and chemical safety assessment, chapter R.20 (Table of terms and abbreviations).
+16.3. Wesentliche Literaturhinweise und Datenquellen
+TRGS 510, TRGS 525, TRGS 900, Safety data sheets for the ingredients , 1907/2006 REACH, 1272/2008 CLP GHS
+Stoffname Art source of supply propan-1-ol LC50 Akute inhalative Toxizität (Staub/ Quelle: Europäische
+Chemikalienagentur, CAS No.:71-23-8 Nebel); LC50; EC50; NOEC http://echa.europa.eu/ EC No.:200-746-9
+Dipropylenglykolmonomethylether LD50 oral; LD50 dermal; LC50; EC50; Quelle: Europäische Chemikalienagentur,
+en / DE\n--- Page Break ---\nSicherheitsdatenblatt gemäß Verordnung (EG) Nr. 1907/2006 (REACH)
+Mycoplasma Off™
+Revisionsdatum:21.08.2024Druckdatum:12.03.2026Version:5 Seite
+10/10
+CAS No.:34590-94-8 NOEC; LOEC http://echa.europa.eu/ EC No.:252-104-2 ethanol LC50; EC50; NOEC Quelle:
+Europäische Chemikalienagentur, CAS No.:64-17-5 http://echa.europa.eu/ EC No.:200-578-6 en / DE GeSi.de
+16.4. Einstufung für Gemische und verwendete Bewertungsmethode gemäß Verordnung (EG) Nr. 1272/2008
+[CLP]
+Gefahrenklassen und Gefahrenhinweise Einstufungsverfahren
+Gefahrenkategorien
+Entzündbare Flüssigkeit 3 H226: Flüssigkeit und Dampf entzündbar. Auf Grundlage von
+Prüfdaten.
+Schwere Augenschädigung 1 H318: Verursacht schwere Augenschäden. Berechnungsmethode.
+STOT SE 3 H336: Kann Schläfrigkeit und Benommenheit Berechnungsmethode.
+verursachen.
+16.5. Gefahrenhinweise
+Gefahrenhinweise
+H226 Flüssigkeit und Dampf entzündbar.
+H318: Verursacht schwere Augenschäden.
+H336 Kann Schläfrigkeit und Benommenheit verursachen.
+16.6. Schulungshinweise
+No data available 16.7. Zusätzliche Informationen Dieses Datenblatt wurde gemäß der EU‑Verordnung (EG) Nr.
+1907/2006 (REACH) erstellt. Die Angaben beruhen auf dem Kenntnisstand und der Erfahrung zum Zeitpunkt der
+Herausgabe; sie stellen keine zugesicherten Eigenschaften dar. Die Informationen dürfen nicht verändert oder auf
+andere Produkte übertragen werden. Eine unveränderte Vervielfältigung ist gestattet. * Daten gegenüber der
+Vorversion geändert.
+16.7. Zusätzliche Informationen
+Dieses Datenblatt wurde gemäß der EU‑Verordnung (EG) Nr. 1907/2006 (REACH) erstellt. Die Angaben beruhen auf
+dem Kenntnisstand und der Erfahrung zum Zeitpunkt der Herausgabe; sie stellen keine zugesicherten Eigenschaften
+dar. Die Informationen dürfen nicht verändert oder auf andere Produkte übertragen werden. Eine unveränderte
+Vervielfältigung ist gestattet.
+en / DE\n--- Page Break ---\n

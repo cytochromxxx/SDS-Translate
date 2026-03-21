@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDS Translator - Dark Edition</title>
+    <style>
+        :root {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #252525;
+            --bg-tertiary: #2d2d2d;
+            --bg-card: #333333;
+            --text-primary: #e0e0e0;
+            --text-secondary: #888888;
+            --accent-primary: #4caf50;
+            --accent-secondary: #2e7d32;
+            --accent-gradient: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            --border-color: #404040;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --error: #f44336;
+            --hover-bg: #3a3a3a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 20px 30px;
+            border-bottom: 3px solid var(--accent-primary);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        header h1 {
+            font-size: 1.6em;
+            font-weight: 600;
+            color: var(--accent-primary);
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 0.95em;
+            margin: 0;
+            margin-top: 4px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-icon {
+            font-size: 2em;
+            color: var(--accent-primary);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: var(--bg-secondary);
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .tab {
+            padding: 15px 30px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+            color: var(--text-secondary);
+            font-weight: 600;
+            border: none;
+            background: transparent;
+        }
+
+        .tab:hover {
+            background: var(--hover-bg);
+            color: var(--text-primary);
+        }
+
+        .tab.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 25px;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .card h2 {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--accent-primary);
+            padding-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.95em;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        select, input[type="file"], input[type="text"], textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+            font-family: 'Courier New', monospace;
+        }
+
+        button {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        button:disabled {
+            background: var(--bg-tertiary);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            color: var(--text-secondary);
+        }
+
+        button.secondary {
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+        }
+
+        button.secondary:hover {
+            background: var(--hover-bg);
+            border-color: var(--accent-primary);
+        }
+
+        button.success {
+            background: linear-gradient(135deg, #00c853 0%, #00e676 100%);
+        }
+
+        button.danger {
+            background: linear-gradient(135deg, #ff1744 0%, #ff5252 100%);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .preview-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .preview-box {
+            background: var(--bg-card);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .preview-header {
+            background: var(--bg-secondary);
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .preview-header h3 {
+            font-size: 1.2em;
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .preview-frame {
+            width: 100%;
+            height: 550px;
+            border: none;
+            background: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: var(--bg-tertiary);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: 600;
+            color: var(--accent-primary);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.95em;
+            margin-top: 8px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-gradient);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .not-found-list {
+            max-height: 450px;
+            overflow-y: auto;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .phrase-item {
+            background: var(--bg-card);
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border-left: 4px solid var(--error);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .phrase-item:hover {
+            background: var(--hover-bg);
+            transform: translateX(5px);
+        }
+
+        .phrase-text {
+            flex: 1;
+            font-size: 0.95em;
+            color: var(--text-primary);
+        }
+
+        .phrase-line {
+            color: var(--accent-primary);
+            font-size: 0.85em;
+            margin-right: 15px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-box input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .search-box select {
+            min-width: 150px;
+        }
+
+        .phrase-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95em;
+        }
+
+        .phrase-table th,
+        .phrase-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .phrase-table th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+        }
+
+        .phrase-table tr:hover {
+            background: var(--hover-bg);
+        }
+
+        .phrase-table td {
+            color: var(--text-primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+        }
+
+        .alert-success {
+            background: rgba(0, 200, 83, 0.1);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .alert-error {
+            background: rgba(255, 23, 68, 0.1);
+            border-color: var(--error);
+            color: var(--error);
+        }
+
+        .alert-info {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 15, 35, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            padding: 35px;
+            border-radius: 15px;
+            max-width: 900px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: var(--accent-primary);
+            font-size: 1.6em;
+        }
+
+        .close-btn {
+            font-size: 2em;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: var(--error);
+        }
+
+        .language-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .language-section {
+            background: var(--bg-tertiary);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .language-section label {
+            color: var(--accent-primary);
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .language-section textarea {
+            min-height: 60px;
+            font-size: 0.9em;
+        }
+
+        .highlight {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--accent-primary);
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-secondary);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-primary);
+        }
+
+        @media (max-width: 1200px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .preview-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .language-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 15px;
+            background: var(--bg-tertiary);
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-input-label:hover {
+            border-color: var(--accent-primary);
+            background: var(--hover-bg);
+        }
+
+        .file-input-label.has-file {
+            border-color: var(--success);
+            border-style: solid;
+            background: rgba(0, 200, 83, 0.1);
+        }
+
+        .file-name {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <div class="header-icon">🧪</div>
+                <div>
+                    <h1>SDS Translator Pro</h1>
+                    <p>Sicherheitsdatenblatt Übersetzer mit Datenbank-Editor & PDF-Export</p>
+                </div>
+            </div>
+        </header>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('translate', this)">🚀 Übersetzen</button>
+            <button class="tab" onclick="showTab('database', this)">🗄️ Datenbank</button>
+            <button class="tab" onclick="showTab('ghs', this)">⚠️ GHS Pictograms</button>
+            <button class="tab" onclick="showTab('stats', this)">📊 Statistiken</button>
+        </div>
+        
+        <!-- Translation Tab -->
+        <div id="translate-tab" class="tab-content active">
+            <div class="main-grid">
+                <div class="sidebar">
+                <div class="card">
+                    <h2>📁 Datei Upload</h2>
+                    <div class="form-group">
+                        <div class="file-input-wrapper">
+                            <input type="file" id="fileInput" accept=".html" onchange="handleFileSelect(this)">
+                            <label for="fileInput" class="file-input-label" id="fileLabel">
+                                <div>📎 HTML Datei auswählen oder hereinziehen</div>
+                                <div class="file-name" id="fileName">{% if template_loaded %}📄 {{ default_template }} (Standard){% else %}Keine Datei ausgewählt{% endif %}</div>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="uploadStatus">
+                        {% if template_loaded %}
+                        <div class="alert alert-success">✅ Standard-Template geladen: {{ default_template }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                    
+                    <div class="card">
+                        <h2>🗄️ Phrasen-Datenbank</h2>
+                        <div class="form-group">
+                            <label>Aktive Datenbank:</label>
+                            <select id="databaseSelect" onchange="handleDatabaseChange(this)">
+                                {% for key, db in available_databases.items() %}
+                                <option value="{{ key }}" {% if db.active %}selected{% endif %} {% if not db.exists %}disabled{% endif %}>
+                                    {{ db.name }} {% if not db.exists %}(nicht verfügbar){% endif %}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <small id="databaseDescription" style="color: var(--text-secondary); display: block; margin-top: 5px;">
+                                {{ current_database.description }}
+                            </small>
+                        </div>
+                        <div id="databaseStatus" style="display: none;"></div>
+                    </div>
+                    
+                    <div class="card">
+                        <h2>⚠️ GHS Piktogramme (max. 3)</h2>
+                        <div id="ghsSelectionCompact">
+                            <div id="ghsSelectedDisplay" style="display: flex; gap: 8px; flex-wrap: wrap; min-height: 84px; background: var(--bg-tertiary); border-radius: 8px; padding: 10px; margin-bottom: 10px; align-items: center; justify-content: center;">
+                                <span style="color: var(--text-secondary); font-size: 0.9em;">Keine Piktogramme ausgewählt</span>
+                            </div>
+                            <button onclick="openGHSModal()" style="width: 100%; margin-bottom: 5px;">➕ Piktogramme wählen</button>
+                            <small style="color: var(--text-secondary);">Wird in Original- und Übersetzungsvorschau angezeigt</small>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h2>🌍 Sprache wählen</h2>
+                        <div class="form-group">
+                            <label>Zielsprache:</label>
+                            <select id="languageSelect">
+                                {% for code, name in languages.items() %}
+                                <option value="{{ code }}">{{ name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button onclick="translateFile()" id="translateBtn" disabled style="width: 100%;">
+                            🚀 Übersetzen starten
+                        </button>
+                    </div>
+                    
+                    <div class="card" id="statsCard" style="display: none;">
+                        <h2>📊 Ergebnis</h2>
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <div class="stat-value" id="totalTexts">0</div>
+                                <div class="stat-label">Gesamt</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value" id="translatedCount">0</div>
+                                <div class="stat-label">Übersetzt</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value" id="notFoundCount">0</div>
+                                <div class="stat-label">Fehlend</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="coverageBar" style="width: 0%">0%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card" id="downloadCard" style="display: none;">
+                        <h2>💾 Download</h2>
+                        <div class="btn-group" style="flex-direction: column;">
+                            <button onclick="downloadHTML()" class="success" style="width: 100%;">
+                                📄 Als HTML herunterladen
+                            </button>
+                            <button onclick="downloadPDF()" class="secondary" style="width: 100%; margin-top: 10px;">
+                                📕 Als PDF herunterladen
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-area">
+                    <div class="preview-container" id="previewContainer" style="display: none;">
+                        <div class="preview-box">
+                            <div class="preview-header">
+                                <h3>👁️ Original</h3>
+                                <button onclick="refreshPreview('original')" class="secondary" style="padding: 8px 15px;">🔄</button>
+                            </div>
+                            <iframe id="originalPreview" class="preview-frame"></iframe>
+                        </div>
+                        <div class="preview-box">
+                            <div class="preview-header">
+                                <h3>✨ Übersetzt</h3>
+                                <button onclick="refreshPreview('translated')" class="secondary" style="padding: 8px 15px;">🔄</button>
+                            </div>
+                            <iframe id="translatedPreview" class="preview-frame"></iframe>
+                        </div>
+                    </div>
+                    
+                    <div class="card" id="notFoundCard" style="display: none;">
+                        <h2>❌ Nicht übersetzte Phrasen <span class="highlight" id="notFoundBadge">0</span></h2>
+                        <div class="not-found-list" id="notFoundList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Database Tab -->
+        <div id="database-tab" class="tab-content">
+            <!-- Bulk Correction Section -->
+            <div class="card">
+                <h2>📝 Bulk-Korrektur</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 15px;">
+                    Korrigieren Sie mehrere Phrasen gleichzeitig durch TXT-Datei-Upload oder Quick-Edit Textfeld.
+                    Verwenden Sie das Format: "EN: English (Original)" gefolgt vom Text, dann "DE: Deutsch", "FR: Français", etc.
+                </p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <!-- File Upload -->
+                    <div>
+                        <h3>📁 TXT-Datei Upload</h3>
+                        <div class="form-group">
+                            <label>Quelldatei:</label>
+                            <select id="bulkSourceLang">
+                                <option value="auto">Automatisch erkennen</option>
+                                <option value="en" selected>🇬🇧 Englisch</option>
+                                <option value="de">🇩🇪 Deutsch</option>
+                                <option value="fr">🇫🇷 Französisch</option>
+                                <option value="es">🇪🇸 Spanisch</option>
+                            </select>
+                        </div>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="bulkFileInput" accept=".txt">
+                            <label for="bulkFileInput" class="file-input-label" id="bulkFileLabel">
+                                <div>📂 TXT-Datei auswählen</div>
+                            </label>
+                        </div>
+                        <button onclick="uploadBulkFile()" style="width: 100%; margin-top: 10px;">
+                            📤 Hochladen & Aktualisieren
+                        </button>
+                    </div>
+                    
+                    <!-- Quick Edit -->
+                    <div>
+                        <h3>⚡ Quick-Edit</h3>
+                        <div class="form-group">
+                            <label>Quelldatei:</label>
+                            <select id="quickSourceLang">
+                                <option value="auto">Automatisch erkennen</option>
+                                <option value="en" selected>🇬🇧 Englisch</option>
+                                <option value="de">🇩🇪 Deutsch</option>
+                                <option value="fr">🇫🇷 Französisch</option>
+                                <option value="es">🇪🇸 Spanisch</option>
+                            </select>
+                        </div>
+                        <textarea id="quickEditText" rows="12" placeholder="EN: English (Original)
+The product is chemically stable under recommended conditions.
+
+DE: Deutsch
+Das Produkt ist chemisch stabil.
+
+FR: Français
+Le produit est chimiquement stable.
+
+---
+DE: Deutsch (Original)
+Von Stoffen fernhalten, die miteinander reagieren könnten.
+
+EN: English
+Keep away from substances which could react together."></textarea>
+                        <button onclick="applyQuickEdit()" style="width: 100%; margin-top: 10px;">
+                            ✅ Quick-Edit anwenden
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="bulkStatus" style="margin-top: 15px;"></div>
+            </div>
+            
+            <div class="card">
+                <h2>🔍 Phrasen suchen</h2>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Suchbegriff eingeben..." onkeypress="if(event.key==='Enter')searchPhrases()">
+                    <select id="searchLanguage">
+                        {% for code, name in languages.items() %}
+                        <option value="{{ code }}">{{ code.upper() }}</option>
+                        {% endfor %}
+                    </select>
+                    <select id="searchMode">
+                        <option value="global">🌍 Alle Sprachen (Global)</option>
+                        <option value="en">🇬🇧 Nur Englisch</option>
+                        <option value="target">🎯 Nur Zielsprache</option>
+                    </select>
+                    <button onclick="searchPhrases()">🔍 Suchen</button>
+                    <button onclick="showAddModal()" class="success">➕ Neue Phrase</button>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>📋 Ergebnisse</h2>
+                <div style="overflow-x: auto;">
+                    <table class="phrase-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">ID</th>
+                                <th>English (Original)</th>
+                                <th id="resultLangHeader">Deutsch</th>
+                                <th style="width: 150px;">Aktionen</th>
+                            </tr>
+                        </thead>
+                        <tbody id="phrasesTable">
+                            <tr>
+                                <td colspan="4" style="text-align: center; color: var(--text-secondary); padding: 40px;">
+                                    🔍 Geben Sie einen Suchbegriff ein oder klicken Sie "Suchen" für alle Phrasen
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- GHS Pictograms Tab -->
+        <div id="ghs-tab" class="tab-content">
+            <div class="card">
+                <h2>⚠️ GHS Pictogramme verwalten (max. 3)</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <!-- Available Pictograms -->
+                    <div>
+                        <h3>Verfuegbare Piktogramme</h3>
+                        <div class="search-box" style="margin-bottom: 15px;">
+                            <select id="ghsFilterClass" onchange="filterGHSPictograms()">
+                                <option value="">Alle Gefahrenklassen</option>
+                                <option value="Explosive">Explosiv</option>
+                                <option value="Flammable">Entzundlich</option>
+                                <option value="Oxidizing">Oxidierend</option>
+                                <option value="Compressed Gas">Unter Druck stehend</option>
+                                <option value="Corrosive">Aetzend</option>
+                                <option value="Toxic">Giftig</option>
+                                <option value="Harmful">Gesundheitsschaedlich</option>
+                                <option value="Health Hazard">Gesundheitsgefahr</option>
+                                <option value="Environmental Hazard">Umweltgefahr</option>
+                            </select>
+                        </div>
+                        <div id="ghsAvailableList" class="ghs-pictogram-grid">
+                            <p style="color: var(--text-secondary);">Lade Piktogramme...</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Selected Pictograms -->
+                    <div>
+                        <h3>Ausgewaehlte Piktogramme (<span id="ghsSelectedCount">0</span>/3)</h3>
+                        <div id="ghsSelectedList" class="ghs-selected-container" style="min-height: 200px; background: var(--bg-tertiary); border-radius: 8px; padding: 15px; border: 2px dashed var(--border-color);">
+                            <p style="color: var(--text-secondary); text-align: center;">Keine Piktogramme ausgewaehlt</p>
+                        </div>
+                        <div id="ghsError" class="alert alert-error" style="display: none; margin-top: 10px;"></div>
+                        <div id="ghsPreview" style="margin-top: 20px; padding: 15px; background: white; border-radius: 8px; text-align: center;">
+                            <p style="color: #333; font-weight: bold; margin-bottom: 10px;">Vorschau (Web: 84x84px @ 72dpi):</p>
+                            <div id="ghsWebPreview" style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;"></div>
+                            <p style="color: #666; font-size: 0.9em; margin-top: 10px;">PDF: 23x23mm @ 300dpi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <style>
+                .ghs-pictogram-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                    gap: 10px;
+                    max-height: 400px;
+                    overflow-y: auto;
+                    padding: 10px;
+                    background: var(--bg-tertiary);
+                    border-radius: 8px;
+                }
+                .ghs-pictogram-item {
+                    background: var(--bg-card);
+                    border: 2px solid var(--border-color);
+                    border-radius: 8px;
+                    padding: 10px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                }
+                .ghs-pictogram-item:hover {
+                    border-color: var(--accent-primary);
+                    transform: scale(1.05);
+                }
+                .ghs-pictogram-item.selected {
+                    border-color: var(--success);
+                    background: rgba(76, 175, 80, 0.2);
+                }
+                .ghs-pictogram-item.disabled {
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                }
+                .ghs-pictogram-item img {
+                    width: 84px;
+                    height: 84px;
+                    object-fit: contain;
+                }
+                .ghs-pictogram-item .code {
+                    font-weight: bold;
+                    font-size: 0.85em;
+                    margin-top: 5px;
+                }
+                .ghs-pictogram-item .name {
+                    font-size: 0.75em;
+                    color: var(--text-secondary);
+                }
+                .ghs-selected-container {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 8px;
+                    align-content: flex-start;
+                }
+                .ghs-selected-item {
+                    position: relative;
+                    background: var(--bg-card);
+                    border: 2px solid var(--success);
+                    border-radius: 8px;
+                    padding: 8px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                }
+                .ghs-selected-item img {
+                    width: 84px;
+                    height: 84px;
+                    object-fit: contain;
+                }
+                .ghs-selected-item .remove-btn {
+                    position: absolute;
+                    top: -8px;
+                    right: -8px;
+                    background: var(--error);
+                    color: white;
+                    border: none;
+                    border-radius: 50%;
+                    width: 24px;
+                    height: 24px;
+                    cursor: pointer;
+                    font-size: 14px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .ghs-selected-item .position {
+                    font-size: 0.75em;
+                    color: var(--text-secondary);
+                    margin-top: 5px;
+                }
+            </style>
+        </div>
+        
+        <!-- Statistics Tab -->
+        <div id="stats-tab" class="tab-content">
+            <div class="card">
+                <h2>📊 Datenbank-Statistiken</h2>
+                <div class="stats-grid" id="dbStats" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="stat-box">
+                        <div class="stat-value" id="totalPhrases">-</div>
+                        <div class="stat-label">Gesamtphrasen</div>
+                    </div>
+                </div>
+                <button onclick="loadStats()" style="margin-top: 20px;">🔄 Statistiken aktualisieren</button>
+            </div>
+            
+            <div class="card">
+                <h2>🌍 Phrasen pro Sprache</h2>
+                <div id="langStats" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add/Edit Modal with All Languages -->
+    <div id="phraseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">✨ Neue Phrase hinzufügen</h2>
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+            </div>
+            <form id="phraseForm">
+                <input type="hidden" id="phraseId">
+                
+                <div class="form-group">
+                    <label>🇬🇧 English (Original) *</label>
+                    <textarea id="enText" required placeholder="Englische Phrase eingeben..."></textarea>
+                </div>
+                
+                <div class="language-grid">
+                    <div class="language-section">
+                        <label>🇩🇪 Deutsch</label>
+                        <textarea id="deText" placeholder="Deutsche Übersetzung..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇫🇷 Français</label>
+                        <textarea id="frText" placeholder="Traduction française..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇪🇸 Español</label>
+                        <textarea id="esText" placeholder="Traducción española..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇮🇹 Italiano</label>
+                        <textarea id="itText" placeholder="Traduzione italiana..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇳🇱 Nederlands</label>
+                        <textarea id="nlText" placeholder="Nederlandse vertaling..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇵🇱 Polski</label>
+                        <textarea id="plText" placeholder="Polskie tłumaczenie..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇸🇪 Svenska</label>
+                        <textarea id="svText" placeholder="Svensk översättning..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇩🇰 Dansk</label>
+                        <textarea id="daText" placeholder="Dansk oversættelse..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇫🇮 Suomi</label>
+                        <textarea id="fiText" placeholder="Suomennos..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇬🇷 Ελληνικά</label>
+                        <textarea id="elText" placeholder="Ελληνική μετάφραση..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇨🇿 Čeština</label>
+                        <textarea id="csText" placeholder="Český překlad..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇭🇺 Magyar</label>
+                        <textarea id="huText" placeholder="Magyar fordítás..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇷🇴 Română</label>
+                        <textarea id="roText" placeholder="Traducere română..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇧🇬 Български</label>
+                        <textarea id="bgText" placeholder="Български превод..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇸🇰 Slovenčina</label>
+                        <textarea id="skText" placeholder="Slovenský preklad..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇸🇮 Slovenščina</label>
+                        <textarea id="slText" placeholder="Slovenski prevod..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇪🇪 Eesti</label>
+                        <textarea id="etText" placeholder="Eesti tõlge..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇱🇻 Latviešu</label>
+                        <textarea id="lvText" placeholder="Latviešu tulkojums..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇱🇹 Lietuvių</label>
+                        <textarea id="ltText" placeholder="Lietuvių vertimas..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇭🇷 Hrvatski</label>
+                        <textarea id="hrText" placeholder="Hrvatski prijevod..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇵🇹 Português</label>
+                        <textarea id="ptText" placeholder="Tradução portuguesa..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇳🇴 Norsk</label>
+                        <textarea id="noText" placeholder="Norsk oversettelse..."></textarea>
+                    </div>
+                    <div class="language-section">
+                        <label>🇮🇸 Íslenska</label>
+                        <textarea id="isText" placeholder="Íslensk þýðing..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button type="submit" class="success">💾 Speichern</button>
+                    <button type="button" onclick="closeModal()" class="secondary">Abbrechen</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentFile = null;
+        let translatedContent = null;
+        
+        // Tab switching
+        function showTab(tabName, btnElement) {
+            // Update tabs
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            if (btnElement) btnElement.classList.add('active');
+            
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            if (tabName === 'stats') {
+                loadStats();
+            }
+        }
+        
+        // File selection handler
+        function handleFileSelect(input) {
+            const file = input.files[0];
+            const label = document.getElementById('fileLabel');
+            const fileName = document.getElementById('fileName');
+            
+            if (file) {
+                fileName.textContent = `📄 ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+                label.classList.add('has-file');
+                uploadFile(file);
+            } else {
+                fileName.textContent = 'Keine Datei ausgewählt';
+                label.classList.remove('has-file');
+            }
+        }
+        
+        // File upload
+        async function uploadFile(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+                showAlert('uploadStatus', 'info', '⏳ Datei wird hochgeladen...');
+                
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentFile = data.filename;
+                    showAlert('uploadStatus', 'success', `✅ ${data.filename} erfolgreich hochgeladen`);
+                    document.getElementById('translateBtn').disabled = false;
+                    
+                    // Show preview
+                    document.getElementById('previewContainer').style.display = 'grid';
+                    refreshPreview('original');
+                } else {
+                    showAlert('uploadStatus', 'error', '❌ ' + data.error);
+                }
+            } catch (error) {
+                showAlert('uploadStatus', 'error', '❌ Upload fehlgeschlagen: ' + error.message);
+            }
+        }
+        
+        // Translate
+        async function translateFile() {
+            const language = document.getElementById('languageSelect').value;
+            const btn = document.getElementById('translateBtn');
+            
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Übersetze...';
+            
+            try {
+                const response = await fetch('/api/translate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ language })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Update stats
+                    document.getElementById('statsCard').style.display = 'block';
+                    document.getElementById('totalTexts').textContent = data.stats.total_texts;
+                    document.getElementById('translatedCount').textContent = data.stats.translated_exact;
+                    document.getElementById('notFoundCount').textContent = data.stats.not_found;
+                    
+                    const coverage = (data.stats.translated_exact / data.stats.total_texts * 100).toFixed(1);
+                    document.getElementById('coverageBar').style.width = coverage + '%';
+                    document.getElementById('coverageBar').textContent = coverage + '%';
+                    
+                    // Show download
+                    document.getElementById('downloadCard').style.display = 'block';
+                    
+                    // Show not found phrases
+                    if (data.not_found && data.not_found.length > 0) {
+                        document.getElementById('notFoundCard').style.display = 'block';
+                        document.getElementById('notFoundBadge').textContent = data.not_found.length;
+                        const list = document.getElementById('notFoundList');
+                        list.innerHTML = data.not_found.map(([text, line]) => `
+                            <div class="phrase-item">
+                                <span class="phrase-text">${escapeHtml(text)}</span>
+                                <span class="phrase-line">Zeile ${line}</span>
+                                <button onclick="addMissingPhrase('${escapeHtml(text)}')" class="success" style="padding: 6px 12px; font-size: 0.85em;">➕</button>
+                            </div>
+                        `).join('');
+                    }
+                    
+                    // Refresh translated preview
+                    refreshPreview('translated');
+                    
+                    showAlert('uploadStatus', 'success', `✅ Übersetzung abgeschlossen! Coverage: ${coverage}%`);
+                } else {
+                    showAlert('uploadStatus', 'error', '❌ ' + data.error);
+                }
+            } catch (error) {
+                showAlert('uploadStatus', 'error', '❌ Übersetzung fehlgeschlagen: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '🚀 Übersetzen starten';
+            }
+        }
+        
+        // Preview refresh with GHS pictograms - replaces ghs-placeholder divs
+        async function refreshPreview(type) {
+            const endpoint = type === 'original' ? '/api/preview/original' : '/api/preview/translated';
+            const frameId = type === 'original' ? 'originalPreview' : 'translatedPreview';
+            
+            try {
+                const response = await fetch(endpoint);
+                const data = await response.json();
+                
+                if (data.content) {
+                    const frame = document.getElementById(frameId);
+                    let content = data.content;
+                    
+                    // Replace ghs-placeholder divs with actual pictograms
+                    if (selectedGHS && selectedGHS.length > 0) {
+                        // Find all ghs-placeholder divs and replace them
+                        const placeholderRegex = /<div[^>]*class="ghs-placeholder"[^>]*data-symbol="[^"]*"[^>]*><\/div>/gi;
+                        
+                        // Create replacement HTML with selected pictograms
+                        const ghsHTML = selectedGHS.map(code => 
+                            `<img src="/api/ghs/pictograms/${code}/png" style="width:84px;height:84px;display:inline-block;" alt="${code}" title="${code}">`
+                        ).join('');
+                        
+                        // Replace parent containers that hold placeholders
+                        content = content.replace(
+                            /<div class="pictograms">[\s\S]*?<\/div>/i,
+                            `<div class="pictograms" style="display:flex;gap:8px;flex-wrap:wrap;">${ghsHTML}</div>`
+                        );
+                        
+                        // Also replace individual placeholders if they exist outside containers
+                        content = content.replace(placeholderRegex, (match) => {
+                            // Extract the symbol from the placeholder
+                            const symbolMatch = match.match(/data-symbol="([^"]+)"/);
+                            const symbol = symbolMatch ? symbolMatch[1] : '';
+                            // Return empty as we're using selectedGHS instead
+                            return '';
+                        });
+                        
+                        // Add CSS for ghs-pictograms if not present
+                        if (!content.includes('.ghs-pictograms')) {
+                            const ghsCSS = `
+                            <style>
+                                .ghs-pictograms { display: flex; flex-direction: row; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+                                .ghs-pictograms img { width: 84px; height: 84px; object-fit: contain; }
+                                @media print { .ghs-pictograms img { width: 23mm; height: 23mm; } }
+                            </style>`;
+                            content = content.replace('</head>', ghsCSS + '</head>');
+                        }
+                    }
+                    
+                    frame.srcdoc = content;
+                }
+            } catch (error) {
+                console.error('Preview error:', error);
+            }
+        }
+        
+        // Downloads
+        async function downloadHTML() {
+            window.location.href = '/api/download';
+        }
+        
+        async function downloadPDF() {
+            const btn = document.querySelector('button[onclick="downloadPDF()"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '⏳ PDF wird erstellt...';
+            btn.disabled = true;
+            
+            try {
+                window.location.href = '/api/download/pdf';
+            } catch (error) {
+                alert('PDF Download fehlgeschlagen: ' + error.message);
+            } finally {
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }, 3000);
+            }
+        }
+        
+        // Database functions
+        async function searchPhrases() {
+            const query = document.getElementById('searchInput').value;
+            const lang = document.getElementById('searchLanguage').value;
+            const mode = document.getElementById('searchMode').value;
+            
+            // Update header
+            const langNames = {
+                'de': 'Deutsch', 'fr': 'Français', 'es': 'Español', 'it': 'Italiano', 'nl': 'Nederlands',
+                'pl': 'Polski', 'sv': 'Svenska', 'da': 'Dansk', 'fi': 'Suomi', 'el': 'Ελληνικά',
+                'cs': 'Čeština', 'hu': 'Magyar', 'ro': 'Română', 'bg': 'Български', 'sk': 'Slovenčina',
+                'sl': 'Slovenščina', 'et': 'Eesti', 'lv': 'Latviešu', 'lt': 'Lietuvių', 'hr': 'Hrvatski',
+                'pt': 'Português', 'no': 'Norsk', 'is': 'Íslenska'
+            };
+            document.getElementById('resultLangHeader').textContent = langNames[lang] || lang.toUpperCase();
+            
+            try {
+                const response = await fetch('/api/phrases/search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ q: query, lang, mode })
+                });
+                
+                const phrases = await response.json();
+                
+                // Check if response is an error
+                if (phrases.error) {
+                    alert('Fehler: ' + phrases.error);
+                    return;
+                }
+                
+                // Check if phrases is an array
+                if (!Array.isArray(phrases)) {
+                    console.error('Unexpected response:', phrases);
+                    alert('Fehler: Ungültige Antwort vom Server');
+                    return;
+                }
+                
+                const tbody = document.getElementById('phrasesTable');
+                if (phrases.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 40px; color: var(--text-secondary);">Keine Phrasen gefunden</td></tr>`;
+                    return;
+                }
+                
+                tbody.innerHTML = phrases.map(p => `
+                    <tr>
+                        <td><span class="highlight">#${p.id}</span></td>
+                        <td>${escapeHtml(p.en_original || '')}</td>
+                        <td>${escapeHtml(p.translation || '-')}</td>
+                        <td>
+                            <button onclick="editPhrase('${p.id}')" style="padding: 8px 15px;">✏️</button>
+                            <button onclick="deletePhrase('${p.id}')" class="danger" style="padding: 8px 15px; margin-left: 5px;">🗑️</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                alert('Fehler beim Suchen: ' + error.message);
+            }
+        }
+        
+        function showAddModal() {
+            document.getElementById('modalTitle').textContent = '✨ Neue Phrase hinzufügen';
+            document.getElementById('phraseId').value = '';
+            
+            // Clear ALL 25 language fields
+            const langFields = ['en', 'de', 'fr', 'es', 'it', 'nl', 'pl', 'sv', 'da', 'fi', 'el', 
+                               'cs', 'hu', 'ro', 'bg', 'sk', 'sl', 'et', 'lv', 'lt', 'hr', 'pt', 'no', 'is'];
+            langFields.forEach(lang => {
+                const field = document.getElementById(lang + 'Text');
+                if (field) {
+                    field.value = '';
+                }
+            });
+            
+            document.getElementById('phraseModal').classList.add('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('phraseModal').classList.remove('active');
+        }
+        
+        async function editPhrase(id) {
+            try {
+                // Use the new /full endpoint to get ALL language fields
+                const response = await fetch(`/api/phrases/${id}/full`);
+                const phrase = await response.json();
+                
+                if (phrase.error) {
+                    alert('Fehler: ' + phrase.error);
+                    return;
+                }
+                
+                document.getElementById('modalTitle').textContent = `✏️ Phrase bearbeiten`;
+                document.getElementById('phraseId').value = phrase.id;
+                
+                // Set all 25 language fields with their values from database
+                const langFields = ['en', 'de', 'fr', 'es', 'it', 'nl', 'pl', 'sv', 'da', 'fi', 'el', 
+                                   'cs', 'hu', 'ro', 'bg', 'sk', 'sl', 'et', 'lv', 'lt', 'hr', 'pt', 'no', 'is'];
+                
+                langFields.forEach(lang => {
+                    const field = document.getElementById(lang + 'Text');
+                    if (field) {
+                        // Get value from database field (e.g., de_original)
+                        const dbValue = phrase[lang + '_original'];
+                        field.value = dbValue || '';
+                    }
+                });
+                
+                document.getElementById('phraseModal').classList.add('active');
+            } catch (error) {
+                alert('Fehler beim Laden: ' + error.message);
+            }
+        }
+        
+        async function deletePhrase(id) {
+            if (!confirm(`Phrase #${id} wirklich löschen?`)) return;
+            
+            try {
+                const response = await fetch(`/api/phrases/${id}`, { method: 'DELETE' });
+                const data = await response.json();
+                
+                if (data.success) {
+                    searchPhrases();
+                }
+            } catch (error) {
+                alert('Fehler beim Löschen: ' + error.message);
+            }
+        }
+        
+        function addMissingPhrase(text) {
+            document.getElementById('searchInput').value = text;
+            showAddModal();
+            document.getElementById('enText').value = text;
+        }
+        
+        // Form submit
+        document.getElementById('phraseForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const id = document.getElementById('phraseId').value;
+            const langFields = ['en', 'de', 'fr', 'es', 'it', 'nl', 'pl', 'sv', 'da', 'fi', 'el', 
+                              'cs', 'hu', 'ro', 'bg', 'sk', 'sl', 'et', 'lv', 'lt', 'hr', 'pt', 'no', 'is'];
+            
+            const data = {};
+            langFields.forEach(lang => {
+                const field = document.getElementById(lang + 'Text');
+                if (field && field.value.trim()) {
+                    data[lang + '_original'] = field.value.trim();
+                }
+            });
+            
+            if (!data.en_original) {
+                alert('English (Original) ist erforderlich!');
+                return;
+            }
+            
+            try {
+                const url = id ? `/api/phrases/${id}` : '/api/phrases';
+                const method = id ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    closeModal();
+                    searchPhrases();
+                    if (!id) showAlert('uploadStatus', 'success', '✅ Neue Phrase hinzugefügt!');
+                } else {
+                    alert('Fehler: ' + (result.error || 'Unbekannter Fehler'));
+                }
+            } catch (error) {
+                alert('Fehler beim Speichern: ' + error.message);
+            }
+        });
+        
+        // Stats
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/stats');
+                const data = await response.json();
+                
+                document.getElementById('totalPhrases').textContent = data.total_phrases.toLocaleString();
+                
+                const langNames = {
+                    'de': '🇩🇪 Deutsch', 'fr': '🇫🇷 Français', 'es': '🇪🇸 Español', 'it': '🇮🇹 Italiano', 'nl': '🇳🇱 Nederlands',
+                    'pl': '🇵🇱 Polski', 'sv': '🇸🇪 Svenska', 'da': '🇩🇰 Dansk', 'fi': '🇫🇮 Suomi', 'el': '🇬🇷 Ελληνικά',
+                    'cs': '🇨🇿 Čeština', 'hu': '🇭🇺 Magyar', 'ro': '🇷🇴 Română', 'bg': '🇧🇬 Български', 'sk': '🇸🇰 Slovenčina',
+                    'sl': '🇸🇮 Slovenščina', 'et': '🇪🇪 Eesti', 'lv': '🇱🇻 Latviešu', 'lt': '🇱🇹 Lietuvių', 'hr': '🇭🇷 Hrvatski',
+                    'pt': '🇵🇹 Português', 'no': '🇳🇴 Norsk', 'is': '🇮🇸 Íslenska'
+                };
+                
+                const langStatsHtml = Object.entries(data.per_language)
+                    .filter(([_, count]) => count > 0)
+                    .sort((a, b) => b[1] - a[1])
+                    .map(([lang, count]) => `
+                        <div class="stat-box" style="text-align: left; padding: 15px;">
+                            <div style="font-size: 1.8em; margin-bottom: 5px;">${langNames[lang] || lang}</div>
+                            <div style="font-size: 2em; font-weight: bold; color: var(--accent-primary);">${count.toLocaleString()}</div>
+                            <div style="color: var(--text-secondary); font-size: 0.9em;">Phrasen</div>
+                        </div>
+                    `).join('');
+                
+                document.getElementById('langStats').innerHTML = langStatsHtml || '<p style="color: var(--text-secondary);">Keine Daten verfügbar</p>';
+            } catch (error) {
+                console.error('Stats error:', error);
+            }
+        }
+        
+        // Helper functions
+        function showAlert(elementId, type, message) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            
+            if (type === 'success') {
+                setTimeout(() => element.innerHTML = '', 5000);
+            }
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // GHS Pictogram Management
+        let ghsPictograms = [];
+        let selectedGHS = [];
+        
+        async function loadGHSPictograms() {
+            try {
+                const response = await fetch('/api/ghs/pictograms');
+                ghsPictograms = await response.json();
+                renderGHSAvailable();
+                updateGHSCompactDisplay();
+            } catch (error) {
+                console.error('Error loading GHS pictograms:', error);
+            }
+        }
+        
+        function filterGHSPictograms() {
+            renderGHSAvailable();
+        }
+        
+        function renderGHSAvailable() {
+            const filterClass = document.getElementById('ghsFilterClass').value;
+            const container = document.getElementById('ghsAvailableList');
+            
+            let filtered = ghsPictograms;
+            if (filterClass) {
+                filtered = filtered.filter(p => p.hazard_class === filterClass);
+            }
+            
+            if (filtered.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-secondary);">Keine Piktogramme gefunden</p>';
+                return;
+            }
+            
+            // Use real PNG images from ghs folder
+            container.innerHTML = filtered.map(p => {
+                const isSelected = selectedGHS.includes(p.code);
+                const isDisabled = !isSelected && selectedGHS.length >= 3;
+                const pngPath = `ghs/${p.code.toLowerCase()}.png`;
+                return `
+                    <div class="ghs-pictogram-item ${isSelected ? 'selected' : ''} ${isDisabled ? 'disabled' : ''}" 
+                         onclick="${isDisabled ? '' : `toggleGHSPictogram('${p.code}')`}">
+                        <img src="${pngPath}" alt="${p.code}" title="${p.name}" loading="lazy" 
+                             style="width: 84px; height: 84px; object-fit: contain;">
+                        <div class="code">${p.code}</div>
+                        <div class="name">${p.name}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function toggleGHSPictogram(code) {
+            const index = selectedGHS.indexOf(code);
+            
+            if (index > -1) {
+                selectedGHS.splice(index, 1);
+            } else {
+                if (selectedGHS.length >= 3) {
+                    showGHSError('Maximal 3 Piktogramme erlaubt');
+                    return;
+                }
+                selectedGHS.push(code);
+            }
+            
+            updateGHSUI();
+            updateGHSCompactDisplay();
+            hideGHSError();
+        }
+        
+        function removeGHSPictogram(code) {
+            const index = selectedGHS.indexOf(code);
+            if (index > -1) {
+                selectedGHS.splice(index, 1);
+                updateGHSUI();
+                updateGHSCompactDisplay();
+            }
+        }
+        
+        function updateGHSUI() {
+            document.getElementById('ghsSelectedCount').textContent = selectedGHS.length;
+            
+            const container = document.getElementById('ghsSelectedList');
+            if (selectedGHS.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-secondary); text-align: center;">Keine Piktogramme ausgewaehlt</p>';
+            } else {
+                container.innerHTML = selectedGHS.map((code, index) => {
+                    const p = ghsPictograms.find(x => x.code === code);
+                    const pngPath = `ghs/${code.toLowerCase()}.png`;
+                    return `
+                        <div class="ghs-selected-item">
+                            <button class="remove-btn" onclick="removeGHSPictogram('${code}')">x</button>
+                            <img src="${pngPath}" alt="${code}" title="${p ? p.name : code}" style="width: 84px; height: 84px; object-fit: contain;">
+                            <div class="position">Position ${index + 1}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            const preview = document.getElementById('ghsWebPreview');
+            preview.innerHTML = selectedGHS.map(code => {
+                return `<img src="ghs/${code.toLowerCase()}.png" style="width: 84px; height: 84px; object-fit: contain;" alt="${code}">`;
+            }).join('');
+            
+            renderGHSAvailable();
+        }
+        
+        function updateGHSCompactDisplay() {
+            const display = document.getElementById('ghsSelectedDisplay');
+            if (selectedGHS.length === 0) {
+                display.innerHTML = '<span style="color: var(--text-secondary); font-size: 0.9em;">Keine Piktogramme ausgewählt</span>';
+            } else {
+                display.innerHTML = selectedGHS.map(code => 
+                    `<img src="ghs/${code.toLowerCase()}.png" style="width: 60px; height: 60px; object-fit: contain;" alt="${code}" title="${code}">`
+                ).join('');
+            }
+        }
+        
+        function openGHSModal() {
+            showTab('ghs', null);
+            document.querySelector('.tab[onclick="showTab(\'ghs\', this)"]').click();
+        }
+        
+        function showGHSError(message) {
+            const errorDiv = document.getElementById('ghsError');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(hideGHSError, 3000);
+        }
+        
+        function hideGHSError() {
+            document.getElementById('ghsError').style.display = 'none';
+        }
+        
+        // Load GHS pictograms on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadGHSPictograms();
+            
+            const originalShowTab = window.showTab;
+            window.showTab = function(tabName, btnElement) {
+                originalShowTab(tabName, btnElement);
+                if (tabName === 'ghs') {
+                    renderGHSAvailable();
+                }
+            };
+        });
+        
+        // Initial stats load
+        loadStats();
+        
+        // Auto-load default template if present
+        {% if template_loaded %}
+        (function() {
+            document.getElementById('fileLabel').classList.add('has-file');
+            document.getElementById('translateBtn').disabled = false;
+            document.getElementById('previewContainer').style.display = 'grid';
+            refreshPreview('original');
+        })();
+        {% endif %}
+        
+        // Database selection handling
+        async function handleDatabaseChange(select) {
+            const dbKey = select.value;
+            const statusDiv = document.getElementById('databaseStatus');
+            const descSmall = document.getElementById('databaseDescription');
+            
+            statusDiv.style.display = 'block';
+            statusDiv.innerHTML = '<div class="alert alert-info">🔄 Wechsle Datenbank...</div>';
+            
+            try {
+                const response = await fetch('/api/databases/select', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ database: dbKey })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    statusDiv.innerHTML = `<div class="alert alert-success">✅ ${data.message}</div>`;
+                    if (data.current && data.current.description) {
+                        descSmall.textContent = data.current.description;
+                    }
+                    // Refresh available databases list
+                    await refreshDatabaseList(data.current);
+                } else {
+                    statusDiv.innerHTML = `<div class="alert alert-error">❌ ${data.error || 'Fehler beim Wechseln'}</div>`;
+                    // Reset selection to current
+                    await loadCurrentDatabase();
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `<div class="alert alert-error">❌ Fehler: ${error.message}</div>`;
+            }
+            
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 3000);
+        }
+        
+        async function loadCurrentDatabase() {
+            try {
+                const response = await fetch('/api/databases');
+                const data = await response.json();
+                
+                if (data.current) {
+                    document.getElementById('databaseSelect').value = data.current.key;
+                    document.getElementById('databaseDescription').textContent = data.current.description;
+                }
+            } catch (error) {
+                console.error('Error loading database info:', error);
+            }
+        }
+        
+        async function refreshDatabaseList(current) {
+            try {
+                const response = await fetch('/api/databases');
+                const data = await response.json();
+                
+                const select = document.getElementById('databaseSelect');
+                select.innerHTML = '';
+                
+                Object.entries(data.available).forEach(([key, db]) => {
+                    const option = document.createElement('option');
+                    option.value = key;
+                    option.textContent = db.name + (db.exists ? '' : ' (nicht verfügbar)');
+                    option.selected = db.active;
+                    option.disabled = !db.exists;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error refreshing database list:', error);
+            }
+        }
+        
+        // Load database info on page load
+        document.addEventListener('DOMContentLoaded', loadCurrentDatabase);
+        
+        // Bulk Correction Functions
+        async function uploadBulkFile() {
+            const fileInput = document.getElementById('bulkFileInput');
+            const sourceLang = document.getElementById('bulkSourceLang').value;
+            const statusDiv = document.getElementById('bulkStatus');
+            
+            if (!fileInput.files || !fileInput.files[0]) {
+                statusDiv.innerHTML = '<div class="alert alert-error">❌ Bitte wählen Sie eine TXT-Datei aus</div>';
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            if (!file.name.endsWith('.txt')) {
+                statusDiv.innerHTML = '<div class="alert alert-error">❌ Nur TXT-Dateien sind erlaubt</div>';
+                return;
+            }
+            
+            statusDiv.innerHTML = '<div class="alert alert-info">⏳ Wird hochgeladen...</div>';
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('source_lang', sourceLang);
+            
+            try {
+                const response = await fetch('/api/phrases/bulk/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    statusDiv.innerHTML = `<div class="alert alert-success">
+                        ✅ Erfolgreich! ${data.created} neue Phrasen erstellt, ${data.updated} Phrasen aktualisiert.
+                        <br>Quellsprache: ${data.source_language.toUpperCase()}
+                    </div>`;
+                    // Clear file input
+                    fileInput.value = '';
+                    document.getElementById('bulkFileLabel').classList.remove('has-file');
+                } else {
+                    statusDiv.innerHTML = `<div class="alert alert-error">❌ ${data.error}</div>`;
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `<div class="alert alert-error">❌ Fehler: ${error.message}</div>`;
+            }
+        }
+        
+        // File input visual feedback
+        document.getElementById('bulkFileInput').addEventListener('change', function() {
+            const label = document.getElementById('bulkFileLabel');
+            if (this.files && this.files[0]) {
+                label.classList.add('has-file');
+                label.querySelector('div').textContent = '📄 ' + this.files[0].name;
+            } else {
+                label.classList.remove('has-file');
+                label.querySelector('div').textContent = '📂 TXT-Datei auswählen';
+            }
+        });
+        
+        async function applyQuickEdit() {
+            const text = document.getElementById('quickEditText').value.trim();
+            const sourceLang = document.getElementById('quickSourceLang').value;
+            const statusDiv = document.getElementById('bulkStatus');
+            
+            if (!text) {
+                statusDiv.innerHTML = '<div class="alert alert-error">❌ Bitte geben Sie Text ein</div>';
+                return;
+            }
+            
+            statusDiv.innerHTML = '<div class="alert alert-info">⏳ Wird verarbeitet...</div>';
+            
+            try {
+                const response = await fetch('/api/phrases/bulk/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        text: text,
+                        source_lang: sourceLang
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    statusDiv.innerHTML = `<div class="alert alert-success">
+                        ✅ Erfolgreich! ${data.created} neue Phrasen erstellt, ${data.updated} Phrasen aktualisiert.
+                        <br>Quellsprache: ${data.source_language.toUpperCase()}
+                        <br>Phrase: ${data.source_phrase}
+                    </div>`;
+                    // Clear textarea
+                    document.getElementById('quickEditText').value = '';
+                } else {
+                    statusDiv.innerHTML = `<div class="alert alert-error">❌ ${data.error}</div>`;
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `<div class="alert alert-error">❌ Fehler: ${error.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>
