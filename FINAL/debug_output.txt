@@ -1,0 +1,5 @@
+processContent = (content) => {
+                    if (content && content.includes('</head>')) {
+                        return content.replace('</head>', editingCSS + '</head>');
+                    } else if (content && content.includes('<html>')) {
+                        return '<html><head>' + editingCSS + '</head><body>' + content.replace(/<html>|<\/html>|<body>|<\/body>/g, '') + '</body></

@@ -10,7 +10,7 @@ main_bp = Blueprint('main', __name__)
 @main_bp.route('/')
 def index():
     """Main page with default template loaded."""
-    default_template = "layout-gemini-fixed.html"
+    default_template = "layout-placeholders-fixed-v2.html"
     template_loaded = False
     
     if os.path.exists(default_template):
@@ -194,6 +194,15 @@ def export_document():
         return jsonify({'error': 'Invalid export format. Use pdf, html, or docx'}), 400
     
     try:
+        # FIRST: Check if there are edited contents from the editor that need to be saved
+        # This ensures manual corrections are included in the export
+        edited_content = data.get('edited_content')
+        if edited_content:
+            # Save the edited content before exporting
+            with open(session['translated_file'], 'w', encoding='utf-8') as f:
+                f.write(edited_content)
+            print(f"Saved edited content before export: {len(edited_content)} bytes")
+        
         with open(session['translated_file'], 'r', encoding='utf-8') as f:
             html_content = f.read()
         
@@ -459,22 +468,24 @@ def export_translated_docx(html_content, target_lang, lang_name):
         elif element.name == 'table':
             rows = element.find_all('tr')
             if rows:
-                table = doc.add_table(rows=len(rows), cols=len(rows[0].find_all(['td', 'th'])))
-                table.style = 'Table Grid'
-                
-                for i, row in enumerate(rows.find_all(['td', 'th'])):
-                    cells = row.find_all(['td', 'th'])
-                    for j, cell in enumerate(cells):
-                        if i < len(table.rows) and j < len(table.columns):
-                            cell_text = cell.get_text(strip=True)
-                            table.rows[i].cells[j].text = cell_text
-                            
-                            # Style header row
-                            if i == 0:
-                                for paragraph in table.rows[i].cells[j].paragraphs:
-                                    for run in paragraph.runs:
-                                        run.font.bold = True
-                                        run.font.color.rgb = RGBColor(118, 184, 42)
+                first_row_cells = rows[0].find_all(['td', 'th']) if rows[0] else []
+                if first_row_cells:
+                    table = doc.add_table(rows=len(rows), cols=len(first_row_cells))
+                    table.style = 'Table Grid'
+                    
+                    for i, row in enumerate(rows):
+                        cells = row.find_all(['td', 'th'])
+                        for j, cell in enumerate(cells):
+                            if i < len(table.rows) and j < len(table.columns):
+                                cell_text = cell.get_text(strip=True)
+                                table.rows[i].cells[j].text = cell_text
+                                
+                                # Style header row
+                                if i == 0:
+                                    for paragraph in table.rows[i].cells[j].paragraphs:
+                                        for run in paragraph.runs:
+                                            run.font.bold = True
+                                            run.font.color.rgb = RGBColor(118, 184, 42)
     
     # Save
     doc_buffer = BytesIO()
@@ -838,16 +849,13 @@ def save_template():
 @main_bp.route('/api/template/reset', methods=['POST'])
 def reset_template():
     template_path = os.path.join(current_app.root_path, 'layout-placeholders-fixed-v2.html')
-    backup_path = os.path.join(current_app.root_path, 'layout-placeholders-fixed-v2.backup.html')
     try:
-        if os.path.exists(backup_path):
-            import shutil
-            shutil.copy(backup_path, template_path)
+        if os.path.exists(template_path):
             with open(template_path, 'r', encoding='utf-8') as f:
                 content = f.read()
             return jsonify({'success': True, 'content': content})
         else:
-            return jsonify({'success': False, 'error': 'Kein Backup gefunden. Die Vorlage wurde vermutlich noch nie überschrieben.'})
+            return jsonify({'success': False, 'error': 'Template-Datei nicht gefunden.'})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 

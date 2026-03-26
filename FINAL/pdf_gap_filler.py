@@ -558,6 +558,78 @@ class SDSPDFGapFiller:
     # Section 12: Mobility, Endocrine, Other Adverse Effects
     # ------------------------------------------------------------------
 
+    def extract_section_12_components(self) -> List[Dict[str, Any]]:
+        """
+        Extracts detailed component data from tables in Section 12.
+        This is a complex parser to handle data missing from the XML.
+        """
+        results = []
+        try:
+            # Search on pages where Section 12 is likely to be (7-9, 0-indexed 6-8)
+            all_tables = []
+            for i in range(6, 9):
+                all_tables.extend(self._page_tables(i))
+
+            current_component = None
+
+            for table in all_tables:
+                if not table or not table[0]:
+                    continue
+                
+                header_str = " ".join(str(c) for c in table[0] if c).strip()
+
+                # Check for a new component header table
+                if 'CAS No' in header_str and 'EC No' in header_str and len(table) == 1:
+                    if current_component:
+                        results.append(current_component)
+                    
+                    name_match = re.match(r'^(.*?)\s*\(CAS No', header_str)
+                    current_component = {
+                        'generic_name': name_match.group(1).strip() if name_match else '',
+                        'aquatic_toxicity_entries': [],
+                        'biodegradation': "", 
+                        'bcf': "", 
+                        'log_kow': "",
+                        'pbt_result': ""
+                    }
+                    continue
+
+                if not current_component:
+                    continue
+
+                # Now, parse the content tables for the current component
+                first_cell = str(table[0][0]).lower() if table[0][0] else ""
+
+                if 'aquatic toxicity' in header_str.lower():
+                    for row in table[1:]:
+                        if len(row) >= 4:
+                            entry = {
+                                'effect_dose': str(row[0]).split(':')[0].strip() if row[0] else "",
+                                'value': str(row[0]).split(':')[1].strip() if row[0] and ':' in row[0] else "",
+                                'exposure_time': str(row[1]).strip() if row[1] else "",
+                                'species': str(row[2]).strip() if row[2] else "",
+                                'method': str(row[3]).strip() if row[3] else ""
+                            }
+                            if entry['effect_dose'] or entry['value']:
+                                current_component['aquatic_toxicity_entries'].append(entry)
+                elif 'biodegradation' in first_cell and len(table) > 1 and len(table[1]) > 1:
+                    current_component['biodegradation'] = str(table[1][1]).strip()
+                elif 'log kow' in first_cell and len(table) > 1 and len(table[1]) > 1:
+                     current_component['log_kow'] = str(table[1][1]).strip()
+                elif 'bcf' in first_cell and len(table) > 1 and len(table[1]) > 1:
+                     current_component['bcf'] = str(table[1][1]).strip()
+                elif 'pbt and vpvb' in first_cell and len(table) > 1 and len(table[1]) > 0:
+                     current_component['pbt_result'] = str(table[1][0]).strip()
+
+            if current_component:
+                results.append(current_component)
+
+        except Exception as e:
+            logger.error(f"Error extracting Section 12 component tables: {e}", exc_info=True)
+        
+        logger.info(f"Extracted Section 12 component details for {len(results)} components from PDF.")
+        return results
+
     def extract_section_12_gaps(self) -> Dict[str, str]:
         """
         Extract mobility, endocrine disrupting properties, and other adverse
@@ -732,9 +804,31 @@ class SDSPDFGapFiller:
         except Exception as e:
             logger.warning(f"Could not fill Section 8 PPE icons: {e}")
 
-        # --- Section 12: Mobility, Endocrine, Adverse Effects ---
+        # --- Section 12: Ecotoxicological Component Data & Text Gaps ---
         try:
             sec12 = data.get("section_12", {})
+            # First, try to fill component data from PDF tables if they exist
+            if sec12 and 'ecotox_components' in sec12:
+                pdf_components = self.extract_section_12_components()
+                if pdf_components:
+                    for xml_comp in sec12['ecotox_components']:
+                        for pdf_comp in pdf_components:
+                            # Match by name (case-insensitive)
+                            if xml_comp.get('generic_name', '').lower() == pdf_comp.get('generic_name', '').lower():
+                                if _is_empty(xml_comp.get('biodegradation')) and pdf_comp.get('biodegradation'):
+                                    xml_comp['biodegradation'] = pdf_comp['biodegradation']
+                                if _is_empty(xml_comp.get('log_kow')) and pdf_comp.get('log_kow'):
+                                    xml_comp['log_kow'] = pdf_comp['log_kow']
+                                if _is_empty(xml_comp.get('bcf')) and pdf_comp.get('bcf'):
+                                    xml_comp['bcf'] = pdf_comp['bcf']
+                                if _is_empty(xml_comp.get('pbt_result')) and pdf_comp.get('pbt_result'):
+                                    xml_comp['pbt_result'] = pdf_comp['pbt_result']
+                                # Overwrite aquatic toxicity if XML was empty
+                                if _is_empty(xml_comp.get('aquatic_toxicity_entries')) and pdf_comp.get('aquatic_toxicity_entries'):
+                                    xml_comp['aquatic_toxicity_entries'] = pdf_comp['aquatic_toxicity_entries']
+                    logger.info("Updated Section 12 component data from PDF.")
+
+            # Then, fill the general text gaps for the section
             gaps12 = self.extract_section_12_gaps()
             changed = False
             for key, val in gaps12.items():
@@ -742,8 +836,10 @@ class SDSPDFGapFiller:
                     sec12[key] = val
                     changed = True
             if changed:
-                data["section_12"] = sec12
-                logger.info("Filled Section 12 gaps from PDF")
+                logger.info("Filled Section 12 text gaps from PDF")
+            
+            data["section_12"] = sec12
+
         except Exception as e:
             logger.warning(f"Could not fill Section 12 gaps: {e}")
 

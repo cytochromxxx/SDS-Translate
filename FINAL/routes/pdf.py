@@ -52,7 +52,7 @@ def process_pdf_dynamic():
         import traceback
         return jsonify({'error': f'An unexpected error occurred: {str(e)}\n{traceback.format_exc()}'}), 500
 
-@pdf_bp.route('/api/download/pdf')
+@pdf_bp.route('/api/download/pdf', methods=['POST'])
 def download_pdf():
     upload_folder = current_app.config['UPLOAD_FOLDER']
     if not current_app.config['WEASYPRINT_AVAILABLE']:
@@ -62,6 +62,16 @@ def download_pdf():
         return jsonify({'error': 'No translation available'}), 400
     
     try:
+        # FIRST: Check if there are edited contents from the editor that need to be saved
+        # This ensures manual corrections are included in the PDF export
+        data = request.get_json() or {}
+        edited_content = data.get('edited_content')
+        if edited_content:
+            # Save the edited content before generating PDF
+            with open(session['translated_file'], 'w', encoding='utf-8') as f:
+                f.write(edited_content)
+            print(f"Saved edited content before PDF export: {len(edited_content)} bytes")
+        
         with open(session['translated_file'], 'r', encoding='utf-8') as f:
             html_content = f.read()
         

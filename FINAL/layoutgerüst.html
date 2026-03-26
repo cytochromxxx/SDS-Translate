@@ -459,13 +459,13 @@
             <div class="section-title">SECTION 2: Hazards identification</div>
             <div class="subsection-title">2.1. Classification of the substance or mixture</div>
             <p class="small">Classification according to Regulation (EC) No 1272/2008 [CLP]</p>
-            <table class="sds" style="border-collapse: collapse; width: 100%;">
+            <table class="sds">
                 <thead>
-                    <tr><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold; width: 38%;">Hazard classes and hazard categories</th><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold; width: 40%;">Hazard statements</th><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold; width: 22%;">Classification procedure</th></tr>
+                    <tr><th>Hazard classes and hazard categories</th><th>Hazard statements</th><th>Classification procedure</th></tr>
                 </thead>
                 <tbody>
                     {% for item in section_2.classification %}
-                    <tr><td style="border: 1px solid #000; padding: 3px 5px;">{{ item.category }}</td><td style="border: 1px solid #000; padding: 3px 5px;">{{ item.code }}: {{ item.statement }}</td><td style="border: 1px solid #000; padding: 3px 5px;">{{ item.procedure }}</td></tr>
+                    <tr><td>{{ item.category }}</td><td>{{ item.code }}: {{ item.statement }}</td><td>{{ item.procedure }}</td></tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -498,13 +498,13 @@
             <p><strong>Hazard components for labelling:</strong></p>
             <p style="margin-left: 15px;">{{ section_2.labelling.hazard_components }}</p>
             <p><strong>Hazard statements for physical hazards</strong></p>
-            <table class="sds" style="border-collapse: collapse; width: 100%;">
+            <table class="sds">
                 <thead>
-                    <tr><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold;">H</th><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold;">Hazard statements</th></tr>
+                    <tr><th>H</th><th>Hazard statements</th></tr>
                 </thead>
                 <tbody>
                     {% for statement in section_2.labelling.hazard_statements %}
-                    <tr><td style="border: 1px solid #000; padding: 3px 5px;">H{{ statement.code|string|pad(3, '0', true) }}</td><td style="border: 1px solid #000; padding: 3px 5px;">{{ statement.text }}</td></tr>
+                    <tr><td>H{{ statement.code|string|pad(3, '0', true) }}</td><td>{{ statement.text }}</td></tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -513,25 +513,19 @@
             <!-- SUPPLEMENTAL_HAZARD_INFO_PLACEHOLDER -->
             
             <p><strong>Precautionary statements - Prevention</strong></p>
-            <table class="sds" style="border-collapse: collapse; width: 100%;">
-                <thead>
-                    <tr><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold;">Code</th><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold;">Precautionary statement</th></tr>
-                </thead>
+            <table class="sds" style="border: none;">
                 <tbody>
                     {% for statement in section_2.labelling.precautionary_statements.prevention %}
-                    <tr><td style="border: 1px solid #000; padding: 3px 5px; width: 50px;">{{ statement.code }}</td><td style="border: 1px solid #000; padding: 3px 5px;">{{ statement.text }}</td></tr>
+                    <tr><td style="width: 50px; border: none; padding: 2px 0;">{{ statement.code }}</td><td style="border: none; padding: 2px 0;">{{ statement.text }}</td></tr>
                     {% endfor %}
                 </tbody>
             </table>
             
             <p><strong>Precautionary statements - Response</strong></p>
-            <table class="sds" style="border-collapse: collapse; width: 100%;">
-                <thead>
-                    <tr><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold;">Code</th><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold;">Precautionary statement</th></tr>
-                </thead>
+            <table class="sds" style="border: none;">
                 <tbody>
                     {% for statement in section_2.labelling.precautionary_statements.response %}
-                    <tr><td style="border: 1px solid #000; padding: 3px 5px; width: 50px;">{{ statement.code }}</td><td style="border: 1px solid #000; padding: 3px 5px;">{{ statement.text }}</td></tr>
+                    <tr><td style="width: 50px; border: none; padding: 2px 0;">{{ statement.code }}</td><td style="border: none; padding: 2px 0;">{{ statement.text }}</td></tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -541,10 +535,7 @@
             <p style="margin-left: 15px;">{{ section_2.other_hazards.physicochemical }}</p>
             <p><strong>Adverse human health effects and symptoms:</strong></p>
             <p style="margin-left: 15px;">{{ section_2.other_hazards.health }}</p>
-        </div>
-    </div>
-
-<div class="section">
+        <div class="section">
             <div class="section-title">SECTION 3: Composition/information on ingredients</div>
             <div class="subsection-title">3.1. Substances</div>
             <p class="small">Not applicable - this is a mixture.</p>
@@ -598,10 +589,7 @@
             
             <div class="subsection-title">4.3. Indication of any immediate medical attention and special treatment needed</div>
             <p style="margin-left: 15px;">{{ section_4.treatment }}</p>
-        </div>
-    </div>
-
-<div class="section">
+        <div class="section">
             <div class="section-title">SECTION 5: Firefighting measures</div>
             <div class="subsection-title">5.1. Extinguishing media</div>
             <div class="data-row"><div class="data-label w-200">Suitable extinguishing media:</div><div class="data-value">{{ section_5.suitable_media }}</div></div>
@@ -643,10 +631,7 @@
             
             <div class="subsection-title">6.5. Additional information</div>
             <p style="margin-left: 15px;">{{ section_6.additional_info }}</p>
-        </div>
-    </div>
-
-<div class="section">
+        <div class="section">
             <div class="section-title">SECTION 7: Handling and storage</div>
             <div class="subsection-title">7.1. Precautions for safe handling</div>
             <div class="subsubsection">Protective measures</div>
@@ -676,16 +661,16 @@
             <div class="subsection-title">8.1. Control parameters</div>
             <div class="subsubsection">8.1.1. Occupational exposure limit values</div>
             <i>
-            <table class="sds" style="border-collapse: collapse; width: 100%;">
+            <table class="sds">
                 <thead>
-                    <tr><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold; width: 25%;">Limit value type (country of origin)</th><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold; width: 30%;">Substance name</th><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold; width: 45%;">① Long-term occupational exposure limit value<br>② Short-term occupational exposure limit value<br>③ Instantaneous value<br>④ Monitoring and observation processes<br>⑤ Remark</th></tr>
+                    <tr><th>Limit value type (country of origin)</th><th>Substance name</th><th>① Long-term occupational exposure limit value<br>② Short-term occupational exposure limit value<br>③ Instantaneous value<br>④ Monitoring and observation processes<br>⑤ Remark</th></tr>
                 </thead>
                 <tbody>
                     {% for limit in section_8.occupational_exposure_limits %}
                     <tr>
-                        <td style="border: 1px solid #000; padding: 3px 5px;">{{ limit.limit_type }}</td>
-                        <td style="border: 1px solid #000; padding: 3px 5px;"><strong>{{ limit.substance }}</strong><br>CAS No.: {{ limit.cas }}<br>EC No.: {{ limit.ec }}</td>
-                        <td style="border: 1px solid #000; padding: 3px 5px;">
+                        <td>{{ limit.limit_type }}</td>
+                        <td><strong>{{ limit.substance }}</strong><br>CAS No.: {{ limit.cas }}<br>EC No.: {{ limit.ec }}</td>
+                        <td>
                             {% if limit.long_term %}① {{ limit.long_term }}<br>{% endif %}
                             {% if limit.short_term %}② {{ limit.short_term }}<br>{% endif %}
                             {% if limit.remarks %}⑤ {{ limit.remarks }}{% endif %}
@@ -723,10 +708,7 @@
             
             <div class="subsubsection">8.2.3. Environmental exposure controls</div>
             <p style="margin-left: 15px;">{{ section_8.environmental_exposure }}</p>
-        </div>
-    </div>
-
-<div class="section">
+        <div class="section">
             <div class="section-title">SECTION 9: Physical and chemical properties</div>
             <div class="subsection-title">9.1. Information on basic physical and chemical properties</div>
             <div class="subsubsection">Appearance</div>
@@ -764,9 +746,7 @@
             <div class="subsection-title">10.3. Possibility of hazardous reactions</div>
             <p style="margin-left: 15px;">{{ section_10.hazardous_reactions }}</p>
         </div>
-    </div>
-
-<div class="section">
+    <div class="section">
             <div class="subsection-title">10.4. Conditions to avoid</div>
             <p style="margin-left: 15px;">{{ section_10.conditions_to_avoid }}</p>
             <div class="subsection-title">10.5. Incompatible materials</div>
@@ -815,10 +795,7 @@
             <p><strong>STOT-single exposure:</strong> {{ section_11.stot_single }}</p>
             <p><strong>STOT-repeated exposure:</strong> {{ section_11.stot_repeated }}</p>
             <p><strong>Aspiration hazard:</strong> {{ section_11.aspiration_hazard }}</p>
-        </div>
-    </div>
-
-<div class="section">
+        <div class="section">
             <div class="section-title">SECTION 12: Ecological information</div>
 
             <div class="subsection-title">12.1. Toxicity</div>
@@ -826,15 +803,21 @@
             <table class="sds">
                 <tbody>
                     <tr style="background-color: #f2f2f2;">
-                        <td><strong>{{ component.generic_name | default('[Komponentenname]') }}</strong> CAS No.: {{ component.cas_no | default('[CAS]') }} EC No.: {{ component.ec_no | default('[EC]') }}</td>
+                        <td colspan="4"><strong>{{ component.generic_name | default('[Komponentenname]') }}</strong> CAS No.: {{ component.cas_no | default('[CAS]') }} EC No.: {{ component.ec_no | default('[EC]') }}</td>
                     </tr>
                     {% for entry in component.aquatic_toxicity_entries %}
                     <tr>
-                        <td>{{ entry.effect_dose }}: {{ entry.value }} {{ entry.unit }} {{ entry.exposure_time }} ({{ entry.species }}){% if entry.method %} {{ entry.method }}{% endif %}</td>
+                        <td>{{ entry.effect_dose }}: {{ entry.value }} {{ entry.unit }}</td>
+                        <td>{{ entry.exposure_time }}</td>
+                        <td>{{ entry.species }}</td>
+                        <td>{{ entry.method }}</td>
                     </tr>
                     {% else %}
                     <tr>
-                        <td>[No aquatic toxicity data available]</td>
+                        <td>[Wirkung]: [Wert] [Einheit]</td>
+                        <td>[Expositionsdauer]</td>
+                        <td>[Spezies]</td>
+                        <td>[Methode]</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -843,10 +826,13 @@
             <table class="sds">
                 <tbody>
                     <tr style="background-color: #f2f2f2;">
-                        <td><strong>[Komponentenname]</strong> CAS No.: [CAS] EC No.: [EC]</td>
+                        <td colspan="4"><strong>[Komponentenname]</strong> CAS No.: [CAS] EC No.: [EC]</td>
                     </tr>
                     <tr>
-                        <td>[No aquatic toxicity data available]</td>
+                        <td>[Wirkung]: [Wert] [Einheit]</td>
+                        <td>[Expositionsdauer]</td>
+                        <td>[Spezies]</td>
+                        <td>[Methode]</td>
                     </tr>
                 </tbody>
             </table>
@@ -857,10 +843,11 @@
             <table class="sds">
                 <tbody>
                     <tr style="background-color: #f2f2f2;">
-                        <td><strong>{{ component.generic_name | default('[Komponentenname]') }}</strong> CAS No.: {{ component.cas_no | default('[CAS]') }} EC No.: {{ component.ec_no | default('[EC]') }}</td>
+                        <td colspan="2"><strong>{{ component.generic_name | default('[Komponentenname]') }}</strong> CAS No.: {{ component.cas_no | default('[CAS]') }} EC No.: {{ component.ec_no | default('[EC]') }}</td>
                     </tr>
                     <tr>
-                        <td><strong>Biodegradation:</strong> {{ component.biodegradation | default('[Keine Daten]') }}</td>
+                        <td><strong>Biodegradation:</strong></td>
+                        <td>{{ component.biodegradation | default('[Keine Daten]') }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -868,10 +855,11 @@
             <table class="sds">
                 <tbody>
                     <tr style="background-color: #f2f2f2;">
-                        <td><strong>[Komponentenname]</strong> CAS No.: [CAS] EC No.: [EC]</td>
+                        <td colspan="2"><strong>[Komponentenname]</strong> CAS No.: [CAS] EC No.: [EC]</td>
                     </tr>
                     <tr>
-                        <td><strong>Biodegradation:</strong> [Keine Daten]</td>
+                        <td><strong>Biodegradation:</strong></td>
+                        <td>[Keine Daten]</td>
                     </tr>
                 </tbody>
             </table>
@@ -882,50 +870,37 @@
             <table class="sds">
                 <tbody>
                     <tr style="background-color: #f2f2f2;">
-                        <td><strong>{{ component.generic_name | default('[Komponentenname]') }}</strong> CAS No.: {{ component.cas_no | default('[CAS]') }} EC No.: {{ component.ec_no | default('[EC]') }}</td>
+                        <td colspan="2"><strong>{{ component.generic_name | default('[Komponentenname]') }}</strong> CAS No.: {{ component.cas_no | default('[CAS]') }} EC No.: {{ component.ec_no | default('[EC]') }}</td>
                     </tr>
-                    <tr>
-                        <td><strong>Log K<sub>OW</sub>:</strong> {{ component.log_kow | default('[Keine Daten]') }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Bioconcentration factor (BCF):</strong> {{ component.bcf | default('[Keine Daten]') }}</td>
-                    </tr>
+                    <tr><td><strong>Log K<sub>OW</sub>:</strong></td><td>{{ component.log_kow | default('[Keine Daten]') }}</td></tr>
+                    <tr><td><strong>Bioconcentration factor (BCF):</strong></td><td>{{ component.bcf | default('[Keine Daten]') }}</td></tr>
                 </tbody>
             </table>
             {% else %}
             <table class="sds">
                 <tbody>
                     <tr style="background-color: #f2f2f2;">
-                        <td><strong>[Komponentenname]</strong> CAS No.: [CAS] EC No.: [EC]</td>
+                        <td colspan="2"><strong>[Komponentenname]</strong> CAS No.: [CAS] EC No.: [EC]</td>
                     </tr>
-                    <tr>
-                        <td><strong>Log K<sub>OW</sub>:</strong> [Keine Daten]</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Bioconcentration factor (BCF):</strong> [Keine Daten]</td>
-                    </tr>
+                    <tr><td><strong>Log K<sub>OW</sub>:</strong></td><td>[Keine Daten]</td></tr>
+                    <tr><td><strong>Bioconcentration factor (BCF):</strong></td><td>[Keine Daten]</td></tr>
                 </tbody>
             </table>
             {% endfor %}
 
             <div class="subsection-title">12.4. Mobility in soil</div>
-            <table class="sds">
-                <tbody>
-                    <tr>
-                        <td>{{ section_12.mobility_info | default('[Keine Daten zur Mobilität im Boden]') }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <p style="margin-left: 15px;">{{ section_12.mobility_info | default('[Keine Daten zur Mobilität im Boden]') }}</p>
 
             <div class="subsection-title">12.5. Results of PBT and vPvB assessment</div>
             {% for component in section_12.ecotox_components %}
             <table class="sds">
                 <tbody>
                     <tr style="background-color: #f2f2f2;">
-                        <td><strong>{{ component.generic_name | default('[Komponentenname]') }}</strong> CAS No.: {{ component.cas_no | default('[CAS]') }} EC No.: {{ component.ec_no | default('[EC]') }}</td>
+                        <td colspan="2"><strong>{{ component.generic_name | default('[Komponentenname]') }}</strong> CAS No.: {{ component.cas_no | default('[CAS]') }} EC No.: {{ component.ec_no | default('[EC]') }}</td>
                     </tr>
                     <tr>
-                        <td><strong>Results of PBT and vPvB assessment:</strong> {{ component.pbt_result | default('[Keine Daten]') }}</td>
+                        <td><strong>Results of PBT and vPvB assessment:</strong></td>
+                        <td>{{ component.pbt_result | default('[Keine Daten]') }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -933,23 +908,18 @@
             <table class="sds">
                 <tbody>
                     <tr style="background-color: #f2f2f2;">
-                        <td><strong>[Komponentenname]</strong> CAS No.: [CAS] EC No.: [EC]</td>
+                        <td colspan="2"><strong>[Komponentenname]</strong> CAS No.: [CAS] EC No.: [EC]</td>
                     </tr>
                     <tr>
-                        <td><strong>Results of PBT and vPvB assessment:</strong> [Keine Daten]</td>
+                        <td><strong>Results of PBT and vPvB assessment:</strong></td>
+                        <td>[Keine Daten]</td>
                     </tr>
                 </tbody>
             </table>
             {% endfor %}
 
             <div class="subsection-title">12.6. Endocrine disrupting properties</div>
-            <table class="sds">
-                <tbody>
-                    <tr>
-                        <td>{{ section_12.endocrine_disrupting_info | default('[Keine Daten zu endokrinschädigenden Eigenschaften]') }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <p style="margin-left: 15px;">{{ section_12.endocrine_disrupting_info | default('[Keine Daten zu endokrinschädigenden Eigenschaften]') }}</p>
 
             <div class="subsection-title">12.7. Other adverse effects</div>
             <p style="margin-left: 15px;">{{ section_12.other_adverse_effects_info | default('[Keine Daten zu anderen schädlichen Wirkungen]') }}</p>
@@ -959,10 +929,7 @@
             <div class="section-title">SECTION 13: Disposal considerations</div>
             <p>{{ section_13.waste_treatment }}</p>
             <p>{{ section_13.eu_requirements }}</p>
-        </div>
-    </div>
-
-<div class="section">
+        <div class="section">
             <div class="section-title">SECTION 14: Transport information</div>
             <table class="sds">
                 <thead>
@@ -1044,10 +1011,7 @@
                 No specific national legislation information available.
             {% endif %}
             </p>
-        </div>
-    </div>
-
-<div class="section">
+        <div class="section">
             <div class="section-title">SECTION 16: Other information</div>
             <i>
             <div class="subsection-title">16.1. Indication of changes</div>
@@ -1058,13 +1022,10 @@
             </p>
 
             <div class="subsection-title">16.2. Abbreviations and acronyms</div>
-            <table class="sds" style="border-collapse: collapse; width: 100%; font-size: 8pt;">
-                <thead>
-                    <tr><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold; width: 30%;">Abbreviation</th><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold; width: 70%;">Meaning</th></tr>
-                </thead>
+            <table class="sds" style="font-size: 8pt;">
                 <tbody>
                     {% for abbr in other_information.abbreviations %}
-                    <tr><td style="border: 1px solid #000; padding: 3px 5px;">{{ abbr.short }}</td><td style="border: 1px solid #000; padding: 3px 5px;">{{ abbr.long }}</td></tr>
+                    <tr><td>{{ abbr.short }}</td><td>{{ abbr.long }}</td></tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -1074,29 +1035,22 @@
             <p>{{ other_information.literature_references }}</p>
 
             <div class="subsection-title">16.4. Classification for mixtures and used evaluation method according to regulation (EC) No 1272/2008 [CLP]</div>
-            <table class="sds" style="border-collapse: collapse; width: 100%;">
+            <table class="sds">
                 <thead>
-                    <tr><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold; width: 38%;">Hazard classes and hazard categories</th><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold; width: 40%;">Hazard statements</th><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold; width: 22%;">Classification procedure</th></tr>
+                    <tr><th>Hazard classes and hazard categories</th><th>Hazard statements</th><th>Classification procedure</th></tr>
                 </thead>
                 <tbody>
                     {% for item in hazard_identification.clp_classifications %}
-                    <tr><td style="border: 1px solid #000; padding: 3px 5px;">{{ item.clp_hazard_class_category }}</td><td style="border: 1px solid #000; padding: 3px 5px;">H{{ item.clp_hazard_statement_code }}: {{ item.clp_hazard_statement_text }}</td><td style="border: 1px solid #000; padding: 3px 5px;">{{ item.clp_classification_procedure }}</td></tr>
+                    <tr><td>{{ item.clp_hazard_class_category }}</td><td>H{{ item.clp_hazard_statement_code }}: {{ item.clp_hazard_statement_text }}</td><td>{{ item.clp_classification_procedure }}</td></tr>
                     {% endfor %}
                 </tbody>
             </table>
 
             <div class="subsection-title">16.5. List of relevant hazard statements and/or precautionary statements from sections 2 to 15</div>
             <p><strong>Hazard statements</strong></p>
-            <table class="sds" style="border-collapse: collapse; width: 100%;">
-                <thead>
-                    <tr><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold; width: 15%;">Code</th><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold; width: 85%;">Hazard statement</th></tr>
-                </thead>
-                <tbody>
-                    {% for item in hazard_identification.clp_classifications %}
-                    <tr><td style="border: 1px solid #000; padding: 3px 5px;">H{{ item.clp_hazard_statement_code }}</td><td style="border: 1px solid #000; padding: 3px 5px;">{{ item.clp_hazard_statement_text }}</td></tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            {% for item in hazard_identification.clp_classifications %}
+            <div class="data-row"><div class="data-label w-50">H{{ item.clp_hazard_statement_code }}</div><div class="data-value">{{ item.clp_hazard_statement_text }}</div></div>
+            {% endfor %}
 
             <div class="subsection-title">16.6. Training advice</div>
             <p>{{ other_information.training_advice }}</p>
@@ -1105,6 +1059,7 @@
             {% for line in other_information.additional_info_lines %}
             <p>{{ line }}</p>
             {% endfor %}
+            </i>
         </div>
     </div>
 </div>
