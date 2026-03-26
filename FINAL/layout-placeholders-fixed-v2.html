@@ -490,10 +490,10 @@
                         {% elif pictogram == 'GHS09' %}Umweltgefährdend
                         {% endif %}
                     </div>
-                    <div class="signal-word">{{ section_2.labelling.signal_word }}</div>
                 </div>
                 {% endfor %}
             </div>
+            <div class="signal-word">{{ section_2.labelling.signal_word }}</div>
             
             <p><strong>Hazard components for labelling:</strong></p>
             <p style="margin-left: 15px;">{{ section_2.labelling.hazard_components }}</p>
@@ -912,7 +912,7 @@
             <table class="sds">
                 <tbody>
                     <tr>
-                        <td>{{ section_12.mobility_info | default('[Keine Daten zur Mobilität im Boden]') }}</td>
+                        <td>{{ section_12.mobility_info | default('No data available.') }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -946,7 +946,7 @@
             <table class="sds">
                 <tbody>
                     <tr>
-                        <td>{{ section_12.endocrine_disrupting_info | default('[Keine Daten zu endokrinschädigenden Eigenschaften]') }}</td>
+                        <td>{{ section_12.endocrine_disrupting_info | default('No data available.') }}</td>
                     </tr>
                 </tbody>
             </table>

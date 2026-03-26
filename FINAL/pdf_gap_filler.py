@@ -558,6 +558,79 @@ class SDSPDFGapFiller:
     # Section 12: Mobility, Endocrine, Other Adverse Effects
     # ------------------------------------------------------------------
 
+    def extract_section_12_mobility(self) -> str:
+        """
+        Extract Mobility in soil information from Section 12.4.
+
+        Returns a string with mobility data or empty string if not found.
+        """
+        try:
+            # Search on pages where Section 12 is likely to be (pages 7-9, 0-indexed 6-8)
+            text = "\n".join([self._page_text(i) for i in range(6, 9)])
+            
+            # Look for Section 12.4 Mobility in soil
+            m = re.search(
+                r'12\.4\.?\s*Mobility in soil\s*\n(.*?)(?=12\.|SECTION 13|\Z)',
+                text, re.DOTALL | re.IGNORECASE
+            )
+            if m:
+                result = " ".join(m.group(1).split())
+                if result.lower() != "no data available":
+                    return result
+                return "No data available."
+            
+            # Fallback: Try to find any mobility mention
+            m = re.search(
+                r'mobility.*?soil(.*?)(?:12\.|SECTION|\Z)',
+                text, re.DOTALL | re.IGNORECASE
+            )
+            if m:
+                return " ".join(m.group(0).split())
+                
+        except Exception as e:
+            logger.warning(f"Could not extract Section 12.4 mobility: {e}")
+        return ""
+
+    def extract_section_12_endocrine(self) -> str:
+        """
+        Extract Endocrine disrupting properties information from Section 12.6.
+
+        Returns a string with endocrine info or empty string if not found.
+        """
+        try:
+            # Search on pages where Section 12 is likely to be (pages 7-9, 0-indexed 6-8)
+            text = "\n".join([self._page_text(i) for i in range(6, 9)])
+            
+            # Look for Section 12.6 Endocrine disrupting properties
+            m = re.search(
+                r'12\.6\.?\s*Endocrine disrupting properties\s*\n(.*?)(?=12\.|SECTION 13|\Z)',
+                text, re.DOTALL | re.IGNORECASE
+            )
+            if m:
+                result = " ".join(m.group(1).split())
+                if result.lower() != "no data available":
+                    return result
+                return "No data available."
+            
+            # Fallback: Check if there's component-level endocrine info
+            # Search for each component
+            for page_idx in range(6, 9):
+                tables = self._page_tables(page_idx)
+                for table in tables:
+                    if not table or not table[0]:
+                        continue
+                    header_str = " ".join(str(c) for c in table[0] if c).lower()
+                    if 'cas no' in header_str and 'ec no' in header_str:
+                        # This is a component header - check for endocrine info in next rows
+                        for row in table[1:]:
+                            row_text = " ".join(str(c) for c in row if c).lower()
+                            if 'endocrine' in row_text:
+                                return " ".join(str(c) for c in row if c)
+            
+        except Exception as e:
+            logger.warning(f"Could not extract Section 12.6 endocrine: {e}")
+        return ""
+
     def extract_section_12_components(self) -> List[Dict[str, Any]]:
         """
         Extracts detailed component data from tables in Section 12.
