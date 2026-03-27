@@ -308,6 +308,16 @@
         #originalEditor .ql-editor {
             height: 100% !important;
             overflow-y: auto !important;
+            caret-color: black !important;
+        }
+        
+        /* Force cursor color in editors */
+        #richTextEditor, #originalEditor, #modalRichTextEditor, #wysiwygEditor {
+            caret-color: black !important;
+        }
+        
+        #richTextEditor:focus, #originalEditor:focus, #modalRichTextEditor:focus, #wysiwygEditor:focus {
+            caret-color: black !important;
         }
     </style>
     <!-- END: Custom Styles -->
@@ -967,6 +977,69 @@
 
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    <script>
+    // Automatische Import-Session-Integration
+    document.addEventListener('DOMContentLoaded', function() {
+        checkForImportSession();
+    });
+
+    async function checkForImportSession() {
+        try {
+            const response = await fetch('/api/check-import-session');
+            const data = await response.json();
+            
+            if (data.success && data.session_data) {
+                // Datei automatisch laden
+                loadImportedFile(data.session_data);
+                
+                // Session-Datei löschen
+                await fetch('/api/clear-import-session', { method: 'POST' });
+            }
+        } catch (error) {
+            console.log('No import session found or error occurred');
+        }
+    }
+
+    function loadImportedFile(sessionData) {
+        // Dateiinhalt laden und in die UI einfügen
+        fetch(`/uploads/${sessionData.original_filename}`)
+            .then(response => response.text())
+            .then(content => {
+                // Originaldokument laden
+                document.getElementById('originalPreview').srcdoc = content;
+                
+                // Session-Daten setzen (über API)
+                return fetch('/api/set-import-session', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(sessionData)
+                });
+            })
+            .then(() => {
+                // Erfolgsmeldung anzeigen
+                showNotification('Importierte Datei wurde automatisch geladen', 'success');
+            })
+            .catch(error => {
+                console.error('Fehler beim Laden der importierten Datei:', error);
+                showNotification('Fehler beim Laden der importierten Datei', 'error');
+            });
+    }
+
+    function showNotification(message, type) {
+        // Einfache Benachrichtigung anzeigen
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
+            type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+        }`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 5000);
+    }
+    </script>
     <script>
         async function uploadBulkFile() {
             const fileInput = document.getElementById('bulkFileInput');
