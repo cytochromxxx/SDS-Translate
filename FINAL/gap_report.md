@@ -1,16 +1,16 @@
 # SDS Gap Report
 
 **File**: Mycoplasma Off™
-**Generated**: 2026-03-26 18:56:49
-**Overall Completeness**: 93.5%
+**Generated**: 2026-03-27 08:07:00
+**Overall Completeness**: 96.8%
 **Status**: ⚠️ WARNING
 
 ## Summary
 - Total Fields: 31
-- Present: 29 (93.5%)
-- Missing: 2 (6.5%)
+- Present: 30 (96.8%)
+- Missing: 1 (3.2%)
 - Critical Gaps: 0
-- Warnings: 2
+- Warnings: 1
 
 ## Section Details
 
@@ -47,9 +47,8 @@
 ### ✅ Section 11: Toxicological Information (100.0%)
 - All required fields present.
 
-### ⚠️ Section 12: Ecological Information (33.3%)
+### ⚠️ Section 12: Ecological Information (66.7%)
 - ⚠️ Missing (recommended): mobility_info
-- ⚠️ Missing (recommended): endocrine_disrupting_info
 
 ### ✅ Section 13: Disposal (100.0%)
 - All required fields present.
@@ -65,4 +64,3 @@
 
 ## Warnings
 - ⚠️ Section 12: mobility_info
-- ⚠️ Section 12: endocrine_disrupting_info

@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, session, jsonify, request, send_file, current_app, make_response
 import os
+import json
 from werkzeug.utils import secure_filename
 from sds_translator_v4 import SDSTranslator
 from database import get_db_path
@@ -906,4 +907,66 @@ def save_mappings():
             json.dump(mappings, f, indent=2, ensure_ascii=False)
         return jsonify({'success': True})
     except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+
+@main_bp.route('/api/check-import-session', methods=['GET'])
+def check_import_session():
+    """Prüft, ob eine Import-Session existiert"""
+    session_file = os.path.join(current_app.config['UPLOAD_FOLDER'], 'import_session.json')
+    
+    # DEBUG: Logging hinzufügen
+    print(f"DEBUG: Checking for session file at: {session_file}")
+    print(f"DEBUG: UPLOAD_FOLDER config: {current_app.config.get('UPLOAD_FOLDER', 'NOT_SET')}")
+    print(f"DEBUG: File exists: {os.path.exists(session_file)}")
+    
+    if os.path.exists(session_file):
+        try:
+            with open(session_file, 'r', encoding='utf-8') as f:
+                session_data = json.load(f)
+            print(f"DEBUG: Session data loaded: {session_data}")
+            return jsonify({'success': True, 'session_data': session_data})
+        except Exception as e:
+            print(f"DEBUG: Error reading session file: {e}")
+            return jsonify({'success': False, 'error': str(e)})
+    else:
+        print(f"DEBUG: Session file not found")
+        return jsonify({'success': False, 'message': 'No import session found'})
+
+@main_bp.route('/api/set-import-session', methods=['POST'])
+def set_import_session():
+    """Setzt die Session-Daten für die importierte Datei"""
+    data = request.json
+    
+    # DEBUG: Logging hinzufügen
+    print(f"DEBUG: Setting import session with data: {data}")
+    print(f"DEBUG: uploaded_file: {data.get('uploaded_file')}")
+    print(f"DEBUG: original_filename: {data.get('original_filename')}")
+    print(f"DEBUG: is_xml_import: {data.get('is_xml_import')}")
+    
+    session['uploaded_file'] = data.get('uploaded_file')
+    session['original_filename'] = data.get('original_filename')
+    session['is_xml_import'] = data.get('is_xml_import', True)
+    
+    print(f"DEBUG: Session set successfully")
+    return jsonify({'success': True})
+
+@main_bp.route('/api/clear-import-session', methods=['POST'])
+def clear_import_session():
+    """Löscht die temporäre Session-Datei"""
+    session_file = os.path.join(current_app.config['UPLOAD_FOLDER'], 'import_session.json')
+    
+    # DEBUG: Logging hinzufügen
+    print(f"DEBUG: Clearing import session file at: {session_file}")
+    print(f"DEBUG: File exists before deletion: {os.path.exists(session_file)}")
+    
+    try:
+        if os.path.exists(session_file):
+            os.remove(session_file)
+            print(f"DEBUG: Session file deleted successfully")
+        else:
+            print(f"DEBUG: Session file did not exist")
+        return jsonify({'success': True})
+    except Exception as e:
+        print(f"DEBUG: Error deleting session file: {e}")
         return jsonify({'success': False, 'error': str(e)})

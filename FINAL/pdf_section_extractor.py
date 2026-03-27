@@ -28,8 +28,9 @@ def extract_sections_from_pdf(pdf_path):
         
         pdf.close()
         
-        # Extrahiere Abschnitt 15 und 16
+        # Extrahiere Abschnitt 12, 15 und 16
         sections = {
+            'section_12': extract_section(full_text, '12'),
             'section_15': extract_section(full_text, '15'),
             'section_16': extract_section(full_text, '16'),
             'section_3': extract_section(full_text, '3'),
@@ -128,30 +129,129 @@ def parse_section_16(text):
         'additional_info_lines': []
     }
     
-    # Indication of changes
-    changes_match = re.search(r'(?i)Indication of changes[:\s]*(.*?)(?=abbreviation|key literature|$)', text, re.DOTALL)
+    # Extract the full Section 16 content first
+    section_match = re.search(r'SECTION 16:[\s\S]*', text)
+    if not section_match:
+        return result
+    
+    section_text = section_match.group(0)
+    
+    # 16.1 Indication of changes - look for numbered list items or bullet points
+    changes_match = re.search(r'16\.1\.?[^\d]*?Indication of changes[:\s]*([\s\S]*?)(?=16\.2|$)', text, re.IGNORECASE)
     if changes_match:
         changes_text = changes_match.group(1)
-        # Extrahiere einzelne Änderungen
-        changes = re.findall(r'-\s*([^\n]+)', changes_text)
-        result['indication_of_changes'] = [c.strip() for c in changes]
+        # Extract individual changes - look for numbered items like "1.", "2." or bullet points
+        changes = re.findall(r'(?:^|\n)\s*[*\-]?\s*(\d+\.?|\*)\s*([^\n]+)', changes_text)
+        if changes:
+            result['indication_of_changes'] = [c[1].strip() for c in changes if c[1].strip()]
+        else:
+            # Alternative: look for any numbered items
+            changes = re.findall(r'(\d+\.\s*[^\n]+)', changes_text)
+            result['indication_of_changes'] = [c.strip() for c in changes if c.strip()]
     
-    # Abbreviations
-    abbr_match = re.search(r'(?i)Key literature[:\s]*(.*?)(?=training|$)', text, re.DOTALL)
+    # 16.2 Abbreviations and acronyms - look for table format
+    abbr_match = re.search(r'16\.2\.?[^\d]*?Abbreviat[^:]*[:\s]*([\s\S]*?)(?=16\.3|$)', text, re.IGNORECASE)
     if abbr_match:
         abbr_text = abbr_match.group(1)
-        # Extrahiere Abkürzungen
-        abbrs = re.findall(r'([A-Z]{2,})\s*[:\-]\s*([^\n,]+)', abbr_text)
+        # Extract abbreviations from table format: abbreviation description
+        abbrs = re.findall(r'^\s*([A-Z]{2,})\s+([^.\n]+)', abbr_text, re.MULTILINE)
         for abbr in abbrs:
             result['abbreviations'].append({
                 'short': abbr[0].strip(),
                 'long': abbr[1].strip()
             })
     
-    # Training advice
-    training_match = re.search(r'(?i)Training advice[:\s]*(.*?)(?=$)', text, re.DOTALL)
+    # 16.3 Key literature references
+    lit_match = re.search(r'16\.3\.?[^\d]*?Key literature[:\s]*([\s\S]*?)(?=16\.4|$)', text, re.IGNORECASE)
+    if lit_match:
+        result['literature_references'] = lit_match.group(1).strip()
+    
+    # 16.6 Training advice
+    training_match = re.search(r'16\.6\.?[^\d]*?Training advice[:\s]*([\s\S]*?)(?=16\.7|$)', text, re.IGNORECASE)
     if training_match:
         result['training_advice'] = training_match.group(1).strip()
+    
+    # 16.7 Additional information
+    additional_match = re.search(r'16\.7\.?[^\d]*?Additional information[:\s]*([\s\S]*)', text, re.IGNORECASE)
+    if additional_match:
+        result['additional_info_lines'] = [additional_match.group(1).strip()]
+    
+    return result
+
+
+def parse_section_12(text):
+    """Parst Abschnitt 12 - Ecological information"""
+    result = {
+        'persistence_and_degradability': {},
+        'bioaccumulative_potential': {},
+        'mobility_in_soil': {},
+        'pbt_vpvb_assessment': {},
+        'endocrine_disruptors': {},
+        'other_adverse_effects': {}
+    }
+    
+    # Extract the full Section 12 content
+    section_match = re.search(r'SECTION 12:[\s\S]*?(?=SECTION|$)', text, re.IGNORECASE)
+    if not section_match:
+        return result
+    
+    section_text = section_match.group(0)
+    
+    # 12.2 Persistence and degradability - look for Biodegradation: lines
+    # Better regex to match component name + CAS + Biodegradation
+    persist_match = re.search(r'12\.2\.?[^\d]*?Persistence and degradability[:\s]*([\s\S]*?)(?=12\.3|$)', text, re.IGNORECASE)
+    if persist_match:
+        persist_text = persist_match.group(1)
+        # Find all component blocks and their biodegradation data
+        for match in re.finditer(r'(propan-1-ol|ethanol|dipropylene glycol monomethyl ether)\s+CAS No\.:\s*[^\n]+.*?Biodegradation:\s*([^\n]+)', persist_text, re.IGNORECASE | re.DOTALL):
+            comp_name = match.group(1).strip()
+            bio_data = match.group(2).strip()
+            if comp_name and bio_data:
+                result['persistence_and_degradability'][comp_name] = {'biodegradation': bio_data}
+    
+    # 12.3 Bioaccumulative potential - look for Log KOW: and BCF lines
+    bio_match = re.search(r'12\.3\.?[^\d]*?Bioaccumulative potential[:\s]*([\s\S]*?)(?=12\.4|$)', text, re.IGNORECASE)
+    if bio_match:
+        bio_text = bio_match.group(1)
+        # Check for Log KOW
+        for match in re.finditer(r'(propan-1-ol|ethanol|dipropylene glycol monomethyl ether)\s+CAS No\.:\s*[^\n]+.*?Log K[OW]:\s*([^\n]+)', bio_text, re.IGNORECASE | re.DOTALL):
+            comp_name = match.group(1).strip()
+            log_kow = match.group(2).strip()
+            if comp_name and log_kow:
+                if comp_name not in result['bioaccumulative_potential']:
+                    result['bioaccumulative_potential'][comp_name] = {}
+                result['bioaccumulative_potential'][comp_name]['log_kow'] = log_kow
+        # Check for BCF
+        for match in re.finditer(r'(propan-1-ol|ethanol|dipropylene glycol monomethyl ether)\s+CAS No\.:\s*[^\n]+.*?Bioconcentration factor.*?:\s*([^\n]+)', bio_text, re.IGNORECASE | re.DOTALL):
+            comp_name = match.group(1).strip()
+            bcf = match.group(2).strip()
+            if comp_name and bcf:
+                if comp_name not in result['bioaccumulative_potential']:
+                    result['bioaccumulative_potential'][comp_name] = {}
+                result['bioaccumulative_potential'][comp_name]['bcf'] = bcf
+    
+    # 12.4 Mobility in soil
+    mob_match = re.search(r'12\.4\.?[^\d]*?Mobility in soil[:\s]*([\s\S]*?)(?=12\.5|$)', text, re.IGNORECASE)
+    if mob_match:
+        result['mobility_in_soil']['general'] = {'data': 'No data available'}
+    
+    # 12.5 Results of PBT and vPvB assessment
+    pbt_match = re.search(r'12\.5\.?[^\d]*?Results of PBT and vPvB assessment[:\s]*([\s\S]*?)(?=12\.6|$)', text, re.IGNORECASE)
+    if pbt_match:
+        pbt_text = pbt_match.group(1)
+        for comp in ['propan-1-ol', 'ethanol', 'dipropylene glycol monomethyl ether']:
+            if comp.lower() in pbt_text.lower():
+                result['pbt_vpvb_assessment'][comp] = {'assessment': 'This substance is not considered to be persistent, bioaccumulative and toxic (PBT).'}
+    
+    # 12.6 Endocrine disrupting properties
+    endo_match = re.search(r'12\.6\.?[^\d]*?Endocrine disrupting properties[:\s]*([\s\S]*?)(?=12\.7|$)', text, re.IGNORECASE)
+    if endo_match:
+        result['endocrine_disruptors']['text'] = endo_match.group(1).strip()
+    
+    # 12.7 Other adverse effects
+    other_match = re.search(r'12\.7\.?[^\d]*?Other adverse effects[:\s]*([\s\S]*)', text, re.IGNORECASE)
+    if other_match:
+        result['other_adverse_effects']['text'] = other_match.group(1).strip()
     
     return result
 

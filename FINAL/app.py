@@ -58,7 +58,12 @@ app.jinja_env.filters['pad'] = jinja_pad_filter
 
 app.secret_key = get_secret_key()
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-app.config['UPLOAD_FOLDER'] = tempfile.gettempdir()
+app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
+
+# Ensure uploads directory exists
+uploads_path = app.config['UPLOAD_FOLDER']
+if not os.path.exists(uploads_path):
+    os.makedirs(uploads_path)
 
 # --- Import checks ---
 try:
@@ -126,6 +131,14 @@ def serve_logo():
     if os.path.exists('mb_logo.svg'):
         return send_file('mb_logo.svg', mimetype='image/svg+xml')
     return "Logo not found", 404
+
+# --- Uploaded Files Route ---
+@app.route('/uploads/<path:filename>')
+def serve_upload(filename):
+    """Serve files from the uploads directory"""
+    from flask import send_from_directory
+    upload_folder = app.config.get('UPLOAD_FOLDER', 'uploads')
+    return send_from_directory(upload_folder, filename)
 
 
 if __name__ == '__main__':

@@ -54,6 +54,120 @@ def import_sds_to_html(
             logger.error("XML parsing resulted in empty data.")
             return "", None
         logger.info(f"XML parsed successfully. Keys: {list(sds_data.keys())}")
+        
+        # 1b. Fill Section 12 and 16 gaps from PDF if available
+        if pdf_path and os.path.exists(pdf_path):
+            try:
+                from pdf_section_extractor import extract_sections_from_pdf, parse_section_16, parse_section_12
+                pdf_sections = extract_sections_from_pdf(pdf_path)
+                
+                # Fill Section 16 gaps from PDF
+                if pdf_sections and pdf_sections.get('section_16'):
+                    section_16_data = parse_section_16(pdf_sections.get('section_16', ''))
+                    
+                    # Merge Section 16 data from PDF into sds_data
+                    if 'other_information' not in sds_data:
+                        sds_data['other_information'] = {}
+                    
+                    # Fill in missing fields from PDF
+                    if not sds_data['other_information'].get('indication_of_changes') and section_16_data.get('indication_of_changes'):
+                        sds_data['other_information']['indication_of_changes'] = section_16_data['indication_of_changes']
+                    
+                    if not sds_data['other_information'].get('abbreviations') and section_16_data.get('abbreviations'):
+                        sds_data['other_information']['abbreviations'] = section_16_data['abbreviations']
+                    
+                    if not sds_data['other_information'].get('literature_references') and section_16_data.get('literature_references'):
+                        sds_data['other_information']['literature_references'] = section_16_data['literature_references']
+                    
+                    if not sds_data['other_information'].get('training_advice') and section_16_data.get('training_advice'):
+                        sds_data['other_information']['training_advice'] = section_16_data['training_advice']
+                    
+                    if not sds_data['other_information'].get('additional_info_lines') and section_16_data.get('additional_info_lines'):
+                        sds_data['other_information']['additional_info_lines'] = section_16_data['additional_info_lines']
+                    
+                    logger.info(f"Section 16 gaps filled from PDF")
+                
+                # Fill Section 12 gaps from PDF
+                if pdf_sections and pdf_sections.get('section_12'):
+                    section_12_data = parse_section_12(pdf_sections.get('section_12', ''))
+                    
+                    # Merge Section 12 data from PDF into sds_data
+                    if 'section_12' not in sds_data:
+                        sds_data['section_12'] = {}
+                    
+                    # 12.2 Persistence and degradability
+                    if section_12_data.get('persistence_and_degradability'):
+                        # Add biodegradation data to existing components
+                        bio_data = section_12_data['persistence_and_degradability']
+                        for comp_name, comp_data in bio_data.items():
+                            # Find or create component in ecotox_components
+                            found = False
+                            for comp in sds_data['section_12'].get('ecotox_components', []):
+                                if comp.get('generic_name') and comp_name.lower() in comp.get('generic_name', '').lower():
+                                    comp['biodegradation'] = comp_data.get('biodegradation', '')
+                                    found = True
+                                    break
+                            if not found:
+                                # Create new component entry
+                                if 'ecotox_components' not in sds_data['section_12']:
+                                    sds_data['section_12']['ecotox_components'] = []
+                                sds_data['section_12']['ecotox_components'].append({
+                                    'generic_name': comp_name,
+                                    'biodegradation': comp_data.get('biodegradation', '')
+                                })
+                    
+                    # 12.3 Bioaccumulative potential - add log_kow and bcf to components
+                    if section_12_data.get('bioaccumulative_potential'):
+                        bio_data = section_12_data['bioaccumulative_potential']
+                        logger.info(f"Bioaccumulative data from PDF: {bio_data}")
+                        for comp_name, comp_data in bio_data.items():
+                            # Try multiple matching strategies
+                            found = False
+                            for comp in sds_data['section_12'].get('ecotox_components', []):
+                                comp_generic = comp.get('generic_name', '').lower()
+                                comp_name_lower = comp_name.lower()
+                                
+                                # Check for various match patterns
+                                if (comp_name_lower in comp_generic or 
+                                    comp_generic in comp_name_lower or
+                                    (comp_name_lower == 'propan-1-ol' and 'propan' in comp_generic) or
+                                    (comp_name_lower == 'ethanol' and 'ethanol' in comp_generic) or
+                                    (comp_name_lower == 'dipropylene glycol monomethyl ether' and 'dipropylene' in comp_generic)):
+                                    
+                                    if comp_data.get('log_kow'):
+                                        comp['log_kow'] = comp_data['log_kow']
+                                        logger.info(f"Added log_kow {comp_data['log_kow']} to {comp.get('generic_name')}")
+                                    if comp_data.get('bcf'):
+                                        comp['bcf'] = comp_data['bcf']  # Use 'bcf' not 'bioconcentration_factor'
+                                        logger.info(f"Added BCF {comp_data['bcf']} to {comp.get('generic_name')}")
+                                    found = True
+                                    break
+                    
+                    # 12.4 Mobility in soil
+                    if section_12_data.get('mobility_in_soil'):
+                        mobility_text = '; '.join([v.get('data', '') for v in section_12_data['mobility_in_soil'].values()])
+                        if mobility_text:
+                            sds_data['section_12']['mobility_info'] = mobility_text
+                    
+                    # 12.5 Results of PBT and vPvB assessment
+                    if section_12_data.get('pbt_vpvb_assessment'):
+                        pbt_text = '; '.join([v.get('assessment', '') for v in section_12_data['pbt_vpvb_assessment'].values()])
+                        if pbt_text:
+                            sds_data['section_12']['pbt_vpvb_info'] = pbt_text
+                    
+                    # 12.6 Endocrine disrupting properties
+                    if section_12_data.get('endocrine_disruptors') and section_12_data['endocrine_disruptors'].get('text'):
+                        sds_data['section_12']['endocrine_disrupting_info'] = section_12_data['endocrine_disruptors']['text']
+                    
+                    # 12.7 Other adverse effects
+                    if section_12_data.get('other_adverse_effects') and section_12_data['other_adverse_effects'].get('text'):
+                        sds_data['section_12']['other_adverse_effects_info'] = section_12_data['other_adverse_effects']['text']
+                    
+                    logger.info(f"Section 12 gaps filled from PDF")
+                    
+            except Exception as e:
+                logger.warning(f"Could not fill gaps from PDF: {e}")
+                
     except Exception as e:
         logger.error(f"Failed to parse XML file {xml_path}: {e}", exc_info=True)
         return "", None
@@ -142,6 +256,57 @@ if __name__ == '__main__':
             with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
                 f.write(final_html)
             print(f"Import successful. Output written to '{OUTPUT_FILE}'")
+
+            # NEW: Copy to uploads folder and create session data for UI integration
+            import shutil
+            import json
+            from datetime import datetime
+            
+            upload_folder = 'uploads'
+            if not os.path.exists(upload_folder):
+                os.makedirs(upload_folder)
+
+            # NEW: Try to fill gaps from PDF for Section 16 if PDF exists
+            if pdf and os.path.exists(pdf):
+                try:
+                    from pdf_section_extractor import extract_sections_from_pdf, parse_section_16
+                    print(f"Extracting Section 16 from PDF for gap-filling...")
+                    
+                    pdf_sections = extract_sections_from_pdf(pdf)
+                    if pdf_sections and pdf_sections.get('section_16'):
+                        section_16_data = parse_section_16(pdf_sections.get('section_16', ''))
+                        print(f"Section 16 data extracted from PDF: {list(section_16_data.keys())}")
+                        
+                        # Save the PDF section 16 data for later use
+                        pdf_gap_data = {
+                            'section_16': section_16_data
+                        }
+                        pdf_gap_file = os.path.join(upload_folder, 'pdf_gap_data.json')
+                        with open(pdf_gap_file, 'w', encoding='utf-8') as f:
+                            json.dump(pdf_gap_data, f, indent=2, ensure_ascii=False)
+                        print(f"PDF gap data saved to '{pdf_gap_file}'")
+                except Exception as e:
+                    print(f"Warning: Could not extract Section 16 from PDF: {e}")
+
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            uploaded_filename = f"imported_{timestamp}.html"
+            uploaded_filepath = os.path.join(upload_folder, uploaded_filename)
+
+            shutil.copy(OUTPUT_FILE, uploaded_filepath)
+
+            session_data = {
+                "uploaded_file": uploaded_filepath.replace('\\', '/'),
+                "original_filename": uploaded_filename,
+                "is_xml_import": True,
+                "import_timestamp": timestamp
+            }
+
+            session_file = os.path.join(upload_folder, "import_session.json")
+            with open(session_file, 'w', encoding='utf-8') as f:
+                json.dump(session_data, f, indent=2)
+
+            print(f"Session data saved to '{session_file}'")
+            print("The file will be automatically loaded in the UI.")
         else:
             print("Import failed. Check logs for details.")
 
