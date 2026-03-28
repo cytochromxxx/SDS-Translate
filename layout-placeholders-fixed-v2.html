@@ -433,7 +433,7 @@
                 </thead>
                 <tbody>
                     {% for statement in section_2.labelling.hazard_statements %}
-                    <tr><td>H{{ statement.code|string|pad(3, '0', true) }}</td><td>{{ statement.text }}</td></tr>
+                    <tr><td>H{{ "%03d" % statement.code|int if statement.code|int else statement.code }}</td><td>{{ statement.text }}</td></tr>
                     {% endfor %}
                 </tbody>
             </table>
