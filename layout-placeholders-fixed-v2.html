@@ -666,30 +666,26 @@
             <div class="section-title">SECTION 8: Exposure controls/personal protection</div>
             <div class="subsection-title">8.1. Control parameters</div>
             <div class="subsubsection">8.1.1. Occupational exposure limit values</div>
+            {% if section_8.occupational_exposure_limits and section_8.occupational_exposure_limits|length > 0 %}
             <i>
             <table class="sds">
                 <thead>
                     <tr><th>Limit value type (country of origin)</th><th>Substance name</th><th>① Long-term occupational exposure limit value<br>② Short-term occupational exposure limit value<br>③ Instantaneous value<br>④ Monitoring and observation processes<br>⑤ Remark</th></tr>
                 </thead>
                 <tbody>
+                    {% for limit in section_8.occupational_exposure_limits %}
                     <tr>
-                        <td>TRGS 900 (DE)<br>from 29 Mar 2019</td>
-                        <td>ethanol<br>CAS No.: 64-17-5<br>EC No.: 200-578-6</td>
-                        <td>① 200 ppm (380 mg/m³)<br>② 800 ppm (1,520 mg/m³)<br>⑤ DFG, Y</td>
+                        <td>{{ limit.type }}</td>
+                        <td>{{ limit.name }}</td>
+                        <td>{{ limit.values }}</td>
                     </tr>
-                    <tr>
-                        <td>IOELV (EU)</td>
-                        <td>Dipropylene glycol monomethyl ether<br>CAS No.: 34590-94-8<br>EC No.: 252-104-2</td>
-                        <td>① 50 ppm (308 mg/m³)<br>⑤ (may be absorbed through the skin)</td>
-                    </tr>
-                    <tr>
-                        <td>TRGS 900 (DE)</td>
-                        <td>Dipropylene glycol monomethyl ether<br>CAS No.: 34590-94-8<br>EC No.: 252-104-2</td>
-                        <td>① 50 ppm (310 mg/m³)<br>② 50 ppm (310 mg/m³)<br>⑤ (Aerosol und Dampf) DFG, EU, 11</td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
             </i>
+            {% else %}
+            <p>No occupational exposure limit values available.</p>
+            {% endif %}
             <p>{{ section_8.control_parameters }}</p>
             
             <div class="subsection-title">8.2. Exposure controls</div>

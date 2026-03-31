@@ -199,12 +199,16 @@ class NewSDScomParser:
         return {'safe_handling': get_all_text_from_nodes(section, 'SafeHandling/HandlingPrecautions'), 'fire_prevention': get_all_text_from_nodes(section, 'SafeHandling/PrecautionaryMeasures/MeasuresToPreventFire'), 'occupational_hygiene': get_all_text_from_nodes(section, 'SafeHandling/GeneralOccupationalHygiene'), 'storage_conditions': get_all_text_from_nodes(section, 'ConditionsForSafeStorage/TechnicalMeasuresAndStorageConditions'), 'storage_rooms': get_all_text_from_nodes(section, 'ConditionsForSafeStorage/RequirementsForStorageRoomsAndVessels'), 'storage_assembly': get_all_text_from_nodes(section, 'ConditionsForSafeStorage/HintsOnStorageAssembly'), 'specific_end_use': get_text(section, 'SpecificEndUses')}
 
     def _parse_section_8(self, section: etree._Element) -> Dict:
-        # This data is not in the XML for this file, so it's hardcoded to match the PDF.
-        oel_limits = [
-            {'type': 'TRGS 900 (DE)', 'name': 'ethanol<br>CAS No.: 64-17-5<br>EC No.: 200-578-6', 'values': '① 200 ppm (380 mg/m³)<br>② 800 ppm (1,520 mg/m³)<br>⑤ DFG, Y'},
-            {'type': 'IOELV (EU)', 'name': 'Dipropylene glycol monomethyl ether<br>CAS No.: 34590-94-8<br>EC No.: 252-104-2', 'values': '① 50 ppm (308 mg/m³)<br>⑤ (may be absorbed through the skin)'},
-            {'type': 'TRGS 900 (DE)', 'name': 'Dipropylene glycol monomethyl ether<br>CAS No.: 34590-94-8<br>EC No.: 252-104-2', 'values': '① 50 ppm (310 mg/m³)<br>② 50 ppm (310 mg/m³)<br>⑤ (Aerosol und Dampf) DFG, EU, 11'}
-        ]
+        oel_limits = []
+        limit_nodes = section.xpath('.//*[local-name()="OccupationalExposureLimit"]')
+        if limit_nodes:
+            for node in limit_nodes:
+                oel_limits.append({
+                    'type': get_text(node, 'LimitType'),
+                    'name': get_text(node, 'SubstanceName'),
+                    'values': get_text(node, 'LimitValue')
+                })
+
         return {
             'occupational_exposure_limits': oel_limits,
             'control_parameters_comments': get_all_text_from_nodes(section, 'ControlParameters'),
