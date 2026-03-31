@@ -1031,7 +1031,17 @@
             <p><strong>National regulations (Germany):</strong><br>
             {% if section_15.national_legislation %}
                 {% for item in section_15.national_legislation %}
-                    <strong>{{ item.label }}:</strong> {{ item.value }}<br>
+                    {% if item.label == 'Restrictionsofoccupation' %}
+                        <strong>Restrictions of occupation:</strong> {{ item.value }}<br>
+                    {% elif item.label == 'Waterhazardclass' %}
+                        <strong>Water hazard class:</strong> {{ item.value }}<br>
+                    {% elif item.label == 'Storageclass' %}
+                        <strong>Storage class:</strong> {{ item.value }}<br>
+                    {% elif item.label == 'Giscode' %}
+                        <strong>GIS code:</strong> {{ item.value }}<br>
+                    {% else %}
+                        <strong>Additional information:</strong> {{ item.value }}<br>
+                    {% endif %}
                 {% endfor %}
             {% else %}
                 No specific national legislation information available.

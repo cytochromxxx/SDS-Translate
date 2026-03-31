@@ -313,7 +313,9 @@ class NewSDScomParser:
 
     def _parse_section_15(self, section: etree._Element) -> Dict:
         national_legislation = []
-        national_legislation_node = self._xpath_single(section, "NationalLegislationGermany")
+        national_legislation_nodes = section.xpath('.//*[local-name()="NationalLegislationGermany"]')
+        national_legislation_node = national_legislation_nodes[0] if national_legislation_nodes else None
+
         if national_legislation_node is not None:
             for elem in national_legislation_node:
                 text = ' '.join(elem.itertext()).strip()
@@ -321,7 +323,13 @@ class NewSDScomParser:
                     tag_name = elem.tag.split('}')[-1] if '}' in elem.tag else elem.tag
                     label = ' '.join(tag_name.replace('_', ' ').split()).title()
                     national_legislation.append({'label': label, 'value': text})
-        return {'eu_legislation': get_text(section, 'SpecificProvisionsRelatedToProduct/EuLegislation'),'national_legislation': national_legislation,'wgk': get_text(national_legislation_node, 'WaterHazardClass/Class'),'storage_class': get_text(national_legislation_node, 'StorageClass')}
+
+        return {
+            'eu_legislation': get_text(section, 'SpecificProvisionsRelatedToProduct/EuLegislation'),
+            'national_legislation': national_legislation,
+            'wgk': get_text(national_legislation_node, 'WaterHazardClass/Class'),
+            'storage_class': get_text(national_legislation_node, 'StorageClass')
+        }
 
     def _parse_section_16(self, section: etree._Element) -> Dict:
         abbreviations = []
