@@ -262,7 +262,25 @@
         .content {
             margin-top: 5mm;
         }
+
+        /* Paged.js Screen Preview Adjustments */
+        @media screen {
+            body {
+                background-color: #e5e5e5;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 20px 0;
+            }
+            .pagedjs_page {
+                background-color: white;
+                box-shadow: 0 0 10px rgba(0,0,0,0.2);
+                margin: 0 auto 20px auto;
+                flex: none;
+            }
+        }
     </style>
+    <script src="https://unpkg.com/pagedjs/dist/js/paged.polyfill.js"></script>
 </head>
 <body>
 
