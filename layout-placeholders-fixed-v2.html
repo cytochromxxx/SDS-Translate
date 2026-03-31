@@ -439,7 +439,11 @@
             </table>
             
             <p><strong>Supplemental hazard information:</strong></p>
+            {% if section_2.labelling.supplemental_hazard_info %}
+            <p style="margin-left: 15px;">{{ section_2.labelling.supplemental_hazard_info }}</p>
+            {% else %}
             <!-- SUPPLEMENTAL_HAZARD_INFO_PLACEHOLDER -->
+            {% endif %}
             
             <p><strong>Precautionary statements Prevention</strong></p>
             <table class="sds">

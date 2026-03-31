@@ -129,15 +129,38 @@ class NewSDScomParser:
         }
 
     def _parse_section_2(self, section: etree._Element) -> Dict[str, Any]:
-        labelling = self._xpath_single(section, "ClpLabellingInfo")
+        labelling = section.xpath('.//*[local-name()="ClpLabellingInfo"]')
+        labelling = labelling[0] if labelling else None
         clp_classifications = [{'clp_hazard_class_category': get_text(c, 'ClpHazardClassCategory'), 'clp_hazard_statement_code': get_text(c, 'ClpHazardStatement/PhraseCode'), 'clp_hazard_statement_text': get_all_text_from_nodes(c, 'ClpHazardStatement/FullText'), 'clp_classification_procedure': get_all_text_from_nodes(c, 'ClpClassificationProcedure/FullText')} for c in section.xpath('.//*[local-name()="ClpHazardClassification"]')]
+
+        precautionary_statements_prevention = []
+        precautionary_statements_response = []
+
+        if labelling is not None:
+            for s in labelling.xpath(".//*[local-name()='ClpPrecautionaryStatement']"):
+                codes = get_all_texts(s, 'PhraseCode')
+                if codes:
+                    code = codes[0]
+                    prefix = "" if code.startswith('P') else "P"
+                    if code.startswith('P2') or code.startswith('2'):
+                        precautionary_statements_prevention.append(f"{prefix}{code} " + get_all_text_from_nodes(s, 'FullText'))
+                    elif code.startswith('P3') or code.startswith('3'):
+                        precautionary_statements_response.append(f"{prefix}{code} " + get_all_text_from_nodes(s, 'FullText'))
+                    elif code.startswith('P4') or code.startswith('4'):
+                        precautionary_statements_response.append(f"{prefix}{code} " + get_all_text_from_nodes(s, 'FullText'))
+                    elif code.startswith('P5') or code.startswith('5'):
+                        precautionary_statements_response.append(f"{prefix}{code} " + get_all_text_from_nodes(s, 'FullText'))
+
+        supplemental_hazard_info = get_all_text_from_nodes(labelling, 'ClpSupplementalHazardInformation/FullText')
+
         return {
             'hazard_identification': {'clp_classifications': clp_classifications},
             'classification': [{'category': get_text(c, 'ClpHazardClassCategory'), 'statement': get_all_text_from_nodes(c, 'ClpHazardStatement/FullText'), 'code': get_text(c, 'ClpHazardStatement/PhraseCode'), 'procedure': get_all_text_from_nodes(c, 'ClpClassificationProcedure/FullText')} for c in section.xpath('.//*[local-name()="ClpHazardClassification"]')],
             'labelling': {
                 'pictograms': get_all_texts(labelling, 'ClpHazardPictogram/PhraseCode'), 'signal_word': get_text(labelling, 'ClpSignalWord/FullText'), 'hazard_components': 'propan-1-ol',
                 'hazard_statements': [{'code': get_text(s, 'PhraseCode'), 'text': get_all_text_from_nodes(s, 'FullText')} for s in labelling.xpath('.//*[local-name()="ClpHazardStatement"]')] if labelling is not None else [],
-                'precautionary_statements': {'prevention': [get_all_text_from_nodes(s, 'FullText') for s in labelling.xpath(".//*[local-name()='ClpPrecautionaryStatement']") if get_text(s, 'PhraseCode').startswith('P2')] if labelling is not None else [], 'response': [get_all_text_from_nodes(s, 'FullText') for s in labelling.xpath(".//*[local-name()='ClpPrecautionaryStatement']") if get_text(s, 'PhraseCode').startswith('P3')] if labelling is not None else []}
+                'precautionary_statements': {'prevention': precautionary_statements_prevention, 'response': precautionary_statements_response},
+                'supplemental_hazard_info': supplemental_hazard_info
             },
             'other_hazards': {'physicochemical': get_all_text_from_nodes(section, 'OtherHazardsInfo/PhysicochemicalEffect/FullText'), 'health': get_all_text_from_nodes(section, 'OtherHazardsInfo/HealthEffect/FullText')}
         }
