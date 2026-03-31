@@ -1,13 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ meta.language }}">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=210mm">
     <title>Safety Data Sheet - {{ meta.product_name }}</title>
     <style>
         @page {
             size: A4;
-            margin: 0;
+            margin: 35mm 15mm 20mm 15mm;
+            @top-center {
+                content: element(header);
+            }
+            @bottom-center {
+                content: element(footer);
+            }
         }
 
         * {
@@ -21,39 +26,18 @@
             font-size: 9.5pt;
             line-height: 1.25;
             color: #000000;
-            background-color: #f5f5f5;
-            padding: 10px 0;
-            margin: 0;
-        }
-
-        .page {
-            width: 210mm;
-            min-height: 297mm;
-            border: 1.5px solid #000000;
             background-color: #ffffff;
-            margin: 0 auto 0 auto;
-            padding: 12mm 15mm 18mm 15mm;
-            position: relative;
-            overflow: visible;
-            page-break-inside: avoid;
-            page-break-after: always;
         }
 
-        .page:last-child {
-            page-break-after: auto;
-        }
-
-        .page-break {
-            page-break-after: always;
-        }
-
-        .header {
+        div.header {
+            position: running(header);
+            width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 0;
             padding-bottom: 8px;
             border-bottom: 1px solid #cccccc;
+            padding-top: 12mm;
         }
 
         .header-left {
@@ -114,37 +98,29 @@
             font-size: 8pt;
             color: #000000;
         }
+        .header .page-number::after {
+            content: "Page " counter(page) "/" counter(pages);
+        }
 
-        .brand { display: none; }
-        .title-block { display: none; }
-        .meta { display: none; }
-
-        .footer {
-            position: absolute;
-            bottom: 10mm;
-            left: 15mm;
-            right: 15mm;
+        div.footer {
+            position: running(footer);
+            width: 100%;
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
             font-size: 8pt;
             color: #555555;
             height: 12px;
-        }
-        
-        .footer .lang-indicator {
-            font-weight: bold;
+            padding-bottom: 10mm;
         }
 
-        .logo-container {
-            display: none;
-        }
-
+        /* Elements inside layout */
         .ghs-pictograms {
             display: flex;
             flex-direction: row;
             gap: 15px;
             margin: 10px 0;
             flex-wrap: wrap;
+            page-break-inside: avoid;
         }
         
         .ghs-pictograms img {
@@ -173,23 +149,8 @@
             text-align: center;
         }
 
-        @media print {
-            .ghs-pictograms img {
-                width: 46mm;
-                height: 46mm;
-            }
-        }
-
-        .content {
-            margin-top: 3px;
-        }
-
         .section {
             margin-bottom: 8px;
-        }
-
-        p, table, ul, ol {
-            page-break-inside: avoid;
         }
 
         .section-title {
@@ -198,22 +159,24 @@
             background-color: #e6e6e6;
             border: 1px solid #000;
             padding: 2px 5px;
-            margin: 6px 0 4px 0;
+            margin: 12px 0 6px 0;
             page-break-after: avoid;
+            page-break-inside: avoid;
         }
 
         .subsection-title {
             font-weight: 700;
             font-size: 9.5pt;
-            margin: 6px 0 3px 0;
+            margin: 10px 0 4px 0;
             page-break-after: avoid;
+            page-break-inside: avoid;
         }
 
         .subsubsection {
             font-weight: 700;
             font-size: 9.5pt;
             text-decoration: underline;
-            margin: 4px 0 2px 0;
+            margin: 6px 0 2px 0;
             page-break-after: avoid;
         }
 
@@ -230,7 +193,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 8.5pt;
-            margin: 4px 0;
+            margin: 6px 0;
             page-break-inside: auto;
         }
 
@@ -267,6 +230,7 @@
         .data-row {
             display: flex;
             margin-bottom: 2px;
+            page-break-inside: avoid;
         }
         .data-label {
             font-weight: bold;
@@ -280,38 +244,6 @@
         .w-120 { width: 120px; }
         .w-80 { width: 80px; }
         .w-50 { width: 50px; }
-
-        .pictograms img {
-            width: 34px;
-            height: 34px;
-        }
-
-        .ghs-placeholder {
-            width: 34px;
-            height: 34px;
-            border: 2px solid #D32F2F;
-            background-color: #ffffff;
-            transform: rotate(45deg);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .ghs-placeholder::before {
-            content: attr(data-symbol);
-            transform: rotate(-45deg);
-            font-size: 7pt;
-            font-weight: bold;
-            color: #000;
-            text-align: center;
-        }
-
-        .signal-word {
-            font-weight: 700;
-            font-size: 10pt;
-            color: #D32F2F;
-        }
 
         .small {
             font-size: 8pt;
@@ -327,15 +259,32 @@
             vertical-align: sub;
         }
 
-        .page-break {
-            page-break-before: always;
+        .content {
+            margin-top: 5mm;
+        }
+
+        /* Paged.js Screen Preview Adjustments */
+        @media screen {
+            body {
+                background-color: #e5e5e5;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 20px 0;
+            }
+            .pagedjs_page {
+                background-color: white;
+                box-shadow: 0 0 10px rgba(0,0,0,0.2);
+                margin: 0 auto 20px auto;
+                flex: none;
+            }
         }
     </style>
+    <script src="https://unpkg.com/pagedjs/dist/js/paged.polyfill.js"></script>
 </head>
 <body>
 
-<!-- PAGE 1 -->
-<div class="page">
+    <!-- Running Header Definition -->
     <div class="header">
         <div class="header-left">
             <div class="title-text">Safety data sheet according to Regulation (EC) No 1907/2006 (REACH)</div>
@@ -346,12 +295,23 @@
                 <span>Version:</span> <span class="normal">{{ meta.version }}</span>
             </div>
         </div>
-          <div class="header-right">
-              <div class="header-logo"><img src="mb_logo.svg" alt="Minerva Biolabs"></div>
-              <div class="page-number">Page 1/11</div>
-          </div>
+        <div class="header-right">
+            <div class="header-logo"><img src="mb_logo.svg" alt="Minerva Biolabs"></div>
+            <div class="page-number"></div> <!-- Filled via CSS counter -->
+        </div>
     </div>
+
+    <!-- Running Footer Definition -->
+    <div class="footer">
+        <div style="flex-grow: 1;"></div> <!-- Spacer left -->
+        <div style="text-align: center; flex-grow: 1;">{{ meta.language }} / {{ meta.country }}</div>
+        <div style="text-align: right; flex-grow: 1;">GeSi.de</div>
+    </div>
+
+    <!-- Main Content -->
     <div class="content">
+
+        <!-- SECTION 1 -->
         <div class="section">
             <div class="section-title">SECTION 1: Identification of the substance/mixture and of the company/undertaking</div>
             
@@ -384,6 +344,7 @@
             <p>{{ section_1.emergency_phone.description }}, {{ section_1.emergency_phone.number }}</p>
         </div>
 
+        <!-- SECTION 2 -->
         <div class="section">
             <div class="section-title">SECTION 2: Hazards identification</div>
             <div class="subsection-title">2.1. Classification of the substance or mixture</div>
@@ -419,13 +380,18 @@
                         {% elif pictogram == 'GHS09' %}Umweltgefährdend
                         {% endif %}
                     </div>
-                    <div class="signal-word">{{ section_2.labelling.signal_word }}</div>
                 </div>
                 {% endfor %}
             </div>
             
+            {% if section_2.labelling.signal_word %}
+            <div class="signal-word" style="text-align: left;">{{ section_2.labelling.signal_word }}</div>
+            {% endif %}
+
             <p><strong>Hazard components for labelling:</strong></p>
             <p style="margin-left: 15px;">{{ section_2.labelling.hazard_components }}</p>
+
+            {% if section_2.labelling.hazard_statements and section_2.labelling.hazard_statements|length > 0 %}
             <p><strong>Hazard statements for physical hazards</strong></p>
             <table class="sds">
                 <thead>
@@ -437,10 +403,16 @@
                     {% endfor %}
                 </tbody>
             </table>
+            {% endif %}
             
             <p><strong>Supplemental hazard information:</strong></p>
+            {% if section_2.labelling.supplemental_hazard_info %}
+            <p style="margin-left: 15px;">{{ section_2.labelling.supplemental_hazard_info }}</p>
+            {% else %}
             <!-- SUPPLEMENTAL_HAZARD_INFO_PLACEHOLDER -->
+            {% endif %}
             
+            {% if section_2.labelling.precautionary_statements.prevention and section_2.labelling.precautionary_statements.prevention|length > 0 %}
             <p><strong>Precautionary statements Prevention</strong></p>
             <table class="sds">
                 <thead>
@@ -452,6 +424,9 @@
                     {% endfor %}
                 </tbody>
             </table>
+            {% endif %}
+
+            {% if section_2.labelling.precautionary_statements.response and section_2.labelling.precautionary_statements.response|length > 0 %}
             <p><strong>Precautionary statements Response</strong></p>
             <table class="sds">
                 <thead>
@@ -463,6 +438,7 @@
                     {% endfor %}
                 </tbody>
             </table>
+            {% endif %}
 
             <div class="subsection-title">2.3. Other hazards</div>
             <p><strong>Adverse physicochemical effects:</strong></p>
@@ -470,28 +446,8 @@
             <p><strong>Adverse human health effects and symptoms:</strong></p>
             <p style="margin-left: 15px;">{{ section_2.other_hazards.health }}</p>
         </div>
-    </div>
-    <div class="footer"><div>{{ meta.language }} / {{ meta.country }}</div><div>GeSi.de</div></div>
-</div>
 
-<!-- PAGE 2 -->
-<div class="page">
-    <div class="header">
-        <div class="header-left">
-            <div class="title-text">Safety data sheet according to Regulation (EC) No 1907/2006 (REACH)</div>
-            <div class="product-name">{{ meta.product_name }}</div>
-            <div class="meta-row">
-                <span>Revision date:</span> <span class="normal">{{ meta.revision_date }}</span>
-                <span>Print date:</span> <span class="normal">{{ meta.print_date }}</span>
-                <span>Version:</span> <span class="normal">{{ meta.version }}</span>
-            </div>
-        </div>
-        <div class="header-right">
-            <div class="header-logo"><img src="mb_logo.svg" alt="Minerva Biolabs"></div>
-            <div class="page-number">Page 2/11</div>
-        </div>
-    </div>
-    <div class="content">
+        <!-- SECTION 3 -->
         <div class="section">
             <div class="section-title">SECTION 3: Composition/information on ingredients</div>
             <div class="subsection-title">3.1. Substances</div>
@@ -525,6 +481,7 @@
             <p class="small">Full text of H- and EUH-phrases: see section 16.</p>
         </div>
 
+        <!-- SECTION 4 -->
         <div class="section">
             <div class="section-title">SECTION 4: First aid measures</div>
             <div class="subsection-title">4.1. Description of first aid measures</div>
@@ -547,28 +504,8 @@
             <div class="subsection-title">4.3. Indication of any immediate medical attention and special treatment needed</div>
             <p style="margin-left: 15px;">{{ section_4.treatment }}</p>
         </div>
-    </div>
-    <div class="footer"><div>{{ meta.language }} / {{ meta.country }}</div><div>GeSi.de</div></div>
-</div>
 
-<!-- PAGE 3 -->
-<div class="page">
-    <div class="header">
-        <div class="header-left">
-            <div class="title-text">Safety data sheet according to Regulation (EC) No 1907/2006 (REACH)</div>
-            <div class="product-name">{{ meta.product_name }}</div>
-            <div class="meta-row">
-                <span>Revision date:</span> <span class="normal">{{ meta.revision_date }}</span>
-                <span>Print date:</span> <span class="normal">{{ meta.print_date }}</span>
-                <span>Version:</span> <span class="normal">{{ meta.version }}</span>
-            </div>
-        </div>
-        <div class="header-right">
-            <div class="header-logo"><img src="mb_logo.svg" alt="Minerva Biolabs"></div>
-            <div class="page-number">Page 3/11</div>
-        </div>
-    </div>
-    <div class="content">
+        <!-- SECTION 5 -->
         <div class="section">
             <div class="section-title">SECTION 5: Firefighting measures</div>
             <div class="subsection-title">5.1. Extinguishing media</div>
@@ -587,6 +524,7 @@
             <p style="margin-left: 15px;">{{ section_5.additional_info }}</p>
         </div>
 
+        <!-- SECTION 6 -->
         <div class="section">
             <div class="section-title">SECTION 6: Accidental release measures</div>
             <div class="subsection-title">6.1. Personal precautions, protective equipment and emergency procedures</div>
@@ -612,27 +550,8 @@
             <div class="subsection-title">6.5. Additional information</div>
             <p style="margin-left: 15px;">{{ section_6.additional_info }}</p>
         </div>
-    </div>
-    <div class="footer"><div>{{ meta.language }} / {{ meta.country }}</div><div>GeSi.de</div></div>
-</div>
-<!-- PAGE 4 -->
-<div class="page">
-    <div class="header">
-        <div class="header-left">
-            <div class="title-text">Safety data sheet according to Regulation (EC) No 1907/2006 (REACH)</div>
-            <div class="product-name">{{ meta.product_name }}</div>
-            <div class="meta-row">
-                <span>Revision date:</span> <span class="normal">{{ meta.revision_date }}</span>
-                <span>Print date:</span> <span class="normal">{{ meta.print_date }}</span>
-                <span>Version:</span> <span class="normal">{{ meta.version }}</span>
-            </div>
-        </div>
-        <div class="header-right">
-            <div class="header-logo"><img src="mb_logo.svg" alt="Minerva Biolabs"></div>
-            <div class="page-number">Page 4/11</div>
-        </div>
-    </div>
-    <div class="content">
+
+        <!-- SECTION 7 -->
         <div class="section">
             <div class="section-title">SECTION 7: Handling and storage</div>
             <div class="subsection-title">7.1. Precautions for safe handling</div>
@@ -658,34 +577,31 @@
             <p style="margin-left: 15px;">{{ section_7.specific_end_use }}</p>
         </div>
 
+        <!-- SECTION 8 -->
         <div class="section">
             <div class="section-title">SECTION 8: Exposure controls/personal protection</div>
             <div class="subsection-title">8.1. Control parameters</div>
             <div class="subsubsection">8.1.1. Occupational exposure limit values</div>
+            {% if section_8.occupational_exposure_limits and section_8.occupational_exposure_limits|length > 0 %}
             <i>
             <table class="sds">
                 <thead>
                     <tr><th>Limit value type (country of origin)</th><th>Substance name</th><th>① Long-term occupational exposure limit value<br>② Short-term occupational exposure limit value<br>③ Instantaneous value<br>④ Monitoring and observation processes<br>⑤ Remark</th></tr>
                 </thead>
                 <tbody>
+                    {% for limit in section_8.occupational_exposure_limits %}
                     <tr>
-                        <td>TRGS 900 (DE)<br>from 29 Mar 2019</td>
-                        <td>ethanol<br>CAS No.: 64-17-5<br>EC No.: 200-578-6</td>
-                        <td>① 200 ppm (380 mg/m³)<br>② 800 ppm (1,520 mg/m³)<br>⑤ DFG, Y</td>
+                        <td>{{ limit.type }}</td>
+                        <td>{{ limit.name }}</td>
+                        <td>{{ limit.values }}</td>
                     </tr>
-                    <tr>
-                        <td>IOELV (EU)</td>
-                        <td>Dipropylene glycol monomethyl ether<br>CAS No.: 34590-94-8<br>EC No.: 252-104-2</td>
-                        <td>① 50 ppm (308 mg/m³)<br>⑤ (may be absorbed through the skin)</td>
-                    </tr>
-                    <tr>
-                        <td>TRGS 900 (DE)</td>
-                        <td>Dipropylene glycol monomethyl ether<br>CAS No.: 34590-94-8<br>EC No.: 252-104-2</td>
-                        <td>① 50 ppm (310 mg/m³)<br>② 50 ppm (310 mg/m³)<br>⑤ (Aerosol und Dampf) DFG, EU, 11</td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
             </i>
+            {% else %}
+            <p>No occupational exposure limit values available.</p>
+            {% endif %}
             <p>{{ section_8.control_parameters }}</p>
             
             <div class="subsection-title">8.2. Exposure controls</div>
@@ -700,28 +616,8 @@
             <div class="subsubsection">8.2.3. Environmental exposure controls</div>
             <p style="margin-left: 15px;">{{ section_8.environmental_exposure }}</p>
         </div>
-    </div>
-    <div class="footer"><div>{{ meta.language }} / {{ meta.country }}</div><div>GeSi.de</div></div>
-</div>
 
-<!-- PAGE 5 -->
-<div class="page">
-    <div class="header">
-        <div class="header-left">
-            <div class="title-text">Safety data sheet according to Regulation (EC) No 1907/2006 (REACH)</div>
-            <div class="product-name">{{ meta.product_name }}</div>
-            <div class="meta-row">
-                <span>Revision date:</span> <span class="normal">{{ meta.revision_date }}</span>
-                <span>Print date:</span> <span class="normal">{{ meta.print_date }}</span>
-                <span>Version:</span> <span class="normal">{{ meta.version }}</span>
-            </div>
-        </div>
-        <div class="header-right">
-            <div class="header-logo"><img src="mb_logo.svg" alt="Minerva Biolabs"></div>
-            <div class="page-number">Page 5/11</div>
-        </div>
-    </div>
-    <div class="content">
+        <!-- SECTION 9 -->
         <div class="section">
             <div class="section-title">SECTION 9: Physical and chemical properties</div>
             <div class="subsection-title">9.1. Information on basic physical and chemical properties</div>
@@ -751,6 +647,7 @@
             </table>
         </div>
 
+        <!-- SECTION 10 -->
         <div class="section">
             <div class="section-title">SECTION 10: Stability and reactivity</div>
             <div class="subsection-title">10.1. Reactivity</div>
@@ -759,29 +656,6 @@
             <p style="margin-left: 15px;">{{ section_10.chemical_stability }}</p>
             <div class="subsection-title">10.3. Possibility of hazardous reactions</div>
             <p style="margin-left: 15px;">{{ section_10.hazardous_reactions }}</p>
-        </div>
-    </div>
-    <div class="footer"><div>{{ meta.language }} / {{ meta.country }}</div><div>GeSi.de</div></div>
-</div>
-<!-- PAGE 6 -->
-<div class="page">
-    <div class="header">
-        <div class="header-left">
-            <div class="title-text">Safety data sheet according to Regulation (EC) No 1907/2006 (REACH)</div>
-            <div class="product-name">{{ meta.product_name }}</div>
-            <div class="meta-row">
-                <span>Revision date:</span> <span class="normal">{{ meta.revision_date }}</span>
-                <span>Print date:</span> <span class="normal">{{ meta.print_date }}</span>
-                <span>Version:</span> <span class="normal">{{ meta.version }}</span>
-            </div>
-        </div>
-        <div class="header-right">
-            <div class="header-logo"><img src="mb_logo.svg" alt="Minerva Biolabs"></div>
-            <div class="page-number">Page 6/11</div>
-        </div>
-    </div>
-    <div class="content">
-        <div class="section">
             <div class="subsection-title">10.4. Conditions to avoid</div>
             <p style="margin-left: 15px;">{{ section_10.conditions_to_avoid }}</p>
             <div class="subsection-title">10.5. Incompatible materials</div>
@@ -790,6 +664,7 @@
             <p style="margin-left: 15px;">{{ section_10.hazardous_decomposition }}</p>
         </div>
 
+        <!-- SECTION 11 -->
         <div class="section">
             <div class="section-title">SECTION 11: Toxicological information</div>
             <div class="subsection-title">11.1. Information on hazard classes as defined in Regulation (EC) No 1272/2008</div>
@@ -824,27 +699,8 @@
             <p><strong>STOT-repeated exposure:</strong> {{ section_11.stot_repeated }}</p>
             <p><strong>Aspiration hazard:</strong> {{ section_11.aspiration_hazard }}</p>
         </div>
-    </div>
-    <div class="footer"><div>{{ meta.language }} / {{ meta.country }}</div><div>GeSi.de</div></div>
-</div>
-<!-- PAGE 7 -->
-<div class="page">
-    <div class="header">
-        <div class="header-left">
-            <div class="title-text">Safety data sheet according to Regulation (EC) No 1907/2006 (REACH)</div>
-            <div class="product-name">{{ meta.product_name }}</div>
-            <div class="meta-row">
-                <span>Revision date:</span> <span class="normal">{{ meta.revision_date }}</span>
-                <span>Print date:</span> <span class="normal">{{ meta.print_date }}</span>
-                <span>Version:</span> <span class="normal">{{ meta.version }}</span>
-            </div>
-        </div>
-        <div class="header-right">
-            <div class="header-logo"><img src="mb_logo.svg" alt="Minerva Biolabs"></div>
-            <div class="page-number">Page 7/11</div>
-        </div>
-    </div>
-    <div class="content">
+
+        <!-- SECTION 12 -->
         <div class="section">
             <div class="section-title">SECTION 12: Ecological information</div>
 
@@ -928,32 +784,14 @@
             <p style="margin-left: 15px;">{{ section_12.other_adverse_effects_info }}</p>
         </div>
 
+        <!-- SECTION 13 -->
         <div class="section">
             <div class="section-title">SECTION 13: Disposal considerations</div>
             <p>{{ section_13.waste_treatment }}</p>
             <p>{{ section_13.eu_requirements }}</p>
         </div>
-    </div>
-    <div class="footer"><div>{{ meta.language }} / {{ meta.country }}</div><div>GeSi.de</div></div>
-</div>
-<!-- PAGE 8 -->
-<div class="page">
-    <div class="header">
-        <div class="header-left">
-            <div class="title-text">Safety data sheet according to Regulation (EC) No 1907/2006 (REACH)</div>
-            <div class="product-name">{{ meta.product_name }}</div>
-            <div class="meta-row">
-                <span>Revision date:</span> <span class="normal">{{ meta.revision_date }}</span>
-                <span>Print date:</span> <span class="normal">{{ meta.print_date }}</span>
-                <span>Version:</span> <span class="normal">{{ meta.version }}</span>
-            </div>
-        </div>
-        <div class="header-right">
-            <div class="header-logo"><img src="mb_logo.svg" alt="Minerva Biolabs"></div>
-            <div class="page-number">Page 8/11</div>
-        </div>
-    </div>
-    <div class="content">
+
+        <!-- SECTION 14 -->
         <div class="section">
             <div class="section-title">SECTION 14: Transport information</div>
             <table class="sds">
@@ -1018,6 +856,7 @@
             <p style="margin-left: 15px;">{{ section_14.bulk_transport }}</p>
         </div>
 
+        <!-- SECTION 15 -->
         <div class="section">
             <div class="section-title">SECTION 15: Regulatory information</div>
             <div class="subsection-title">15.1. Safety, health and environmental regulations/legislation specific for the substance or mixture</div>
@@ -1027,34 +866,25 @@
             <p><strong>National regulations (Germany):</strong><br>
             {% if section_15.national_legislation %}
                 {% for item in section_15.national_legislation %}
-                    <strong>{{ item.label }}:</strong> {{ item.value }}<br>
+                    {% if item.label == 'Restrictionsofoccupation' %}
+                        <strong>Restrictions of occupation:</strong> {{ item.value }}<br>
+                    {% elif item.label == 'Waterhazardclass' %}
+                        <strong>Water hazard class:</strong> {{ item.value }}<br>
+                    {% elif item.label == 'Storageclass' %}
+                        <strong>Storage class:</strong> {{ item.value }}<br>
+                    {% elif item.label == 'Giscode' %}
+                        <strong>GIS code:</strong> {{ item.value }}<br>
+                    {% else %}
+                        <strong>Additional information:</strong> {{ item.value }}<br>
+                    {% endif %}
                 {% endfor %}
             {% else %}
                 No specific national legislation information available.
             {% endif %}
             </p>
         </div>
-    </div>
-    <div class="footer"><div>{{ meta.language }} / {{ meta.country }}</div><div>GeSi.de</div></div>
-</div>
-<!-- PAGE 9 -->
-<div class="page">
-    <div class="header">
-        <div class="header-left">
-            <div class="title-text">Safety data sheet according to Regulation (EC) No 1907/2006 (REACH)</div>
-            <div class="product-name">{{ meta.product_name }}</div>
-            <div class="meta-row">
-                <span>Revision date:</span> <span class="normal">{{ meta.revision_date }}</span>
-                <span>Print date:</span> <span class="normal">{{ meta.print_date }}</span>
-                <span>Version:</span> <span class="normal">{{ meta.version }}</span>
-            </div>
-        </div>
-        <div class="header-right">
-            <div class="header-logo"><img src="mb_logo.svg" alt="Minerva Biolabs"></div>
-            <div class="page-number">Page 9/11</div>
-        </div>
-    </div>
-    <div class="content">
+
+        <!-- SECTION 16 -->
         <div class="section">
             <div class="section-title">SECTION 16: Other information</div>
             <i>
@@ -1105,8 +935,7 @@
             {% endfor %}
             </i>
         </div>
+
     </div>
-    <div class="footer"><div>{{ meta.language }} / {{ meta.country }}</div><div>GeSi.de</div></div>
-</div>
 </body>
 </html>

@@ -129,15 +129,38 @@ class NewSDScomParser:
         }
 
     def _parse_section_2(self, section: etree._Element) -> Dict[str, Any]:
-        labelling = self._xpath_single(section, "ClpLabellingInfo")
+        labelling = section.xpath('.//*[local-name()="ClpLabellingInfo"]')
+        labelling = labelling[0] if labelling else None
         clp_classifications = [{'clp_hazard_class_category': get_text(c, 'ClpHazardClassCategory'), 'clp_hazard_statement_code': get_text(c, 'ClpHazardStatement/PhraseCode'), 'clp_hazard_statement_text': get_all_text_from_nodes(c, 'ClpHazardStatement/FullText'), 'clp_classification_procedure': get_all_text_from_nodes(c, 'ClpClassificationProcedure/FullText')} for c in section.xpath('.//*[local-name()="ClpHazardClassification"]')]
+
+        precautionary_statements_prevention = []
+        precautionary_statements_response = []
+
+        if labelling is not None:
+            for s in labelling.xpath(".//*[local-name()='ClpPrecautionaryStatement']"):
+                codes = get_all_texts(s, 'PhraseCode')
+                if codes:
+                    code = codes[0]
+                    prefix = "" if code.startswith('P') else "P"
+                    if code.startswith('P2') or code.startswith('2'):
+                        precautionary_statements_prevention.append(f"{prefix}{code} " + get_all_text_from_nodes(s, 'FullText'))
+                    elif code.startswith('P3') or code.startswith('3'):
+                        precautionary_statements_response.append(f"{prefix}{code} " + get_all_text_from_nodes(s, 'FullText'))
+                    elif code.startswith('P4') or code.startswith('4'):
+                        precautionary_statements_response.append(f"{prefix}{code} " + get_all_text_from_nodes(s, 'FullText'))
+                    elif code.startswith('P5') or code.startswith('5'):
+                        precautionary_statements_response.append(f"{prefix}{code} " + get_all_text_from_nodes(s, 'FullText'))
+
+        supplemental_hazard_info = get_all_text_from_nodes(labelling, 'ClpSupplementalHazardInformation/FullText')
+
         return {
             'hazard_identification': {'clp_classifications': clp_classifications},
             'classification': [{'category': get_text(c, 'ClpHazardClassCategory'), 'statement': get_all_text_from_nodes(c, 'ClpHazardStatement/FullText'), 'code': get_text(c, 'ClpHazardStatement/PhraseCode'), 'procedure': get_all_text_from_nodes(c, 'ClpClassificationProcedure/FullText')} for c in section.xpath('.//*[local-name()="ClpHazardClassification"]')],
             'labelling': {
                 'pictograms': get_all_texts(labelling, 'ClpHazardPictogram/PhraseCode'), 'signal_word': get_text(labelling, 'ClpSignalWord/FullText'), 'hazard_components': 'propan-1-ol',
                 'hazard_statements': [{'code': get_text(s, 'PhraseCode'), 'text': get_all_text_from_nodes(s, 'FullText')} for s in labelling.xpath('.//*[local-name()="ClpHazardStatement"]')] if labelling is not None else [],
-                'precautionary_statements': {'prevention': [get_all_text_from_nodes(s, 'FullText') for s in labelling.xpath(".//*[local-name()='ClpPrecautionaryStatement']") if get_text(s, 'PhraseCode').startswith('P2')] if labelling is not None else [], 'response': [get_all_text_from_nodes(s, 'FullText') for s in labelling.xpath(".//*[local-name()='ClpPrecautionaryStatement']") if get_text(s, 'PhraseCode').startswith('P3')] if labelling is not None else []}
+                'precautionary_statements': {'prevention': precautionary_statements_prevention, 'response': precautionary_statements_response},
+                'supplemental_hazard_info': supplemental_hazard_info
             },
             'other_hazards': {'physicochemical': get_all_text_from_nodes(section, 'OtherHazardsInfo/PhysicochemicalEffect/FullText'), 'health': get_all_text_from_nodes(section, 'OtherHazardsInfo/HealthEffect/FullText')}
         }
@@ -176,12 +199,16 @@ class NewSDScomParser:
         return {'safe_handling': get_all_text_from_nodes(section, 'SafeHandling/HandlingPrecautions'), 'fire_prevention': get_all_text_from_nodes(section, 'SafeHandling/PrecautionaryMeasures/MeasuresToPreventFire'), 'occupational_hygiene': get_all_text_from_nodes(section, 'SafeHandling/GeneralOccupationalHygiene'), 'storage_conditions': get_all_text_from_nodes(section, 'ConditionsForSafeStorage/TechnicalMeasuresAndStorageConditions'), 'storage_rooms': get_all_text_from_nodes(section, 'ConditionsForSafeStorage/RequirementsForStorageRoomsAndVessels'), 'storage_assembly': get_all_text_from_nodes(section, 'ConditionsForSafeStorage/HintsOnStorageAssembly'), 'specific_end_use': get_text(section, 'SpecificEndUses')}
 
     def _parse_section_8(self, section: etree._Element) -> Dict:
-        # This data is not in the XML for this file, so it's hardcoded to match the PDF.
-        oel_limits = [
-            {'type': 'TRGS 900 (DE)', 'name': 'ethanol<br>CAS No.: 64-17-5<br>EC No.: 200-578-6', 'values': '① 200 ppm (380 mg/m³)<br>② 800 ppm (1,520 mg/m³)<br>⑤ DFG, Y'},
-            {'type': 'IOELV (EU)', 'name': 'Dipropylene glycol monomethyl ether<br>CAS No.: 34590-94-8<br>EC No.: 252-104-2', 'values': '① 50 ppm (308 mg/m³)<br>⑤ (may be absorbed through the skin)'},
-            {'type': 'TRGS 900 (DE)', 'name': 'Dipropylene glycol monomethyl ether<br>CAS No.: 34590-94-8<br>EC No.: 252-104-2', 'values': '① 50 ppm (310 mg/m³)<br>② 50 ppm (310 mg/m³)<br>⑤ (Aerosol und Dampf) DFG, EU, 11'}
-        ]
+        oel_limits = []
+        limit_nodes = section.xpath('.//*[local-name()="OccupationalExposureLimit"]')
+        if limit_nodes:
+            for node in limit_nodes:
+                oel_limits.append({
+                    'type': get_text(node, 'LimitType'),
+                    'name': get_text(node, 'SubstanceName'),
+                    'values': get_text(node, 'LimitValue')
+                })
+
         return {
             'occupational_exposure_limits': oel_limits,
             'control_parameters_comments': get_all_text_from_nodes(section, 'ControlParameters'),
@@ -290,7 +317,9 @@ class NewSDScomParser:
 
     def _parse_section_15(self, section: etree._Element) -> Dict:
         national_legislation = []
-        national_legislation_node = self._xpath_single(section, "NationalLegislationGermany")
+        national_legislation_nodes = section.xpath('.//*[local-name()="NationalLegislationGermany"]')
+        national_legislation_node = national_legislation_nodes[0] if national_legislation_nodes else None
+
         if national_legislation_node is not None:
             for elem in national_legislation_node:
                 text = ' '.join(elem.itertext()).strip()
@@ -298,7 +327,13 @@ class NewSDScomParser:
                     tag_name = elem.tag.split('}')[-1] if '}' in elem.tag else elem.tag
                     label = ' '.join(tag_name.replace('_', ' ').split()).title()
                     national_legislation.append({'label': label, 'value': text})
-        return {'eu_legislation': get_text(section, 'SpecificProvisionsRelatedToProduct/EuLegislation'),'national_legislation': national_legislation,'wgk': get_text(national_legislation_node, 'WaterHazardClass/Class'),'storage_class': get_text(national_legislation_node, 'StorageClass')}
+
+        return {
+            'eu_legislation': get_text(section, 'SpecificProvisionsRelatedToProduct/EuLegislation'),
+            'national_legislation': national_legislation,
+            'wgk': get_text(national_legislation_node, 'WaterHazardClass/Class'),
+            'storage_class': get_text(national_legislation_node, 'StorageClass')
+        }
 
     def _parse_section_16(self, section: etree._Element) -> Dict:
         abbreviations = []
