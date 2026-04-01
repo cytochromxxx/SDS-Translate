@@ -8,26 +8,17 @@ Key improvements:
 - Proper handling of section number prefixes
 - Exact match validation with substring contamination prevention
 - Strict matching mode for critical phrases
-- Global phrase caching for improved performance
 """
 
 import sys
 import sqlite3
 import re
-import threading
-import time
 from pathlib import Path
 from bs4 import BeautifulSoup, NavigableString
 from typing import Dict, List, Tuple, Optional
 import html
 
 sys.stdout.reconfigure(encoding='utf-8')
-
-# Global cache for phrases to avoid reloading on every translation
-# Key: (db_path, target_lang), Value: {'phrases': dict, 'patterns': list, 'loaded_at': timestamp}
-_phrase_cache = {}
-_cache_lock = threading.Lock()
-_CACHE_TTL = 3600  # Cache time-to-live in seconds (1 hour)
 
 
 class SDSTranslator:
@@ -69,25 +60,7 @@ class SDSTranslator:
         self.original_content = ""
         
     def _load_phrases(self):
-        """Load phrases from database or use cached data."""
-        cache_key = (self.db_path, self.target_lang)
-        current_time = time.time()
-
-        # Check if we have a valid cache entry
-        with _cache_lock:
-            if cache_key in _phrase_cache:
-                cache_entry = _phrase_cache[cache_key]
-                # Check if cache is still valid (within TTL)
-                if current_time - cache_entry['loaded_at'] < _CACHE_TTL:
-                    self.phrase_cache = cache_entry['phrases']
-                    self.phrase_patterns = cache_entry['patterns']
-                    print(f"Using cached phrases: {len(self.phrase_cache)} phrases")
-                    return
-                else:
-                    # Cache expired, remove it
-                    del _phrase_cache[cache_key]
-
-        # Load from database if not in cache or expired
+        """Load all phrases from database with strict filtering."""
         print(f"Loading phrases from database: {self.db_path}")
         
         conn = sqlite3.connect(self.db_path)
@@ -106,52 +79,19 @@ class SDSTranslator:
         cursor.execute(query)
         rows = cursor.fetchall()
         
-        local_phrase_cache = {}
-        local_patterns = []
-
         for en_text, translated_text in rows:
             if en_text and translated_text:
                 normalized = self._normalize_text(en_text)
                 # Skip very short normalized text
                 if len(normalized) >= self.MIN_PHRASE_LENGTH:
-                    local_phrase_cache[normalized] = (en_text, translated_text)
-                    local_patterns.append((en_text, normalized, translated_text))
+                    self.phrase_cache[normalized] = (en_text, translated_text)
+                    self.phrase_patterns.append((en_text, normalized, translated_text))
         
         # Sort by length (longest first) for proper matching priority
-        local_patterns.sort(key=lambda x: len(x[0]), reverse=True)
+        self.phrase_patterns.sort(key=lambda x: len(x[0]), reverse=True)
         
         conn.close()
-
-        # Update instance variables
-        self.phrase_cache = local_phrase_cache
-        self.phrase_patterns = local_patterns
-
-        # Store in global cache
-        with _cache_lock:
-            _phrase_cache[cache_key] = {
-                'phrases': local_phrase_cache,
-                'patterns': local_patterns,
-                'loaded_at': current_time
-            }
-
         print(f"Loaded {len(self.phrase_cache)} phrases into cache")
-
-    @staticmethod
-    def clear_cache():
-        """Clear the global phrase cache. Useful for forcing a reload."""
-        global _phrase_cache
-        with _cache_lock:
-            _phrase_cache = {}
-        print("Phrase cache cleared")
-
-    @staticmethod
-    def get_cache_info():
-        """Get information about the current cache state."""
-        with _cache_lock:
-            return {
-                'entries': len(_phrase_cache),
-                'keys': list(_phrase_cache.keys())
-            }
         
     def _normalize_text(self, text: str) -> str:
         """Normalize text for matching."""
@@ -347,7 +287,7 @@ class SDSTranslator:
         self._load_phrases()
         self.original_content = html_content
         
-        soup = BeautifulSoup(html_content, 'lxml')
+        soup = BeautifulSoup(html_content, 'html.parser')
         
         text_nodes = []
         for element in soup.find_all(string=True):
@@ -433,7 +373,7 @@ class SDSTranslator:
                 red_span = soup.new_tag('span', style='color: red; font-weight: bold;')
                 red_span.string = stripped
                 final_text = leading_ws + str(red_span) + trailing_ws
-                element.replace_with(BeautifulSoup(final_text, 'lxml'))
+                element.replace_with(BeautifulSoup(final_text, 'html.parser'))
         
         if self.debug and self.stats['not_found'] <= 50:
             try:

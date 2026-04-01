@@ -42,22 +42,11 @@ class SDScomParser:
             return {}
 
     def _parse_meta(self, root):
-        def format_date(d):
-            if not d: return ""
-            try:
-                d = d.split('T')[0]
-                parts = d.split('-')
-                if len(parts) == 3:
-                    return f"{parts[2]}.{parts[1]}.{parts[0]}"
-            except Exception:
-                pass
-            return d
-
         self.data['meta'] = {
             'product_name': _get_text(root, './/ProductIdentity/TradeName'),
             'version': _get_text(root, './/IdentificationSubstPrep/VersionNo'),
-            'revision_date': format_date(_get_text(root, './/IdentificationSubstPrep/IssueDate')),
-            'print_date': format_date(_get_text(root, './/InformationFromExportingSystem/DateGeneratedExport'))
+            'revision_date': _get_text(root, './/IdentificationSubstPrep/IssueDate'),
+            'print_date': _get_text(root, './/InformationFromExportingSystem/DateGeneratedExport')
         }
 
     def _parse_section_1(self, root):
