@@ -51,10 +51,9 @@ def get_all_texts(element: Optional[etree._Element], path: str) -> List[str]:
         return []
 
 class NewSDScomParser:
-    def __init__(self, xml_path: str, pdf_path: Optional[str] = None):
+    def __init__(self, xml_path: str):
         self.tree = etree.parse(xml_path)
         self.root = self.tree.getroot()
-        self.pdf_path = pdf_path
         self.data: Dict[str, Any] = {}
 
     def _xpath_single(self, element: etree._Element, path: str) -> Optional[etree._Element]:
@@ -69,8 +68,7 @@ class NewSDScomParser:
         datasheet_list = self.root.xpath("//*[local-name()='Datasheet']")
         if not datasheet_list:
             raise ValueError("<Datasheet> tag not found")
-        self.datasheet = datasheet_list[0]  # Store as instance variable for access in section parsers
-        datasheet = self.datasheet
+        datasheet = datasheet_list[0]
 
         self.data['meta'] = self._parse_meta(datasheet)
         
@@ -95,40 +93,16 @@ class NewSDScomParser:
                         self.data['other_information'] = parsed_data.get('other_information', {})
                     else:
                         self.data[f'section_{num}'] = parsed_data
-
-        # PDF gap filling: if a pdf_path was provided, fill empty XML fields from PDF
-        if self.pdf_path:
-            try:
-                from pdf_gap_filler import SDSPDFGapFiller
-                logger.info(f"Running PDF gap filler with: {self.pdf_path}")
-                with SDSPDFGapFiller(self.pdf_path) as filler:
-                    self.data = filler.fill_gaps(self.data)
-                logger.info("PDF gap filling completed")
-            except Exception as e:
-                logger.warning(f"PDF gap filling failed (continuing with XML-only data): {e}")
-
         return self.data
 
     def _parse_meta(self, datasheet: etree._Element) -> Dict[str, str]:
         id_section = self._xpath_single(datasheet, 'IdentificationSubstPrep')
         info_section = self._xpath_single(datasheet, 'InformationFromExportingSystem')
-
-        def format_date(d):
-            if not d: return ""
-            try:
-                d = d.split('T')[0]
-                parts = d.split('-')
-                if len(parts) == 3:
-                    return f"{parts[2]}.{parts[1]}.{parts[0]}"
-            except Exception:
-                pass
-            return d
-
         return {
             'product_name': get_text(id_section, 'ProductIdentity/TradeName'),
             'version': get_text(id_section, 'VersionNo'),
-            'revision_date': format_date(get_text(id_section, 'RevisionDate')),
-            'print_date': format_date(get_text(info_section, 'DateGeneratedExport')),
+            'revision_date': get_text(id_section, 'RevisionDate'),
+            'print_date': get_text(info_section, 'DateGeneratedExport'),
             'language': get_text(info_section, 'Language/FreetextLanguageCode'),
             'country': get_text(info_section, 'RegulationsRelatedToCountryOrRegion/RegulationsRelatedToCountryOrRegionCode'),
         }
@@ -140,7 +114,7 @@ class NewSDScomParser:
         pc1 = ": ".join(filter(None, [get_text(product_categories[0], 'PcCode'), get_text(product_categories[0], 'PcFulltext/FullText')])) if len(product_categories) > 0 else ''
         pc2 = ": ".join(filter(None, [get_text(product_categories[1], 'PcCode'), get_text(product_categories[1], 'PcFulltext/FullText')])) if len(product_categories) > 1 else ''
         lcs_elem = section.xpath('.//*[local-name()="LifeCycleStage"]')
-        lcs = ": ".join(filter(None, [get_text(lcs_elem[0], 'LcsCode'), get_text(lcs_elem[0], 'LcsFulltext/FullText')])) if lcs_elem else ''
+        lcs = ": ".join(filter(None, [get_text(lcs_elem[0], 'LcsCode'), get_text(lcs_elem[0], 'LcsFulltext/FullText')])) if lcs_elem else 'PW: Widespread use by professional workers'
 
         return {
             'product_identifier': {'trade_name': get_text(section, 'ProductIdentity/TradeName'), 'item_no': get_text(section, 'ItemNo'), 'ufi': get_text(section, 'ProductIdentity/Ufi')},
@@ -155,63 +129,37 @@ class NewSDScomParser:
         }
 
     def _parse_section_2(self, section: etree._Element) -> Dict[str, Any]:
-        hazard_labelling = self._xpath_single(section, "HazardLabelling")
-        labelling = self._xpath_single(hazard_labelling, "ClpLabellingInfo")
+        labelling = section.xpath('.//*[local-name()="ClpLabellingInfo"]')
+        labelling = labelling[0] if labelling else None
         clp_classifications = [{'clp_hazard_class_category': get_text(c, 'ClpHazardClassCategory'), 'clp_hazard_statement_code': get_text(c, 'ClpHazardStatement/PhraseCode'), 'clp_hazard_statement_text': get_all_text_from_nodes(c, 'ClpHazardStatement/FullText'), 'clp_classification_procedure': get_all_text_from_nodes(c, 'ClpClassificationProcedure/FullText')} for c in section.xpath('.//*[local-name()="ClpHazardClassification"]')]
-
-        # New logic for precautionary statements
-        prevention_stmts = []
-        response_stmts = []
-
+        
+        precautionary_statements_prevention = []
+        precautionary_statements_response = []
+        
         if labelling is not None:
-            all_statements = labelling.xpath(".//*[local-name()='ClpPrecautionaryStatement']")
-            code_buffer = []
-
-            for stmt in all_statements:
-                code = get_text(stmt, 'PhraseCode')
-                text = get_all_text_from_nodes(stmt, 'FullText')
-
-                if code:
-                    # Prefix with 'P' and add to buffer preventing duplicate 'P'
-                    prefix = "" if code.startswith("P") else "P"
-                    code_buffer.append(f"{prefix}{code}")
-
-                # If text is found, this statement is the end of a (potentially combined) group
-                if text:
-                    full_code = " + ".join(code_buffer)
-
-                    # Determine category based on the first code in the buffer
-                    if code_buffer and (code_buffer[0].startswith('P2') or code_buffer[0].startswith('2')):
-                        prevention_stmts.append({"code": full_code, "text": text})
-                    elif code_buffer and (code_buffer[0].startswith('P3') or code_buffer[0].startswith('3') or code_buffer[0].startswith('P4') or code_buffer[0].startswith('4') or code_buffer[0].startswith('P5') or code_buffer[0].startswith('5')):
-                        response_stmts.append({"code": full_code, "text": text})
-
-                    # Reset buffer for the next statement group
-                    code_buffer = []
-
-        # Extract hazard components from the composition section
-        hazard_components = []
-        composition = self._xpath_single(self.datasheet, 'Composition')
-        if composition is not None:
-            for comp in composition.xpath('.//*[local-name()="Component"]'):
-                comp_name = get_text(comp, 'Substance/GenericName')
-                if comp_name:
-                    hazard_components.append(comp_name)
-
+            for s in labelling.xpath(".//*[local-name()='ClpPrecautionaryStatement']"):
+                codes = get_all_texts(s, 'PhraseCode')
+                if codes:
+                    code = codes[0]
+                    prefix = "" if code.startswith('P') else "P"
+                    if code.startswith('P2') or code.startswith('2'):
+                        precautionary_statements_prevention.append(f"{prefix}{code} " + get_all_text_from_nodes(s, 'FullText'))
+                    elif code.startswith('P3') or code.startswith('3'):
+                        precautionary_statements_response.append(f"{prefix}{code} " + get_all_text_from_nodes(s, 'FullText'))
+                    elif code.startswith('P4') or code.startswith('4'):
+                        precautionary_statements_response.append(f"{prefix}{code} " + get_all_text_from_nodes(s, 'FullText'))
+                    elif code.startswith('P5') or code.startswith('5'):
+                        precautionary_statements_response.append(f"{prefix}{code} " + get_all_text_from_nodes(s, 'FullText'))
+                    
         supplemental_hazard_info = get_all_text_from_nodes(labelling, 'ClpSupplementalHazardInformation/FullText')
 
         return {
             'hazard_identification': {'clp_classifications': clp_classifications},
             'classification': [{'category': get_text(c, 'ClpHazardClassCategory'), 'statement': get_all_text_from_nodes(c, 'ClpHazardStatement/FullText'), 'code': get_text(c, 'ClpHazardStatement/PhraseCode'), 'procedure': get_all_text_from_nodes(c, 'ClpClassificationProcedure/FullText')} for c in section.xpath('.//*[local-name()="ClpHazardClassification"]')],
             'labelling': {
-                'pictograms': get_all_texts(labelling, 'ClpHazardPictogram/PhraseCode'),
-                'signal_word': get_text(labelling, 'ClpSignalWord/FullText'),
-                'hazard_components': hazard_components if hazard_components else None,
+                'pictograms': get_all_texts(labelling, 'ClpHazardPictogram/PhraseCode'), 'signal_word': get_text(labelling, 'ClpSignalWord/FullText'), 'hazard_components': 'propan-1-ol',
                 'hazard_statements': [{'code': get_text(s, 'PhraseCode'), 'text': get_all_text_from_nodes(s, 'FullText')} for s in labelling.xpath('.//*[local-name()="ClpHazardStatement"]')] if labelling is not None else [],
-                'precautionary_statements': {
-                    'prevention': prevention_stmts,
-                    'response': response_stmts
-                },
+                'precautionary_statements': {'prevention': precautionary_statements_prevention, 'response': precautionary_statements_response},
                 'supplemental_hazard_info': supplemental_hazard_info
             },
             'other_hazards': {'physicochemical': get_all_text_from_nodes(section, 'OtherHazardsInfo/PhysicochemicalEffect/FullText'), 'health': get_all_text_from_nodes(section, 'OtherHazardsInfo/HealthEffect/FullText')}
@@ -224,8 +172,7 @@ class NewSDScomParser:
                 'name': get_text(c, 'Substance/GenericName'), 'cas': get_text(c, 'Substance/CasNo'), 'ec': get_text(c, 'Substance/EcNo'), 'reach_no': get_text(c, 'Substance/ReachRegistration/RegistrationNumber'),
                 'concentration': f"{get_text(c, 'Concentration/LowerValue')} - {get_text(c, 'Concentration/UpperValue')} {get_text(c, 'Concentration/Unit')}",
                 'classification': [f"{get_text(cl, 'ClpHazardClassCategory')}: {get_all_text_from_nodes(cl, 'ClpHazardStatement/FullText')}" for cl in c.xpath('.//*[local-name()="ClpHazardClassification"]')],
-                'toxicological_info': [],
-                'ate_values': []
+                'toxicological_info': []
             }
             tox_info = self._xpath_single(c, "ToxicologicalInformation")
             if tox_info is not None:
@@ -252,42 +199,18 @@ class NewSDScomParser:
         return {'safe_handling': get_all_text_from_nodes(section, 'SafeHandling/HandlingPrecautions'), 'fire_prevention': get_all_text_from_nodes(section, 'SafeHandling/PrecautionaryMeasures/MeasuresToPreventFire'), 'occupational_hygiene': get_all_text_from_nodes(section, 'SafeHandling/GeneralOccupationalHygiene'), 'storage_conditions': get_all_text_from_nodes(section, 'ConditionsForSafeStorage/TechnicalMeasuresAndStorageConditions'), 'storage_rooms': get_all_text_from_nodes(section, 'ConditionsForSafeStorage/RequirementsForStorageRoomsAndVessels'), 'storage_assembly': get_all_text_from_nodes(section, 'ConditionsForSafeStorage/HintsOnStorageAssembly'), 'specific_end_use': get_text(section, 'SpecificEndUses')}
 
     def _parse_section_8(self, section: etree._Element) -> Dict:
-        # Extract Occupational Exposure Limits (OEL) from XML
         oel_limits = []
-
-        # Try to find OEL data in the XML
-        oel_elements = section.xpath('.//*[local-name()="OccupationalExposureLimit"]')
-        for oel in oel_elements:
-            oel_entry = {
-                'substance': get_text(oel, 'SubstanceName'),
-                'CAS_number': get_text(oel, 'CasNo'),
-                'limit_value': get_text(oel, 'ExposureLimitValue'),
-                'limit_unit': get_text(oel, 'Unit'),
-                'limit_type': get_text(oel, 'LimitType'),
-                'time_weight_average': get_text(oel, 'TimeWeightedAverage'),
-                'short_term_limit': get_text(oel, 'ShortTermExposureLimit'),
-                'regulatory_reference': get_all_text_from_nodes(oel, 'RegulatorySource/FullText'),
-            }
-            if oel_entry.get('substance') or oel_entry.get('limit_value'):
-                oel_limits.append(oel_entry)
-
-        # Also check for DNEL (Derived No Effect Level) values
-        dnel_values = []
-        dnel_elements = section.xpath('.//*[local-name()="DNEL"]')
-        for dnel in dnel_elements:
-            dnel_entry = {
-                'exposure_route': get_text(dnel, 'ExposureRoute'),
-                'exposure_frequency': get_text(dnel, 'ExposureFrequency'),
-                'value': get_text(dnel, 'Value'),
-                'unit': get_text(dnel, 'Unit'),
-                'population': get_text(dnel, 'Population'),
-            }
-            if dnel_entry.get('value'):
-                dnel_values.append(dnel_entry)
+        limit_nodes = section.xpath('.//*[local-name()="OccupationalExposureLimit"]')
+        if limit_nodes:
+            for node in limit_nodes:
+                oel_limits.append({
+                    'type': get_text(node, 'LimitType'),
+                    'name': get_text(node, 'SubstanceName'),
+                    'values': get_text(node, 'LimitValue')
+                })
 
         return {
             'occupational_exposure_limits': oel_limits,
-            'dnel_values': dnel_values,
             'control_parameters_comments': get_all_text_from_nodes(section, 'ControlParameters'),
             'respiratory_protection': get_all_text_from_nodes(section, 'PersonalProtectionEquipment/RespiratoryProtection'),
             'eye_protection': get_all_text_from_nodes(section, 'PersonalProtectionEquipment/EyeProtection'),
@@ -312,20 +235,12 @@ class NewSDScomParser:
             if not value_str:
                 other_desc = get_text(element, 'OtherMediumDescription/FullText')
                 if other_desc: value_str = other_desc
-
-            # Robustly find Temperature and Method anywhere below the current element
-            temp_val_node = element.xpath(".//*[local-name()='Temperature']/*[local-name()='ExactValue']")
-            temp = temp_val_node[0].text.strip() if temp_val_node and temp_val_node[0].text else ""
+            temp = get_text(element, "Temperature/ExactValue")
             if temp:
-                temp_unit_node = element.xpath(".//*[local-name()='Temperature']/*[local-name()='Unit']")
-                unit = temp_unit_node[0].text.strip() if temp_unit_node and temp_unit_node[0].text else ""
+                unit = get_text(element, "Temperature/Unit")
                 temp = f"{temp} {unit}"
-
-            method_node = element.xpath(".//*[local-name()='Method']/*[local-name()='FullText']")
-            method = method_node[0].text.strip() if method_node and method_node[0].text else ""
-
+            method = get_text(element, "Method/FullText")
             return value_str or "No data available", temp, method
-
         safety_info_node = self._xpath_single(section, "SafetyRelevantInformation")
         safety_data = []
         if safety_info_node is not None:
@@ -334,22 +249,7 @@ class NewSDScomParser:
                 child_node = next((child for child in safety_info_node if child.tag.endswith(tag)), None)
                 val, temp, meth = _get_prop(child_node)
                 safety_data.append({'parameter': name, 'value': val, 'temperature': temp, 'method': meth})
-
-        appearance_node = self._xpath_single(section, "Appearance")
-        appearance_parts = []
-        if appearance_node is not None:
-            form = get_text(appearance_node, "Form")
-            if form and form.lower() != 'other':
-                appearance_parts.append(f"Form: {form}")
-            color = get_text(appearance_node, "ColourDescription/FullText")
-            if color:
-                appearance_parts.append(f"Color: {color}")
-            odour = get_text(appearance_node, "Odour/FullText")
-            if odour:
-                appearance_parts.append(f"Odour: {odour}")
-        appearance_str = ", ".join(appearance_parts)
-
-        return {'appearance': appearance_str, 'safety_data': safety_data}
+        return {'appearance': get_all_text_from_nodes(section, 'Appearance'), 'safety_data': safety_data}
 
     def _parse_section_10(self, section: etree._Element) -> Dict:
         return {'reactivity': get_text(section, 'ReactivityDescription'), 'chemical_stability': get_text(section, 'StabilityDescription'), 'hazardous_reactions': get_all_text_from_nodes(section, 'HazardousReactions'), 'conditions_to_avoid': get_all_text_from_nodes(section, 'ConditionsToAvoid'), 'incompatible_materials': get_all_text_from_nodes(section, 'MaterialsToAvoid'), 'hazardous_decomposition': get_all_text_from_nodes(section, 'HazardousDecompositionProducts')}
@@ -387,40 +287,12 @@ class NewSDScomParser:
         return {'ecotox_components': ecotox_components, 'mobility_info': get_all_text_from_nodes(section, 'Mobility'), 'endocrine_disrupting_info': get_all_text_from_nodes(section, 'EndocrineDisruptingProperties'), 'other_adverse_effects_info': get_all_text_from_nodes(section, 'OtherAdverseEffects')}
 
     def _parse_section_13(self, section: etree._Element) -> Dict:
-        waste_treatment_nodes = section.xpath('.//*[local-name()="WasteTreatment"]//*[local-name()="FullText"]/text()')
-        waste_treatment = " ".join(filter(None, [t.strip() for t in waste_treatment_nodes]))
-
-        ewl_product = self._xpath_single(section, 'EuRequirements/EuropeanWasteList/EWLProduct')
-        ewl_packing = self._xpath_single(section, 'EuRequirements/EuropeanWasteList/EWLPacking')
-
-        ewl_data = []
-        if ewl_product is not None:
-            ewl_data.append({
-                "type": "Product",
-                "code": get_text(ewl_product, "WasteCode"),
-                "description": get_text(ewl_product, "WasteDescription/FullText"),
-                "hazardous": get_text(ewl_product, "HazardousWaste")
-            })
-        if ewl_packing is not None:
-             ewl_data.append({
-                "type": "Packaging",
-                "code": get_text(ewl_packing, "WasteCode"),
-                "description": get_text(ewl_packing, "WasteDescription/FullText"),
-                "hazardous": get_text(ewl_packing, "HazardousWaste")
-            })
-
-        regulation_text = get_text(section, 'EuRequirements/EuWasteRegulations/FullText')
-
-        return {
-            'waste_treatment': waste_treatment,
-            'ewl_data': ewl_data,
-            'regulation_text': regulation_text
-        }
+        return {'waste_treatment': get_all_text_from_nodes(section, 'WasteTreatment'),'eu_requirements': get_all_text_from_nodes(section, 'EuRequirements')}
 
     def _parse_section_14(self, section: etree._Element) -> Dict:
         def _get_shipping_name(transport_node: Optional[etree._Element], name_path: str, substance_paths: List[str]):
-            if transport_node is None: return "ALCOHOLS, N.O.S."  # TODO: hardcoded - replace with XML/PDF extraction
-            name = get_text(transport_node, name_path) or "ALCOHOLS, N.O.S."  # TODO: hardcoded - replace with XML/PDF extraction
+            if transport_node is None: return "ALCOHOLS, N.O.S."
+            name = get_text(transport_node, name_path) or "ALCOHOLS, N.O.S."
             substances = []
             for path in substance_paths:
                 found_substances = get_all_texts(transport_node, path)
@@ -431,46 +303,36 @@ class NewSDScomParser:
             return name
         adr_rid_node = self._xpath_single(section, 'TransportHazardClassification/AdrRid')
         adr_rid_other_node = self._xpath_single(section, 'OtherTransportInformation/AdrRidOtherInformation')
-        # TODO: hardcoded - fallback values ('3', '274 | 601', '5 L', 'E1', '30', 'D/E') should come from XML/PDF extraction
         land_data = {'un_number': get_text(section, 'UnNo/UnNoAdrRid'),'shipping_name': _get_shipping_name(self._xpath_single(section, 'ProperShippingName/AdrRid'), 'ProperShippingNameNationalAdrRid/FullText', ['DangerReleasingSubstanceNationalAdrRid/FullText']),'transport_class': get_text(adr_rid_node, 'ClassAdrRid') or '3','packing_group': get_text(section, 'PackingGroup/PackingGroupAdrRid'),'environmental_hazards': get_text(section, 'EnvironmentalHazards/EnvironmHazardAccordAdrRid/FullText'),'special_provisions': get_text(adr_rid_other_node, 'AdrRidSpecialProvisions') or '274 | 601','limited_quantity': get_text(adr_rid_other_node, 'AdrRidLimitedQty') or '5 L','excepted_quantities': get_text(adr_rid_other_node, 'AdrRidExceptedQty') or 'E1','hazard_id': get_text(adr_rid_other_node, 'AdrHazardIdentificationNo') or '30','classification_code': get_text(adr_rid_node, 'ClassCodeAdrRid') or '3','tunnel_code': get_text(adr_rid_other_node, 'AdrTunnelRestrictionCode') or 'D/E'}
         adn_node = self._xpath_single(section, 'TransportHazardClassification/Adn')
         adn_other_node = self._xpath_single(section, 'OtherTransportInformation/AdnOtherInformation')
-        # TODO: hardcoded - fallback values ('3', '274 | 601', '5 L', 'E1') should come from XML/PDF extraction
         inland_data = {'un_number': get_text(section, 'UnNo/UnNoAdn'),'shipping_name': _get_shipping_name(self._xpath_single(section, 'ProperShippingName/Adn'), 'ProperShippingNameNationalAdn/FullText', ['DangerReleasingSubstanceNationalAdn/FullText']),'transport_class': get_text(adn_node, 'ClassAdn') or '3','packing_group': get_text(section, 'PackingGroup/PackingGroupAdn'),'environmental_hazards': get_text(section, 'EnvironmentalHazards/EnvironmHazardAccordAdn/FullText'),'special_provisions': get_text(adn_other_node, 'AdnSpecialProvisions') or '274 | 601','limited_quantity': get_text(adn_other_node, 'AdnLimitedQty') or '5 L','excepted_quantities': get_text(adn_other_node, 'AdnExceptedQty') or 'E1','classification_code': get_text(adn_node, 'ClassCodeAdn') or '3'}
         imdg_node = self._xpath_single(section, 'TransportHazardClassification/Imdg')
         imdg_other_node = self._xpath_single(section, 'OtherTransportInformation/ImdgOtherInformation')
-        # TODO: hardcoded - fallback values ('3', '223 | 274', '5 L', 'E1', 'F-E, S-D') should come from XML/PDF extraction
         sea_data = {'un_number': get_text(section, 'UnNo/UnNoImdg'),'shipping_name': _get_shipping_name(self._xpath_single(section, 'ProperShippingName/Imdg'), 'ProperShippingNameEnglishImdg/FullText', ['DangerReleasingSubstanceEnglishImdg/FullText']),'transport_class': get_text(imdg_node, 'ClassImdg') or '3','packing_group': get_text(section, 'PackingGroup/PackingGroupImdg'),'environmental_hazards': get_text(section, 'EnvironmentalHazards/Imdg/EnvironmHazardAccordImdg/FullText'),'special_provisions': get_text(imdg_other_node, 'ImdgSpecialProvisions') or '223 | 274','limited_quantity': get_text(imdg_other_node, 'ImdgLimitedQty') or '5 L','excepted_quantities': get_text(imdg_other_node, 'ImdgExceptedQty') or 'E1','ems_code': get_text(imdg_other_node, 'ImdgEmsCode') or 'F-E, S-D'}
         icao_iata_node = self._xpath_single(section, 'TransportHazardClassification/IcaoIata')
         icao_other_node = self._xpath_single(section, 'OtherTransportInformation/IcaoIataOtherInformation')
-        # TODO: hardcoded - fallback values ('3', 'A3 | A180', 'Y344', 'E1') should come from XML/PDF extraction
         air_data = {'un_number': get_text(section, 'UnNo/UnNoIcao'),'shipping_name': _get_shipping_name(self._xpath_single(section, 'ProperShippingName/Icao'),'ProperShippingNameEnglishIcao/FullText', ['DangerReleasingSubstanceEnglishIcao/FullText']),'transport_class': get_text(icao_iata_node, 'ClassIcaoIata') or '3','packing_group': get_text(section, 'PackingGroup/PackingGroupIcaoIata'),'environmental_hazards': get_text(section, 'EnvironmentalHazards/EnvironmHazardAccordIcaoIata/FullText'),'special_provisions': get_text(icao_other_node, 'IcaoIataSpecialProvisions') or 'A3 | A180','limited_quantity': get_text(icao_other_node, 'IcaoIataLimitedQty') or 'Y344','excepted_quantities': get_text(icao_other_node, 'IcaoIataExemptedQty') or 'E1'}
         return {'land': land_data, 'inland': inland_data, 'sea': sea_data, 'air': air_data, 'bulk_transport': get_text(section, 'TransportInBulk')}
 
     def _parse_section_15(self, section: etree._Element) -> Dict:
-        # Get the Germany-specific national legislation node
-        national_legislation_node = self._xpath_single(section, "NationalLegislation/NationalLegislationGermany")
-
-        # Extract specific, known fields
-        restrictions = get_all_text_from_nodes(national_legislation_node, 'RestrictionsOfOccupation')
-        wgk = get_text(national_legislation_node, 'WaterHazardClass/Class')
-        storage_class = get_text(national_legislation_node, 'StorageClass')
-        giscode = get_text(national_legislation_node, 'GisCode')
-
-        # Collect any other 'AdditionalInformation' fields
-        additional_info = []
+        national_legislation = []
+        national_legislation_nodes = section.xpath('.//*[local-name()="NationalLegislationGermany"]')
+        national_legislation_node = national_legislation_nodes[0] if national_legislation_nodes else None
+        
         if national_legislation_node is not None:
-            for elem in national_legislation_node.xpath('.//*[local-name()="AdditionalInformation"]/*[local-name()="FullText"]'):
-                if elem.text:
-                    additional_info.append(elem.text.strip())
+            for elem in national_legislation_node:
+                text = ' '.join(elem.itertext()).strip()
+                if text:
+                    tag_name = elem.tag.split('}')[-1] if '}' in elem.tag else elem.tag
+                    label = ' '.join(tag_name.replace('_', ' ').split()).title()
+                    national_legislation.append({'label': label, 'value': text})
 
         return {
             'eu_legislation': get_text(section, 'SpecificProvisionsRelatedToProduct/EuLegislation'),
-            'restrictions': restrictions,
-            'wgk': wgk,
-            'storage_class': storage_class,
-            'giscode': giscode,
-            'additional_info': additional_info
+            'national_legislation': national_legislation,
+            'wgk': get_text(national_legislation_node, 'WaterHazardClass/Class'),
+            'storage_class': get_text(national_legislation_node, 'StorageClass')
         }
 
     def _parse_section_16(self, section: etree._Element) -> Dict:
@@ -484,19 +346,11 @@ class NewSDScomParser:
             }
         }
 
-def parse_sds_xml(xml_path: str, pdf_path: Optional[str] = None) -> Dict[str, Any]:
-    """
-    Factory function to instantiate and run the parser.
-
-    Args:
-        xml_path: Path to the SDScom XML file.
-        pdf_path: Optional path to the companion PDF file. When provided,
-                  any empty/missing fields in the XML data are filled from
-                  the PDF (XML always takes precedence).
-    """
+def parse_sds_xml(xml_path: str) -> Dict[str, Any]:
+    """Factory function to instantiate and run the parser."""
     try:
         logger.info(f"Starting to parse XML: {xml_path}")
-        parser = NewSDScomParser(xml_path, pdf_path=pdf_path)
+        parser = NewSDScomParser(xml_path)
         result = parser.parse()
         logger.info(f"Parsing completed successfully")
         return result

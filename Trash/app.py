@@ -6,20 +6,10 @@ Flask-based web UI for translating Safety Data Sheets
 
 import os
 import tempfile
-import secrets
 from flask import Flask
 import logging
-from database import set_db_path, get_db_path, DATABASE_OPTIONS, DEFAULT_DB_PATH, ensure_database_indices
+from database import set_db_path, get_db_path, DATABASE_OPTIONS, DEFAULT_DB_PATH
 from utils import AVAILABLE_LANGUAGES, LANG_TO_COLUMN, parse_flag_format
-
-# Generate secure secret key from environment or random
-def get_secret_key():
-    """Get secret key from environment or generate a secure random key."""
-    env_key = os.environ.get('FLASK_SECRET_KEY')
-    if env_key:
-        return env_key
-    # Generate a new secure key if not in environment (for development only)
-    return secrets.token_hex(32)
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -36,34 +26,9 @@ os.environ['GTK_PATH'] = r'C:\msys64\mingw64'
 
 # --- Flask App Initialization ---
 app = Flask(__name__)
-
-def jinja_pad_filter(s, width, fillchar='0', left=True):
-    """
-    Jinja2 filter to pad a string.
-    - s: The string to pad.
-    - width: The target width.
-    - fillchar: The character to use for padding.
-    - left: If True, pad on the left (rjust); otherwise, pad on the right (ljust).
-    """
-    s = str(s)
-    width = int(width)
-    fillchar = str(fillchar)
-    if left:
-        return s.rjust(width, fillchar)
-    else:
-        return s.ljust(width, fillchar)
-
-# Register the custom filter
-app.jinja_env.filters['pad'] = jinja_pad_filter
-
-app.secret_key = get_secret_key()
+app.secret_key = 'sds-translator-secret-key-2024'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
-
-# Ensure uploads directory exists
-uploads_path = app.config['UPLOAD_FOLDER']
-if not os.path.exists(uploads_path):
-    os.makedirs(uploads_path)
+app.config['UPLOAD_FOLDER'] = tempfile.gettempdir()
 
 # --- Import checks ---
 try:
@@ -113,17 +78,6 @@ app.register_blueprint(database_bp)
 app.register_blueprint(pdf_bp)
 app.register_blueprint(ghs_bp)
 
-# --- Initialize database indices for better performance ---
-# This runs automatically on startup to ensure indices exist
-try:
-    index_result = ensure_database_indices()
-    if index_result.get('success'):
-        logger.info(f"Database indices initialized: {index_result.get('indices_created')} indices created")
-    else:
-        logger.warning(f"Could not initialize database indices: {index_result.get('error')}")
-except Exception as e:
-    logger.warning(f"Error initializing database indices: {e}")
-
 # --- Logo Route ---
 @app.route('/mb_logo.svg')
 def serve_logo():
@@ -132,16 +86,6 @@ def serve_logo():
         return send_file('mb_logo.svg', mimetype='image/svg+xml')
     return "Logo not found", 404
 
-# --- Uploaded Files Route ---
-@app.route('/uploads/<path:filename>')
-def serve_upload(filename):
-    """Serve files from the uploads directory"""
-    from flask import send_from_directory
-    upload_folder = app.config.get('UPLOAD_FOLDER', 'uploads')
-    return send_from_directory(upload_folder, filename)
-
 
 if __name__ == '__main__':
-    # Determine debug mode from environment (default: False for security)
-    debug_mode = os.environ.get('FLASK_DEBUG', 'False').lower() in ('true', '1', 'yes')
-    app.run(debug=debug_mode, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000)

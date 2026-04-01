@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, session, jsonify, request, send_file, current_app, make_response
 import os
+import json
 from werkzeug.utils import secure_filename
 from sds_translator_v4 import SDSTranslator
 from database import get_db_path
@@ -10,7 +11,7 @@ main_bp = Blueprint('main', __name__)
 @main_bp.route('/')
 def index():
     """Main page with default template loaded."""
-    default_template = "layout-gemini-fixed.html"
+    default_template = "layout-placeholders-fixed-v2.html"
     template_loaded = False
     
     if os.path.exists(default_template):
@@ -39,15 +40,39 @@ def index():
 @main_bp.route('/api/upload', methods=['POST'])
 def upload_file():
     upload_folder = current_app.config['UPLOAD_FOLDER']
+
+    # Validate file presence
     if 'file' not in request.files:
         return jsonify({'error': 'No file provided'}), 400
     
     file = request.files['file']
-    if file.filename == '':
+
+    # Validate filename
+    if not file.filename or file.filename == '':
         return jsonify({'error': 'No file selected'}), 400
     
-    if file and file.filename.endswith('.html'):
-        filename = secure_filename(file.filename)
+    # Security: Use secure_filename and validate extension
+    filename = secure_filename(file.filename)
+
+    # Validate file extension (whitelist approach)
+    allowed_extensions = {'.html', '.htm'}
+    file_ext = os.path.splitext(filename)[1].lower()
+    if file_ext not in allowed_extensions:
+        return jsonify({'error': 'Invalid file type. Only HTML files are allowed.'}), 400
+
+    # Additional security: Check for path traversal attempts
+    if '..' in filename or '/' in filename or '\\' in filename:
+        return jsonify({'error': 'Invalid filename detected'}), 400
+
+    # Validate file size (limit to 16MB as per Flask config)
+    file.seek(0, 2)  # Seek to end
+    file_size = file.tell()
+    file.seek(0)  # Reset to beginning
+    max_size = current_app.config.get('MAX_CONTENT_LENGTH', 16 * 1024 * 1024)
+    if file_size > max_size:
+        return jsonify({'error': f'File too large. Maximum size is {max_size // (1024*1024)}MB'}), 400
+
+    if file and filename.endswith('.html'):
         filepath = os.path.join(upload_folder, filename)
         file.save(filepath)
         
@@ -170,6 +195,15 @@ def export_document():
         return jsonify({'error': 'Invalid export format. Use pdf, html, or docx'}), 400
     
     try:
+        # FIRST: Check if there are edited contents from the editor that need to be saved
+        # This ensures manual corrections are included in the export
+        edited_content = data.get('edited_content')
+        if edited_content:
+            # Save the edited content before exporting
+            with open(session['translated_file'], 'w', encoding='utf-8') as f:
+                f.write(edited_content)
+            print(f"Saved edited content before export: {len(edited_content)} bytes")
+
         with open(session['translated_file'], 'r', encoding='utf-8') as f:
             html_content = f.read()
         
@@ -435,22 +469,24 @@ def export_translated_docx(html_content, target_lang, lang_name):
         elif element.name == 'table':
             rows = element.find_all('tr')
             if rows:
-                table = doc.add_table(rows=len(rows), cols=len(rows[0].find_all(['td', 'th'])))
-                table.style = 'Table Grid'
-                
-                for i, row in enumerate(rows.find_all(['td', 'th'])):
-                    cells = row.find_all(['td', 'th'])
-                    for j, cell in enumerate(cells):
-                        if i < len(table.rows) and j < len(table.columns):
-                            cell_text = cell.get_text(strip=True)
-                            table.rows[i].cells[j].text = cell_text
-                            
-                            # Style header row
-                            if i == 0:
-                                for paragraph in table.rows[i].cells[j].paragraphs:
-                                    for run in paragraph.runs:
-                                        run.font.bold = True
-                                        run.font.color.rgb = RGBColor(118, 184, 42)
+                first_row_cells = rows[0].find_all(['td', 'th']) if rows[0] else []
+                if first_row_cells:
+                    table = doc.add_table(rows=len(rows), cols=len(first_row_cells))
+                    table.style = 'Table Grid'
+
+                    for i, row in enumerate(rows):
+                        cells = row.find_all(['td', 'th'])
+                        for j, cell in enumerate(cells):
+                            if i < len(table.rows) and j < len(table.columns):
+                                cell_text = cell.get_text(strip=True)
+                                table.rows[i].cells[j].text = cell_text
+
+                                # Style header row
+                                if i == 0:
+                                    for paragraph in table.rows[i].cells[j].paragraphs:
+                                        for run in paragraph.runs:
+                                            run.font.bold = True
+                                            run.font.color.rgb = RGBColor(118, 184, 42)
     
     # Save
     doc_buffer = BytesIO()
@@ -635,9 +671,9 @@ def process_combined_import():
         xml_file.save(temp_xml_path)
         pdf_file.save(temp_pdf_path)
         
-        # Parse XML file
+        # Parse XML file with PDF fallback
         from sds_parser import parse_sds_xml
-        sds_data = parse_sds_xml(temp_xml_path)
+        sds_data = parse_sds_xml(temp_xml_path, temp_pdf_path)
         
         if not sds_data:
             return jsonify({'error': 'Failed to parse the XML file.'}), 400
@@ -716,6 +752,16 @@ def process_combined_import():
         template_file = os.path.basename(template_path)
         
         env = Environment(loader=FileSystemLoader(template_dir), autoescape=True)
+
+        # Add custom 'pad' filter for zero-padding numbers
+        def pad_filter(value, length, fillchar='0', left=True):
+            s = str(value)
+            if left:
+                return s.zfill(length)
+            else:
+                return s.rjust(length, fillchar)
+
+        env.filters['pad'] = pad_filter
         template = env.get_template(template_file)
         rendered_html = template.render(sds_data)
         
@@ -741,3 +787,186 @@ def process_combined_import():
     except Exception as e:
         import traceback
         return jsonify({'error': f'An unexpected error occurred: {str(e)}\n{traceback.format_exc()}'}), 500
+
+# ==============================================================
+# TEMPLATE EDITOR API ROUTES
+# ==============================================================
+
+@main_bp.route('/api/template', methods=['GET'])
+def get_template():
+    template_path = os.path.join(current_app.root_path, 'layout-placeholders-fixed-v2.html')
+    try:
+        with open(template_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        return jsonify({'success': True, 'content': content})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@main_bp.route('/api/template/save', methods=['POST'])
+def save_template():
+    data = request.json
+    content = data.get('content', '')
+
+    # Security: Input validation
+    if not isinstance(content, str):
+        return jsonify({'success': False, 'error': 'Ungültiger Inhaltstyp'})
+
+    # Limit content size (max 10MB)
+    if len(content) > 10 * 1024 * 1024:
+        return jsonify({'success': False, 'error': 'Inhalt zu groß (max. 10MB)'})
+
+    # Basic security check - reject if it contains potentially dangerous patterns
+    # Allow <script> tags (they're needed for inline JS in templates)
+    # Block javascript: URLs and event handlers
+    suspicious_patterns = ['javascript:', 'onerror=', 'onclick=', 'onload=']
+    for pattern in suspicious_patterns:
+        if pattern.lower() in content.lower():
+            return jsonify({'success': False, 'error': 'Verdächtige Inhalte erkannt: ' + pattern})
+
+    template_path = os.path.join(current_app.root_path, 'layout-placeholders-fixed-v2.html')
+    backup_path = os.path.join(current_app.root_path, 'layout-placeholders-fixed-v2.backup.html')
+    try:
+        # Create backup if it doesn't exist to allow resetting
+        if not os.path.exists(backup_path) and os.path.exists(template_path):
+            import shutil
+            shutil.copy(template_path, backup_path)
+
+        with open(template_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+
+        # Clear phrase cache after template change
+        try:
+            from sds_translator_v4 import SDSTranslator
+            SDSTranslator.clear_cache()
+            print("Phrase cache cleared after template save")
+        except Exception as e:
+            print(f"Could not clear phrase cache: {e}")
+
+        return jsonify({'success': True})
+    except Exception as e:
+        import traceback
+        return jsonify({'success': False, 'error': str(e) + '\n' + traceback.format_exc()})
+
+@main_bp.route('/api/template/reset', methods=['POST'])
+def reset_template():
+    template_path = os.path.join(current_app.root_path, 'layout-placeholders-fixed-v2.html')
+    try:
+        if os.path.exists(template_path):
+            with open(template_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            return jsonify({'success': True, 'content': content})
+        else:
+            return jsonify({'success': False, 'error': 'Template-Datei nicht gefunden.'})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+# ======================================================
+# MAPPING API ROUTES
+# ======================================================
+@main_bp.route('/api/mappings', methods=['GET'])
+def get_mappings():
+    """Get template field mappings."""
+    import json
+    mappings_path = os.path.join(current_app.root_path, 'mappings.json')
+    try:
+        if os.path.exists(mappings_path):
+            with open(mappings_path, 'r', encoding='utf-8') as f:
+                mappings = json.load(f)
+            return jsonify({'success': True, 'mappings': mappings})
+        else:
+            # Return default mappings
+            return jsonify({'success': True, 'mappings': []})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@main_bp.route('/api/mappings/save', methods=['POST'])
+def save_mappings():
+    """Save template field mappings."""
+    import json
+    data = request.json
+    mappings = data.get('mappings', [])
+
+    # Security: Input validation
+    if not isinstance(mappings, list):
+        return jsonify({'success': False, 'error': 'Ungültiges Format'})
+
+    # Limit number of mappings
+    if len(mappings) > 1000:
+        return jsonify({'success': False, 'error': 'Zu viele Mappings (max. 1000)'})
+
+    # Validate each mapping
+    for m in mappings:
+        if not isinstance(m, dict):
+            return jsonify({'success': False, 'error': 'Ungültiges Mapping-Format'})
+        if 'templateVar' not in m or 'sourceField' not in m:
+            return jsonify({'success': False, 'error': 'Mapping muss templateVar und sourceField enthalten'})
+
+    mappings_path = os.path.join(current_app.root_path, 'mappings.json')
+    try:
+        with open(mappings_path, 'w', encoding='utf-8') as f:
+            json.dump(mappings, f, indent=2, ensure_ascii=False)
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+
+@main_bp.route('/api/check-import-session', methods=['GET'])
+def check_import_session():
+    """Prüft, ob eine Import-Session existiert"""
+    session_file = os.path.join(current_app.config['UPLOAD_FOLDER'], 'import_session.json')
+
+    # DEBUG: Logging hinzufügen
+    print(f"DEBUG: Checking for session file at: {session_file}")
+    print(f"DEBUG: UPLOAD_FOLDER config: {current_app.config.get('UPLOAD_FOLDER', 'NOT_SET')}")
+    print(f"DEBUG: File exists: {os.path.exists(session_file)}")
+
+    if os.path.exists(session_file):
+        try:
+            with open(session_file, 'r', encoding='utf-8') as f:
+                session_data = json.load(f)
+            print(f"DEBUG: Session data loaded: {session_data}")
+            return jsonify({'success': True, 'session_data': session_data})
+        except Exception as e:
+            print(f"DEBUG: Error reading session file: {e}")
+            return jsonify({'success': False, 'error': str(e)})
+    else:
+        print(f"DEBUG: Session file not found")
+        return jsonify({'success': False, 'message': 'No import session found'})
+
+@main_bp.route('/api/set-import-session', methods=['POST'])
+def set_import_session():
+    """Setzt die Session-Daten für die importierte Datei"""
+    data = request.json
+
+    # DEBUG: Logging hinzufügen
+    print(f"DEBUG: Setting import session with data: {data}")
+    print(f"DEBUG: uploaded_file: {data.get('uploaded_file')}")
+    print(f"DEBUG: original_filename: {data.get('original_filename')}")
+    print(f"DEBUG: is_xml_import: {data.get('is_xml_import')}")
+
+    session['uploaded_file'] = data.get('uploaded_file')
+    session['original_filename'] = data.get('original_filename')
+    session['is_xml_import'] = data.get('is_xml_import', True)
+
+    print(f"DEBUG: Session set successfully")
+    return jsonify({'success': True})
+
+@main_bp.route('/api/clear-import-session', methods=['POST'])
+def clear_import_session():
+    """Löscht die temporäre Session-Datei"""
+    session_file = os.path.join(current_app.config['UPLOAD_FOLDER'], 'import_session.json')
+
+    # DEBUG: Logging hinzufügen
+    print(f"DEBUG: Clearing import session file at: {session_file}")
+    print(f"DEBUG: File exists before deletion: {os.path.exists(session_file)}")
+
+    try:
+        if os.path.exists(session_file):
+            os.remove(session_file)
+            print(f"DEBUG: Session file deleted successfully")
+        else:
+            print(f"DEBUG: Session file did not exist")
+        return jsonify({'success': True})
+    except Exception as e:
+        print(f"DEBUG: Error deleting session file: {e}")
+        return jsonify({'success': False, 'error': str(e)})

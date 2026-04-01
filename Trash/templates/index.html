@@ -68,9 +68,6 @@
             min-height: 500px;
             border: none;
             background: #FFFFFF;
-            color-scheme: light;
-            color: #000;
-            overflow: auto;
         }
 
         /* OTHER */
@@ -256,107 +253,8 @@
         .dark .gutter {
             background-color: #334155;
         }
-
-        /* Editor A4 Simulation */
-        .trumbowyg-box {
-            background-color: #525659 !important;
-            padding: 20px 0 !important;
-            overflow-y: auto !important;
-        }
-        .trumbowyg-editor {
-            width: 210mm !important;
-            min-height: 297mm !important;
-            margin: 0 auto !important;
-            background-color: #ffffff !important;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3) !important;
-            padding: 15mm !important;
-            color: #000 !important;
-        }
-
-        /* Quill Editor Custom Styles */
-        .ql-container {
-            font-family: Arial, Helvetica, "Nimbus Sans", sans-serif !important;
-            font-size: 9.5pt !important;
-        }
-
-        .ql-editor {
-            padding: 15px !important;
-            min-height: 100% !important;
-        }
-
-        .ql-toolbar {
-            background-color: #f3f4f6 !important;
-            border-bottom: 1px solid #d1d5db !important;
-        }
-
-        .ql-toolbar.ql-snow {
-            border: none !important;
-            border-bottom: 1px solid #d1d5db !important;
-        }
-
-        .ql-container.ql-snow {
-            border: none !important;
-        }
-
-        /* Ensure Quill editor fills container */
-        #richTextEditor .ql-container,
-        #originalEditor .ql-container {
-            height: calc(100% - 42px) !important;
-        }
-
-        #richTextEditor .ql-editor,
-        #originalEditor .ql-editor {
-            height: 100% !important;
-            overflow-y: auto !important;
-            caret-color: black !important;
-        }
-
-        /* Force cursor color in editors */
-        #richTextEditor, #originalEditor, #modalRichTextEditor, #wysiwygEditor {
-            caret-color: black !important;
-        }
-
-        #richTextEditor:focus, #originalEditor:focus, #modalRichTextEditor:focus, #wysiwygEditor:focus {
-            caret-color: black !important;
-        }
     </style>
     <!-- END: Custom Styles -->
-    <!-- Quill.js Rich Text Editor - Open Source, No API Key Required -->
-    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
-    <script>
-        // Fallback: Check if Quill loaded successfully
-        window.addEventListener('load', function() {
-            if (typeof Quill === 'undefined') {
-                console.error('Quill failed to load from CDN. Attempting to load from alternative source...');
-                // Try alternative CDN
-                var script = document.createElement('script');
-                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.min.js';
-                script.onerror = function() {
-                    console.error('Quill failed to load from all sources.');
-                    // Show user-friendly error message
-                    var errorMsg = document.createElement('div');
-                    errorMsg.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-4 rounded-lg shadow-lg z-50';
-                    errorMsg.innerHTML = `
-                        <div class="flex items-center gap-3">
-                            <span class="text-xl">⚠️</span>
-                            <div>
-                                <div class="font-bold">Texteditor konnte nicht geladen werden</div>
-                                <div class="text-sm opacity-90">Bitte überprüfen Sie Ihre Internetverbindung</div>
-                            </div>
-                            <button onclick="location.reload()" class="ml-4 bg-white text-red-500 px-3 py-1 rounded font-semibold hover:bg-gray-100 transition-colors">
-                                Neu laden
-                            </button>
-                        </div>
-                    `;
-                    document.body.appendChild(errorMsg);
-                    // Auto-remove after 10 seconds
-                    setTimeout(() => errorMsg.remove(), 10000);
-                };
-                document.head.appendChild(script);
-            }
-        });
-    </script>
 </head>
 <body class="font-sans antialiased bg-light-bg text-light-text dark:bg-minerva-black dark:text-gray-200">
     <!-- BEGIN: Top Navigation -->
@@ -377,17 +275,7 @@
                 <button class="text-xs font-semibold uppercase tracking-wider text-light-text-secondary dark:text-minerva-gray hover:text-light-text dark:hover:text-white transition-colors" onclick="showTab('database', this)">Datenbank</button>
                 <button class="text-xs font-semibold uppercase tracking-wider text-light-text-secondary dark:text-minerva-gray hover:text-light-text dark:hover:text-white transition-colors" onclick="showTab('ghs', this)">GHS Pictograms</button>
                 <button class="text-xs font-semibold uppercase tracking-wider text-light-text-secondary dark:text-minerva-gray hover:text-light-text dark:hover:text-white transition-colors" onclick="showTab('stats', this)">Statistiken</button>
-                <button class="text-xs font-semibold uppercase tracking-wider text-light-text-secondary dark:text-minerva-gray hover:text-light-text dark:hover:text-white transition-colors" onclick="showTab('template', this)">Template Bearbeiten</button>
-                <button class="text-xs font-semibold uppercase tracking-wider text-light-text-secondary dark:text-minerva-gray hover:text-light-text dark:hover:text-white transition-colors" onclick="showTab('mapping', this)">Mapping</button>
             </nav>
-            <!-- Mobile Menu Button -->
-            <div class="lg:hidden">
-                <button id="mobile-menu-button" class="text-light-text-secondary dark:text-minerva-gray">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                    </svg>
-                </button>
-            </div>
         </div>
         <div class="flex items-center gap-4">
              <!-- DB Status -->
@@ -402,19 +290,6 @@
         </div>
     </header>
     <!-- END: Top Navigation -->
-
-    <!-- Mobile Navigation Menu -->
-    <div id="mobile-menu" class="hidden lg:hidden bg-white dark:bg-minerva-black p-4">
-        <nav class="flex flex-col gap-4">
-            <button class="text-sm font-semibold uppercase tracking-wider transition-colors tab-active" onclick="showTab('translate', this); toggleMobileMenu();">Übersetzen</button>
-            <button class="text-sm font-semibold uppercase tracking-wider text-light-text-secondary dark:text-minerva-gray hover:text-light-text dark:hover:text-white transition-colors" onclick="showTab('database', this); toggleMobileMenu();">Datenbank</button>
-            <button class="text-sm font-semibold uppercase tracking-wider text-light-text-secondary dark:text-minerva-gray hover:text-light-text dark:hover:text-white transition-colors" onclick="showTab('ghs', this); toggleMobileMenu();">GHS Pictograms</button>
-            <button class="text-sm font-semibold uppercase tracking-wider text-light-text-secondary dark:text-minerva-gray hover:text-light-text dark:hover:text-white transition-colors" onclick="showTab('stats', this); toggleMobileMenu();">Statistiken</button>
-            <button class="text-sm font-semibold uppercase tracking-wider text-light-text-secondary dark:text-minerva-gray hover:text-light-text dark:hover:text-white transition-colors" onclick="showTab('template', this); toggleMobileMenu();">Template Bearbeiten</button>
-            <button class="text-sm font-semibold uppercase tracking-wider text-light-text-secondary dark:text-minerva-gray hover:text-light-text dark:hover:text-white transition-colors" onclick="showTab('mapping', this); toggleMobileMenu();">Mapping</button>
-        </nav>
-    </div>
-
 
     <main class="max-w-[1800px] mx-auto p-8">
         <!-- Translate Tab -->
@@ -532,19 +407,6 @@
                     </div>
                     <!-- WYSIWYG Toolbar -->
                     <div id="editor-toolbar" class="bg-light-card dark:bg-minerva-card border border-light-border dark:border-minerva-border rounded-t-lg p-2 flex gap-2 flex-wrap" style="display: none;">
-                        <!-- Formatting Styles -->
-                        <select id="formatStyle" onchange="applyFormatStyle(this.value)" class="bg-light-bg dark:bg-minerva-black border border-light-border dark:border-minerva-border rounded px-2 py-1 text-xs font-bold text-minerva-green">
-                            <option value="">Formatvorlage...</option>
-                            <option value="section-title">Abschnitt (z.B. 1.)</option>
-                            <option value="subsection-title">1.1 Überschrift</option>
-                            <option value="subsubsection">1.1.1 Überschrift</option>
-                            <option value="sub-heading">Sub-Überschrift (Fett)</option>
-                            <option value="sub-heading-u">Sub-Überschrift (Unterstrichen)</option>
-                            <option value="normal-text">Normaler Text</option>
-                            <option value="table-text">Text Tabellen</option>
-                            <option value="table-header">Text Tabellen Überschrift</option>
-                        </select>
-                        <div class="w-px h-6 bg-light-border dark:bg-minerva-border mx-1"></div>
                         <!-- Font Selection -->
                         <select id="fontFamily" onchange="document.execCommand('fontName', false, this.value)" class="bg-light-bg dark:bg-minerva-black border border-light-border dark:border-minerva-border rounded px-2 py-1 text-xs">
                             <option value="Arial">Arial</option>
@@ -592,33 +454,28 @@
                         <button onclick="deleteRow()" class="p-2 rounded hover:bg-light-bg dark:hover:bg-minerva-hover" title="Zeile löschen">➖Z</button>
                         <button onclick="deleteColumn()" class="p-2 rounded hover:bg-light-bg dark:hover:bg-minerva-hover" title="Spalte löschen">➖S</button>
                         <button onclick="deleteTable()" class="p-2 rounded hover:bg-light-bg dark:hover:bg-minerva-hover" title="Tabelle löschen">🗑️T</button>
-                        <button onclick="mergeTableCells()" class="p-2 rounded hover:bg-light-bg dark:hover:bg-minerva-hover" title="Zellen verbinden">🔗Z</button>
-                        <button onclick="splitTableCell()" class="p-2 rounded hover:bg-light-bg dark:hover:bg-minerva-hover" title="Zelle teilen">✂️Z</button>
-                        <button onclick="setColumnWidth()" class="p-2 rounded hover:bg-light-bg dark:hover:bg-minerva-hover" title="Spaltenbreite anpassen">📏S</button>
-                        <button onclick="applySDSTableStyle()" class="p-2 rounded hover:bg-light-bg dark:hover:bg-minerva-hover" title="SDS-Tabellendesign anwenden">📋</button>
                         <div class="w-px h-6 bg-light-border dark:bg-minerva-border mx-1"></div>
                         <input type="color" id="tableBgColor" onchange="changeTableCellBgColor(this.value)" class="w-8 h-8 rounded cursor-pointer" title="Zellenhintergrund">
                         <input type="color" id="tableBorderColor" onchange="changeTableCellBorderColor(this.value)" class="w-8 h-8 rounded cursor-pointer" title="Rahmenfarbe">
                         <div class="w-px h-6 bg-light-border dark:bg-minerva-border mx-1"></div>
                         <button onclick="document.execCommand('insertHorizontalRule')" class="p-2 rounded hover:bg-light-bg dark:hover:bg-minerva-hover" title="Linie">―</button>
                         <button onclick="var url=prompt('URL:'); if(url) document.execCommand('createLink', false, url)" class="p-2 rounded hover:bg-light-bg dark:hover:bg-minerva-hover" title="Link einfügen">🔗</button>
-                        <button onclick="promptAndInsertImage()" class="p-2 rounded hover:bg-light-bg dark:hover:bg-minerva-hover" title="Bild einfügen/auswählen">🖼️</button>
                         <div class="w-px h-6 bg-light-border dark:bg-minerva-border mx-1"></div>
                         <!-- Undo/Redo -->
                         <button onclick="document.execCommand('undo')" class="p-2 rounded hover:bg-light-bg dark:hover:bg-minerva-hover" title="Rückgängig">↩</button>
                         <button onclick="document.execCommand('redo')" class="p-2 rounded hover:bg-light-bg dark:hover:bg-minerva-hover" title="Wiederholen">↪</button>
                     </div>
                      <!-- Preview Grid -->
-                    <div class="flex" id="previewContainer" style="height: calc(100vh - 380px); min-height: 500px; overflow: auto;">
+                    <div class="flex" id="previewContainer" style="height: calc(100vh - 380px); min-height: 500px;">
                         <!-- Original Iframe (Editable) -->
-                        <div id="original-container" class="bg-white rounded-lg shadow-2xl relative group" style="overflow: auto;">
+                        <div id="original-container" class="bg-white rounded-lg overflow-hidden shadow-2xl relative group">
                             <iframe class="preview-iframe" id="originalPreview" style="height: 100%;"></iframe>
-                            <div id="originalEditor" class="preview-iframe text-black bg-white" style="display:none; height: 100%; width: 100%; box-sizing: border-box;"></div>
+                            <div id="originalEditor" class="preview-iframe p-4 overflow-y-auto text-black bg-white" contenteditable="true" style="display:none; height: 100%; width: 100%; box-sizing: border-box;" onblur="saveEditorContent()"></div>
                         </div>
                         <!-- Translated View (Editable) -->
-                        <div id="translated-container" class="bg-white rounded-lg shadow-2xl relative group transition-all duration-300" style="overflow: auto;">
-                            <div id="richTextEditor" class="preview-iframe text-black bg-white" style="display:none; height: 100%; width: 100%; box-sizing: border-box;"></div>
-                            <iframe class="preview-iframe" id="translatedPreview" style="height: 100%;"></iframe>
+                        <div id="translated-container" class="bg-white rounded-lg overflow-hidden shadow-2xl relative group transition-all duration-300">
+                             <div id="richTextEditor" class="preview-iframe p-4 overflow-y-auto text-black bg-white" contenteditable="true" style="display:none; height: 100%; width: 100%; box-sizing: border-box;" onblur="saveEditorContent()"></div>
+                             <iframe class="preview-iframe" id="translatedPreview" style="height: 100%;"></iframe>
                         </div>
                     </div>
                      <!-- Relocated "Nicht übersetzte Phrasen" -->
@@ -767,127 +624,6 @@
                  </div>
             </div>
         </div>
-
-        <!-- TEMPLATE TAB -->
-        <div id="template-tab" class="tab-content" style="display: none;">
-            <div class="bg-light-card dark:bg-minerva-card border border-light-border dark:border-minerva-border rounded-lg p-4 flex flex-col" style="max-height: calc(100vh - 120px); overflow: hidden;">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-bold text-light-text dark:text-white">Template Editor</h2>
-                    <div class="flex gap-2">
-                        <button id="editorModeToggle" onclick="toggleEditorMode()" class="bg-purple-500 hover:bg-purple-600 text-white px-3 py-1.5 rounded text-sm transition-colors" title="Zwischen Code und WYSIWYG wechseln">🔄 WYSIWYG</button>
-                        <input type="file" id="templateImportFile" style="display:none" onchange="importTemplateFile(this)" accept=".html,.htm">
-                        <button onclick="document.getElementById('templateImportFile').click()" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded text-sm transition-colors" title="HTML-Vorlage hochladen">📥 Importieren</button>
-                        <button onclick="exportTemplate()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm transition-colors" title="Als HTML-Datei herunterladen">📤 Exportieren</button>
-                        <button onclick="resetTemplate()" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded text-sm transition-colors" title="Auf Werkszustand zurücksetzen">🔄 Zurücksetzen</button>
-                        <button onclick="saveTemplate()" class="btn-primary px-6 py-1.5 rounded text-sm font-bold transition-colors shadow-lg">Speichern</button>
-                    </div>
-                </div>
-                <!-- Warning -->
-                <div class="bg-yellow-500/10 border border-yellow-500/20 text-yellow-600 dark:text-yellow-400 p-3 rounded text-sm mb-4">
-                    <strong>Achtung:</strong> Hier bearbeiten Sie direkt die HTML-Layoutvorlage (<code>layout-placeholders-fixed-v2.html</code>). Da dieses Dokument als Basis für den PDF-Export und die App-Vorschau dient, empfehlen wir vor größeren Anpassungen zunächst einen Export zur Sicherheit.
-                </div>
-                <!-- Editor Mode Tabs -->
-                <div class="flex gap-2 mb-4 border-b border-light-border dark:border-minerva-border">
-                    <button id="codeEditorTab" onclick="switchEditorMode('code')" class="px-4 py-2 text-sm font-semibold border-b-2 border-minerva-green text-minerva-green">Code Editor</button>
-                    <button id="wysiwygEditorTab" onclick="switchEditorMode('wysiwyg')" class="px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-light-text-secondary dark:text-minerva-gray hover:text-minerva-green">Visuell (WYSIWYG)</button>
-                </div>
-
-                <!-- Editor Container - Fixed Height -->
-                <div style="height: 35vh; min-height: 250px;">
-                    <!-- Code Editor -->
-                    <textarea id="templateCodeEditor" class="w-full h-full bg-light-bg dark:bg-[#15171e] p-4 font-mono text-xs md:text-sm border border-light-border dark:border-minerva-border rounded text-light-text dark:text-gray-300" spellcheck="false" style="white-space: pre; overflow-wrap: normal; overflow-x: auto; box-sizing: border-box; resize: none;" oninput="syncCodeToPreview()"></textarea>
-
-                    <!-- WYSIWYG Editor (hidden by default) -->
-                    <div id="wysiwygEditorContainer" class="flex flex-col h-full" style="display: none;">
-                        <div id="wysiwygEditor" class="flex-1 w-full bg-white border border-light-border dark:border-minerva-border rounded p-4 overflow-y-auto" contenteditable="true" oninput="syncWysiwygToCode()"></div>
-                    </div>
-                </div>
-
-                <!-- Live Preview -->
-                <div class="mt-4 border-t border-light-border dark:border-minerva-border pt-4">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="text-sm font-semibold text-light-text-secondary dark:text-minerva-gray">Live Vorschau</h3>
-                        <div class="flex gap-2">
-                            <button onclick="togglePreviewSize()" class="px-2 py-1 text-xs bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300" title="Vorschaugröße ändern">⤢</button>
-                        </div>
-                    </div>
-                    <iframe id="templatePreview" class="w-full border border-light-border dark:border-minerva-border rounded" style="height: 250px; background: white; overflow: auto;"></iframe>
-                </div>
-            </div>
-        </div>
-
-        <!-- MAPPING TAB -->
-        <div id="mapping-tab" class="tab-content" style="display: none;">
-            <div class="bg-light-card dark:bg-minerva-card border border-light-border dark:border-minerva-border rounded-lg p-6 flex flex-col h-[calc(100vh-180px)]">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-bold text-light-text dark:text-white">Template Mapping</h2>
-                    <div class="flex gap-2">
-                        <button onclick="refreshMappings()" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded text-sm transition-colors">🔄 Aktualisieren</button>
-                        <button onclick="saveMappings()" class="btn-primary px-6 py-1.5 rounded text-sm font-bold transition-colors shadow-lg">Speichern</button>
-                    </div>
-                </div>
-                <p class="text-sm text-light-text-secondary dark:text-minerva-gray mb-4">Zeigt die Zuordnung zwischen XML/JSON-Feldern und Template-Platzhaltern. Hier können Sie Mappings überprüfen und anpassen.</p>
-
-                <!-- Mapping Filter -->
-                <div class="flex gap-4 mb-4">
-                    <select id="mappingSectionFilter" onchange="filterMappings()" class="bg-light-bg dark:bg-minerva-black border border-light-border dark:border-minerva-border rounded px-3 py-2 text-sm">
-                        <option value="all">Alle Abschnitte</option>
-                        <option value="section_1">Abschnitt 1: Identifikation</option>
-                        <option value="section_2">Abschnitt 2: Gefahrenhinweise</option>
-                        <option value="section_3">Abschnitt 3: Zusammensetzung</option>
-                        <option value="section_4">Abschnitt 4: Erste-Hilfe-Maßnahmen</option>
-                        <option value="section_5">Abschnitt 5: Maßnahmen zur Brandbekämpfung</option>
-                        <option value="section_6">Abschnitt 6: Maßnahmen bei unbeabsichtigter Freisetzung</option>
-                        <option value="section_7">Abschnitt 7: Handhabung und Lagerung</option>
-                        <option value="section_8">Abschnitt 8: Exposition/Personenschutz</option>
-                        <option value="section_9">Abschnitt 9: Physikalische Eigenschaften</option>
-                        <option value="section_10">Abschnitt 10: Stabilität und Reaktivität</option>
-                        <option value="section_11">Abschnitt 11: Toxikologische Angaben</option>
-                        <option value="section_12">Abschnitt 12: Umweltbezogene Angaben</option>
-                        <option value="section_13">Abschnitt 13: Hinweise zur Entsorgung</option>
-                        <option value="section_14">Abschnitt 14: Transportangaben</option>
-                        <option value="section_15">Abschnitt 15: Rechtsvorschriften</option>
-                        <option value="section_16">Abschnitt 16: Sonstige Angaben</option>
-                    </select>
-                    <input type="text" id="mappingSearch" oninput="filterMappings()" placeholder="Suchen..." class="flex-1 bg-light-bg dark:bg-minerva-black border border-light-border dark:border-minerva-border rounded px-3 py-2 text-sm">
-                </div>
-
-                <!-- Mapping Table -->
-                <div class="flex-1 overflow-auto">
-                    <table class="w-full text-sm border-collapse">
-                        <thead class="bg-light-bg dark:bg-minerva-black sticky top-0">
-                            <tr>
-                                <th class="text-left p-3 border-b border-light-border dark:border-minerva-border font-semibold text-light-text dark:text-white">Template Variable</th>
-                                <th class="text-left p-3 border-b border-light-border dark:border-minerva-border font-semibold text-light-text dark:text-white">Quellfeld (XML/JSON)</th>
-                                <th class="text-left p-3 border-b border-light-border dark:border-minerva-border font-semibold text-light-text dark:text-white">Beispielwert</th>
-                                <th class="text-left p-3 border-b border-light-border dark:border-minerva-border font-semibold text-light-text dark:text-white">Status</th>
-                                <th class="text-left p-3 border-b border-light-border dark:border-minerva-border font-semibold text-light-text dark:text-white">Aktionen</th>
-                            </tr>
-                        </thead>
-                        <tbody id="mappingTableBody">
-                            <!-- Mappings loaded by JS -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Add New Mapping -->
-                <div class="mt-4 pt-4 border-t border-light-border dark:border-minerva-border">
-                    <h3 class="text-sm font-semibold text-light-text dark:text-white mb-3">Neues Mapping hinzufügen</h3>
-                    <div class="flex gap-4 items-end">
-                        <div class="flex-1">
-                            <label class="block text-xs text-light-text-secondary dark:text-minerva-gray mb-1">Template Variable</label>
-                            <input type="text" id="newMappingTemplateVar" placeholder="z.B. section_1.product_name" class="w-full bg-light-bg dark:bg-minerva-black border border-light-border dark:border-minerva-border rounded px-3 py-2 text-sm">
-                        </div>
-                        <div class="flex-1">
-                            <label class="block text-xs text-light-text-secondary dark:text-minerva-gray mb-1">Quellfeld</label>
-                            <input type="text" id="newMappingSourceField" placeholder="z.B. Product/Name" class="w-full bg-light-bg dark:bg-minerva-black border border-light-border dark:border-minerva-border rounded px-3 py-2 text-sm">
-                        </div>
-                        <button onclick="addNewMapping()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-sm transition-colors">+ Hinzufügen</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </main>
     
     <!-- Fixed Bottom Status & Footer -->
@@ -977,69 +713,6 @@
 
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-
-    <script>
-    // Automatische Import-Session-Integration
-    document.addEventListener('DOMContentLoaded', function() {
-        checkForImportSession();
-    });
-
-    async function checkForImportSession() {
-        try {
-            const response = await fetch('/api/check-import-session');
-            const data = await response.json();
-
-            if (data.success && data.session_data) {
-                // Datei automatisch laden
-                loadImportedFile(data.session_data);
-
-                // Session-Datei löschen
-                await fetch('/api/clear-import-session', { method: 'POST' });
-            }
-        } catch (error) {
-            console.log('No import session found or error occurred');
-        }
-    }
-
-    function loadImportedFile(sessionData) {
-        // Dateiinhalt laden und in die UI einfügen
-        fetch(`/uploads/${sessionData.original_filename}`)
-            .then(response => response.text())
-            .then(content => {
-                // Originaldokument laden
-                document.getElementById('originalPreview').srcdoc = content;
-
-                // Session-Daten setzen (über API)
-                return fetch('/api/set-import-session', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(sessionData)
-                });
-            })
-            .then(() => {
-                // Erfolgsmeldung anzeigen
-                showNotification('Importierte Datei wurde automatisch geladen', 'success');
-            })
-            .catch(error => {
-                console.error('Fehler beim Laden der importierten Datei:', error);
-                showNotification('Fehler beim Laden der importierten Datei', 'error');
-            });
-    }
-
-    function showNotification(message, type) {
-        // Einfache Benachrichtigung anzeigen
-        const notification = document.createElement('div');
-        notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
-            type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
-        }`;
-        notification.textContent = message;
-        document.body.appendChild(notification);
-
-        setTimeout(() => {
-            notification.remove();
-        }, 5000);
-    }
-    </script>
     <script>
         async function uploadBulkFile() {
             const fileInput = document.getElementById('bulkFileInput');
