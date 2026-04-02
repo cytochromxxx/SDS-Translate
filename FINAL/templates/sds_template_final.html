@@ -43,7 +43,7 @@ body {
 /* ── Sections ── */
 .section { border:1px solid #000; margin-bottom:5px; }
 .sec-head { border-bottom:2px solid #000; padding:3px 6px; font-size:8.5pt;
-             font-weight:bold; text-decoration:underline; }
+             font-weight:bold; text-decoration:underline; text-align:left; letter-spacing:0.1pt; }
 .sec-body { padding:4px 6px; }
 .sh  { font-weight:bold; font-size:8.5pt; margin-top:5px; margin-bottom:2px; }
 .ssh { font-weight:bold; font-size:8pt;   margin-top:4px; margin-bottom:1px; }
@@ -183,26 +183,26 @@ th { font-weight:bold; background:#f0f0f0; }
     {% endif %}
 
     {% if sections.section2_2.labelling.precautionary_statements.prevention %}
-    <div class="b" style="margin-top:5px;">Precautionary statements – Prevention:</div>
-    <table style="width:100%; border-collapse:collapse; margin:3px 0;">
-      <tr><th colspan="2" style="border:1px solid #000; padding:2px 4px; background:#d0d0d0; font-weight:bold; text-align:left;">Precautionary statements – Prevention</th></tr>
+    <div class="b" style="margin-top:5px; text-decoration:underline;">Precautionary statements – Prevention:</div>
+    <table style="width:100%; border-collapse:collapse; margin:3px 0 5px 0;">
+      <tr><th colspan="2" style="border:1px solid #000; padding:3px 4px; background:#d0d0d0; font-weight:bold; text-align:left; font-size:8pt;">Statement</th></tr>
       {% for item in sections.section2_2.labelling.precautionary_statements.prevention %}
-      <tr style="background:{% if loop.index0 % 2 == 1 %}#ededed{% endif %}">
-        <td style="border:1px solid #000; padding:2px 4px; width:15%; font-weight:bold;">{{ item.code }}</td>
-        <td style="border:1px solid #000; padding:2px 4px;">{{ item.text }}</td>
+      <tr style="background:{% if loop.index0 % 2 == 1 %}#f5f5f5{% endif %}">
+        <td style="border:1px solid #000; padding:3px 4px; width:18%; font-weight:bold; background:#fafafa; border-right:2px solid #000;">{{ item.code }}</td>
+        <td style="border:1px solid #000; padding:3px 4px; font-size:8pt;">{{ item.text }}</td>
       </tr>
       {% endfor %}
     </table>
     {% endif %}
 
     {% if sections.section2_2.labelling.precautionary_statements.response %}
-    <div class="b" style="margin-top:5px;">Precautionary statements – Response:</div>
-    <table style="width:100%; border-collapse:collapse; margin:3px 0;">
-      <tr><th colspan="2" style="border:1px solid #000; padding:2px 4px; background:#d0d0d0; font-weight:bold; text-align:left;">Precautionary statements – Response</th></tr>
+    <div class="b" style="margin-top:5px; text-decoration:underline;">Precautionary statements – Response:</div>
+    <table style="width:100%; border-collapse:collapse; margin:3px 0 5px 0;">
+      <tr><th colspan="2" style="border:1px solid #000; padding:3px 4px; background:#d0d0d0; font-weight:bold; text-align:left; font-size:8pt;">Statement</th></tr>
       {% for item in sections.section2_2.labelling.precautionary_statements.response %}
-      <tr style="background:{% if loop.index0 % 2 == 1 %}#ededed{% endif %}">
-        <td style="border:1px solid #000; padding:2px 4px; width:15%; font-weight:bold;">{{ item.code }}</td>
-        <td style="border:1px solid #000; padding:2px 4px;">{{ item.text }}</td>
+      <tr style="background:{% if loop.index0 % 2 == 1 %}#f5f5f5{% endif %}">
+        <td style="border:1px solid #000; padding:3px 4px; width:18%; font-weight:bold; background:#fafafa; border-right:2px solid #000;">{{ item.code }}</td>
+        <td style="border:1px solid #000; padding:3px 4px; font-size:8pt;">{{ item.text }}</td>
       </tr>
       {% endfor %}
     </table>
