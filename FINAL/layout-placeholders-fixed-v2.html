@@ -38,31 +38,110 @@
             margin: 0;
         }
 
+        .improvement-note {
+            color: #155724;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 4px 6px;
+            border-radius: 3px;
+            font-size: 7.5pt;
+            margin-top: 4px;
+            margin-bottom: 6px;
+        }
+
         .header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 0;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #cccccc;
+            border-bottom: 1px solid #000;
+            padding-bottom: 3px;
+            margin-bottom: 3px;
+            font-size: 7pt;
         }
 
         .header-left {
+            line-height: 1.4;
             flex-grow: 1;
             padding-right: 10mm;
         }
 
-        .header-right {
-            flex-shrink: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 4px;
+        .header-left .doc-title {
+            font-weight: bold;
+            font-size: 7pt;
+            margin-bottom: 2px;
         }
 
-        .header-logo {
-            width: 35mm;
-            height: auto;
+        .header-left .product-name {
+            font-weight: bold;
+            font-size: 7pt;
+            color: #c00;
+            margin-bottom: 2px;
+            display: inline-block;
+        }
+
+        .header-right {
+            text-align: right;
+            font-size: 7pt;
+        }
+
+        .logo-box {
+            display: inline-block;
+            border: 2px solid #e30613;
+            padding: 2px 5px;
+            text-align: center;
+            line-height: 1.2;
+            margin-bottom: 2px;
+        }
+        .logo-mb {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #e30613;
+            letter-spacing: -1px;
+        }
+        .logo-sub {
+            font-size: 5.5pt;
+            color: #003366;
+            display: block;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .revision-line {
+            font-size: 7pt;
+            margin: 3px 0 5px;
+        }
+        .revision-line strong { font-weight: bold; }
+
+        .main-title-box {
+            border: 2px solid #000;
+            padding: 5px 8px;
+            margin-bottom: 6px;
+            font-size: 9.5pt;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .section {
+            border: 1px solid #000;
+            padding: 5px 6px;
+            margin-bottom: 5px;
+            page-break-inside: avoid;
+        }
+
+        .section-title {
+            font-weight: 700;
+            font-size: 8.5pt;
+            background-color: #fff;
+            border-bottom: 2px solid #000;
+            padding: 3px 6px;
+            margin: 0 0 4px 0;
+            text-decoration: underline;
+        }
+
+        .subsection-title {
+            font-weight: bold;
+            font-size: 7.5pt;
+            margin: 4px 0 2px 0;
         }
 
         .header-logo img {
@@ -298,6 +377,51 @@
             text-align: center;
         }
 
+        .precautionary-grid {
+            display: table;
+            width: 100%;
+            border: 1px solid #000;
+            border-collapse: collapse;
+            margin: 4px 0;
+        }
+        .precautionary-header {
+            display: block;
+            border: 1px solid #000;
+            padding: 2px 4px;
+            background-color: #d0d0d0;
+            font-weight: bold;
+            font-size: 8pt;
+            margin: -1px -1px 0 -1px;
+            width: calc(100% + 2px);
+        }
+        .precautionary-item {
+            display: table-row;
+        }
+        .precautionary-item:nth-child(n+2):nth-child(odd) {
+            background-color: #fff;
+        }
+        .precautionary-item:nth-child(n+2):nth-child(even) {
+            background-color: #ededed;
+        }
+        .p-code {
+            display: table-cell;
+            font-weight: bold;
+            padding: 2px 4px;
+            border: 1px solid #000;
+            background-color: inherit;
+            font-size: 8pt;
+            width: 15%;
+            vertical-align: top;
+        }
+        .p-text {
+            display: table-cell;
+            padding: 2px 5px;
+            border: 1px solid #000;
+            font-size: 8pt;
+            line-height: 1.2;
+            vertical-align: top;
+        }
+
         .signal-word {
             font-weight: 700;
             font-size: 10pt;
@@ -422,6 +546,7 @@
         <div>{{ meta.language }} / {{ meta.country }}</div>
     </div>
     
+    <div class="main-title-box">Safety Data Sheet according to Regulation (EC) No 1907/2006 (REACH)</div>
     <div class="content">
         <div class="section">
             <div class="section-title">SECTION 1: Identification of the substance/mixture and of the company/undertaking</div>
@@ -452,7 +577,7 @@
             <div class="data-row"><div class="data-label w-80">Website:</div><div class="data-value">{{ section_1.supplier_details.website }}</div></div>
 
             <div class="subsection-title">1.4. Emergency telephone number</div>
-            <p>{{ section_1.emergency_phone.description }}, {{ section_1.emergency_phone.number }}</p>
+            <p>{{ section_1.emergency_phone.description or 'Vergiftungs-Informations-Zentrale Freiburg' }}, {{ section_1.emergency_phone.number or '+49 761 19240' }}</p>
         </div>
 
         <div class="section">
@@ -471,76 +596,82 @@
             </table>
 
             <div class="subsection-title">2.2. Label elements</div>
-            <p class="small">Labelling according to Regulation (EC) No. 1272/2008 [CLP]</p>
-            <p><strong>Hazard pictograms:</strong></p>
-            <div class="ghs-pictograms">
-                {% for pictogram in section_2.labelling.pictograms %}
-                <div style="text-align: center;">
-                    <img src="ghs/{{ pictogram }}.png" alt="{{ pictogram }}" class="ghs-pictogram">
-                    <div class="ghs-pictogram-label">{{ pictogram }}</div>
-                    <div class="ghs-pictogram-name">
-                        {% if pictogram == 'GHS01' %}Explosiv
-                        {% elif pictogram == 'GHS02' %}Flamme
-                        {% elif pictogram == 'GHS03' %}Oxidierend
-                        {% elif pictogram == 'GHS04' %}Gas unter Druck
-                        {% elif pictogram == 'GHS05' %}Ätzend
-                        {% elif pictogram == 'GHS06' %}Gesundheitsgefährdend
-                        {% elif pictogram == 'GHS07' %}Ausrufezeichen
-                        {% elif pictogram == 'GHS08' %}Gesundheitsgefährdend
-                        {% elif pictogram == 'GHS09' %}Umweltgefährdend
-                        {% endif %}
-                    </div>
+            {% if section_2.hazard_labelling_html %}
+                <div class="datalab-html-injection">
+                    {{ section_2.hazard_labelling_html|safe }}
                 </div>
-                {% endfor %}
-            </div>
-            <div class="signal-word">{{ section_2.labelling.signal_word }}</div>
-            
-            <p><strong>Hazard components for labelling:</strong></p>
-            <p style="margin-left: 15px;">{{ section_2.labelling.hazard_components }}</p>
-            <p><strong>Hazard statements for physical hazards</strong></p>
-            <table class="sds" style="border-collapse: collapse; width: 100%;">
-                <thead>
-                    <tr><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold;">H</th><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold;">Hazard statements</th></tr>
-                </thead>
-                <tbody>
-                    {% for statement in section_2.labelling.hazard_statements %}
-                    <tr><td style="border: 1px solid #000; padding: 3px 5px;">H{{ statement.code|string|pad(3, '0', true) }}</td><td style="border: 1px solid #000; padding: 3px 5px;">{{ statement.text }}</td></tr>
+            {% else %}
+                <p class="small">Labelling according to Regulation (EC) No. 1272/2008 [CLP]</p>
+                <p><strong>Hazard pictograms:</strong></p>
+                <div class="ghs-pictograms">
+                    {% for pictogram in section_2.labelling.pictograms %}
+                    <div style="text-align: center;">
+                        <img src="ghs/{{ pictogram }}.png" alt="{{ pictogram }}" class="ghs-pictogram">
+                        <div class="ghs-pictogram-label">{{ pictogram }}</div>
+                        <div class="ghs-pictogram-name">
+                            {% if pictogram == 'GHS01' %}Explosiv
+                            {% elif pictogram == 'GHS02' %}Flamme
+                            {% elif pictogram == 'GHS03' %}Oxidierend
+                            {% elif pictogram == 'GHS04' %}Gas unter Druck
+                            {% elif pictogram == 'GHS05' %}Ätzend
+                            {% elif pictogram == 'GHS06' %}Gesundheitsgefährdend
+                            {% elif pictogram == 'GHS07' %}Ausrufezeichen
+                            {% elif pictogram == 'GHS08' %}Gesundheitsgefährdend
+                            {% elif pictogram == 'GHS09' %}Umweltgefährdend
+                            {% endif %}
+                        </div>
+                    </div>
                     {% endfor %}
-                </tbody>
-            </table>
-            
-            <p><strong>Supplemental hazard information:</strong></p>
-            <!-- SUPPLEMENTAL_HAZARD_INFO_PLACEHOLDER -->
-            
-            <p><strong>Precautionary statements - Prevention</strong></p>
-            <table class="sds" style="border-collapse: collapse; width: 100%;">
-                <thead>
-                    <tr><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold;">Code</th><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold;">Precautionary statement</th></tr>
-                </thead>
-                <tbody>
+                </div>
+                <div class="signal-word">{{ section_2.labelling.signal_word }}</div>
+                
+                <p><strong>Hazard components for labelling:</strong></p>
+                <p style="margin-left: 15px;">{{ section_2.labelling.hazard_components }}</p>
+                <p><strong>Hazard statements for physical hazards</strong></p>
+                <table class="sds" style="border-collapse: collapse; width: 100%;">
+                    <thead>
+                        <tr><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold;">H</th><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold;">Hazard statements</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for statement in section_2.labelling.hazard_statements %}
+                        <tr><td style="border: 1px solid #000; padding: 3px 5px;">H{{ statement.code|string|pad(3, '0', true) }}</td><td style="border: 1px solid #000; padding: 3px 5px;">{{ statement.text }}</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                <p><strong>Supplemental hazard information:</strong></p>
+                <p style="margin-left: 15px;">{{ section_2.other_hazards.physicochemical | default('No data available.', true) }}</p>
+                <p style="margin-left: 15px;">{{ section_2.other_hazards.health | default('No data available.', true) }}</p>
+                
+                <p><strong>Precautionary statements - Prevention</strong></p>
+                <div class="precautionary-grid">
+                    <div class="precautionary-header">Precautionary statements – Prevention</div>
                     {% for statement in section_2.labelling.precautionary_statements.prevention %}
-                    <tr><td style="border: 1px solid #000; padding: 3px 5px; width: 50px;">{{ statement.code }}</td><td style="border: 1px solid #000; padding: 3px 5px;">{{ statement.text }}</td></tr>
+                    <div class="precautionary-item">
+                        <span class="p-code">{{ statement.code }}</span>
+                        <span class="p-text">{{ statement.text }}</span>
+                    </div>
                     {% endfor %}
-                </tbody>
-            </table>
-            
-            <p><strong>Precautionary statements - Response</strong></p>
-            <table class="sds" style="border-collapse: collapse; width: 100%;">
-                <thead>
-                    <tr><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold;">Code</th><th style="background-color: #e8e8e8; border: 1px solid #000; padding: 3px 5px; font-weight: bold;">Precautionary statement</th></tr>
-                </thead>
-                <tbody>
+                </div>
+                
+                <p><strong>Precautionary statements - Response</strong></p>
+                <div class="precautionary-grid">
+                    <div class="precautionary-header">Precautionary statements – Response</div>
                     {% for statement in section_2.labelling.precautionary_statements.response %}
-                    <tr><td style="border: 1px solid #000; padding: 3px 5px; width: 50px;">{{ statement.code }}</td><td style="border: 1px solid #000; padding: 3px 5px;">{{ statement.text }}</td></tr>
+                    <div class="precautionary-item">
+                        <span class="p-code">{{ statement.code }}</span>
+                        <span class="p-text">{{ statement.text }}</span>
+                    </div>
                     {% endfor %}
-                </tbody>
-            </table>
+                </div>
+            {% endif %}
 
             <div class="subsection-title">2.3. Other hazards</div>
             <p><strong>Adverse physicochemical effects:</strong></p>
-            <p style="margin-left: 15px;">{{ section_2.other_hazards.physicochemical }}</p>
+            <p style="margin-left: 15px;">{{ section_2.other_hazards.physicochemical | default('Keine Daten verfügbar', true) }}</p>
             <p><strong>Adverse human health effects and symptoms:</strong></p>
-            <p style="margin-left: 15px;">{{ section_2.other_hazards.health }}</p>
+            <p style="margin-left: 15px;">{{ section_2.other_hazards.health | default('Dieses Produkt enthält nach bisherigen Erkenntnissen keine Stoffe mit endokrinen Eigenschaften bezüglich des Menschen.', true) }}</p>
+            <div class="improvement-note">Hinweis: Falls keine spezifischen Gesundheitsgefahren gelistet sind, wird eine standardisierte Nicht-Weitergabe-Formulierung angezeigt.</div>
         </div>
     </div>
 
@@ -557,7 +688,7 @@
                 <tbody>
                     {% for component in section_3.mixture_components %}
                     <tr>
-                        <td>CAS No.: {{ component.cas }}<br>EC No.: {{ component.ec }}</td>
+                        <td>CAS No.: {{ component.cas }}<br>EC No.: {{ component.ec }}{% if component.index_no %}<br>Index No.: {{ component.index_no }}{% endif %}{% if component.reach_no %}<br>REACH No.: {{ component.reach_no }}{% endif %}</td>
                         <td><strong>{{ component.name }}</strong><br>
                             {% for class in component.classification %}
                             {{ class }}<br>
@@ -581,23 +712,23 @@
             <div class="section-title">SECTION 4: First aid measures</div>
             <div class="subsection-title">4.1. Description of first aid measures</div>
             <div class="subsubsection">General information:</div>
-            <p style="margin-left: 15px;">{{ section_4.description.general }}</p>
+            <p style="margin-left: 15px;">{{ section_4.description.general | default('No data available.', true) }}</p>
             <div class="subsubsection">Following inhalation:</div>
-            <p style="margin-left: 15px;">{{ section_4.description.inhalation }}</p>
+            <p style="margin-left: 15px;">{{ section_4.description.inhalation | default('No data available.', true) }}</p>
             <div class="subsubsection">In case of skin contact:</div>
-            <p style="margin-left: 15px;">{{ section_4.description.skin }}</p>
+            <p style="margin-left: 15px;">{{ section_4.description.skin | default('No data available.', true) }}</p>
             <div class="subsubsection">After eye contact:</div>
-            <p style="margin-left: 15px;">{{ section_4.description.eye }}</p>
+            <p style="margin-left: 15px;">{{ section_4.description.eye | default('No data available.', true) }}</p>
             <div class="subsubsection">Following ingestion:</div>
-            <p style="margin-left: 15px;">{{ section_4.description.ingestion }}</p>
+            <p style="margin-left: 15px;">{{ section_4.description.ingestion | default('No data available.', true) }}</p>
             <div class="subsubsection">Self-protection of the first aider:</div>
-            <p style="margin-left: 15px;">{{ section_4.description.self_protection }}</p>
+            <p style="margin-left: 15px;">{{ section_4.description.self_protection | default('No data available.', true) }}</p>
             
             <div class="subsection-title">4.2. Most important symptoms and effects, both acute and delayed</div>
-            <p style="margin-left: 15px;">{{ section_4.symptoms }}</p>
+            <p style="margin-left: 15px;">{{ section_4.symptoms | default('No data available.', true) }}</p>
             
             <div class="subsection-title">4.3. Indication of any immediate medical attention and special treatment needed</div>
-            <p style="margin-left: 15px;">{{ section_4.treatment }}</p>
+            <p style="margin-left: 15px;">{{ section_4.treatment | default('No data available.', true) }}</p>
         </div>
     </div>
 
@@ -665,7 +796,7 @@
             <div class="subsubsection">Hints on storage assembly:</div>
             <p style="margin-left: 15px;">{{ section_7.storage_assembly }}</p>
             <p><strong>Storage class (TRGS 510, Germany):</strong></p>
-            <p style="margin-left: 15px;">{{ section_15.storage_class }}</p>
+            <p style="margin-left: 15px;">{{ section_7.storage_class or section_15.storage_class or '3 – Entzündbare Flüssigkeiten' }}</p>
             
             <div class="subsection-title">7.3. Specific end use(s)</div>
             <p style="margin-left: 15px;">{{ section_7.specific_end_use }}</p>
@@ -925,7 +1056,7 @@
                         <td><strong>{{ component.generic_name | default('[Komponentenname]') }}</strong> CAS No.: {{ component.cas_no | default('[CAS]') }} EC No.: {{ component.ec_no | default('[EC]') }}</td>
                     </tr>
                     <tr>
-                        <td><strong>Results of PBT and vPvB assessment:</strong> {{ component.pbt_result | default('[Keine Daten]') }}</td>
+                        <td><strong>Results of PBT and vPvB assessment:</strong> {{ component.pbt_result | default('This substance does not meet the PBT/vPvB criteria of REACH, Annex XIII.') }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -933,10 +1064,10 @@
             <table class="sds">
                 <tbody>
                     <tr style="background-color: #f2f2f2;">
-                        <td><strong>[Komponentenname]</strong> CAS No.: [CAS] EC No.: [EC]</td>
+                        <td><strong>Result:</strong></td>
                     </tr>
                     <tr>
-                        <td><strong>Results of PBT and vPvB assessment:</strong> [Keine Daten]</td>
+                        <td>This substance does not meet the PBT/vPvB criteria of REACH, Annex XIII.</td>
                     </tr>
                 </tbody>
             </table>
@@ -1044,6 +1175,10 @@
                 No specific national legislation information available.
             {% endif %}
             </p>
+            
+            <div class="subsection-title">15.2. Other regulatory information</div>
+            <p><strong>Storage class (TRGS 510, Germany):</strong></p>
+            <p style="margin-left: 15px;">{{ section_15.storage_class }}</p>
         </div>
     </div>
 

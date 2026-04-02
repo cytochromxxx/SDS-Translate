@@ -54,8 +54,81 @@ def import_sds_to_html(
             logger.error("XML parsing resulted in empty data.")
             return "", None
         logger.info(f"XML parsed successfully. Keys: {list(sds_data.keys())}")
-        
-        # 1b. Fill Section 12 and 16 gaps from PDF if available
+
+        # 1b. Inject Section 3.2 table from Datalab JSON if available
+        # The Datalab JSON has a complete, richly-formatted S3.2 table with ATE values and GHS images
+        if pdf_path and os.path.exists(pdf_path):
+            try:
+                # We search for the datalab output json. It should be in the same folder as the PDF or project root.
+                pdf_dir = os.path.dirname(os.path.abspath(pdf_path))
+                pdf_name = os.path.basename(pdf_path)
+                
+                # Possible locations for the datalab json
+                possible_paths = [
+                    os.path.join(pdf_dir, f"datalab-output-{pdf_name}.json"),
+                    os.path.join(os.getcwd(), f"datalab-output-{pdf_name}.json"),
+                    os.path.join(os.getcwd(), 'uploads', f"datalab-output-{pdf_name}.json")
+                ]
+                
+                datalab_json_path = None
+                for p in possible_paths:
+                    if os.path.exists(p):
+                        datalab_json_path = p
+                        break
+                
+                if datalab_json_path:
+                    logger.info(f"Loading Datalab JSON: {datalab_json_path}")
+                    with open(datalab_json_path, 'r', encoding='utf-8') as f:
+                        datalab_j = _json.load(f)
+
+                    def _extract_html(node):
+                        if isinstance(node, str): return node
+                        if isinstance(node, dict):
+                            h = node.get('html', '') or node.get('text', '') or node.get('content', '') or ''
+                            for c in node.get('children', []): h += _extract_html(c)
+                            return h
+                        if isinstance(node, list):
+                            return ''.join(_extract_html(n) for n in node)
+                        return ''
+
+                    full_html = _extract_html(datalab_j)
+                    idx_s3 = full_html.find('3.2. Mixtures')
+                    if idx_s3 < 0: idx_s3 = full_html.find('Hazardous ingredients')
+                    idx_tbl = full_html.find('<table', idx_s3) if idx_s3 >= 0 else -1
+                    idx_tbl_end = full_html.find('</table>', idx_tbl) if idx_tbl >= 0 else -1
+
+                    if idx_tbl >= 0 and idx_tbl_end >= 0:
+                        s32_html = full_html[idx_tbl:idx_tbl_end + len('</table>')]
+                        # Clean up data-bbox attributes (not needed in final doc)
+                        import re as _re
+                        s32_html = _re.sub(r'\s*data-bbox="[^"]*"', '', s32_html)
+                        if 'section_3' not in sds_data:
+                            sds_data['section_3'] = {}
+                        sds_data['section_3']['mixture_components_html'] = s32_html
+                        logger.info(f"Injected S3.2 table from Datalab JSON ({len(s32_html)} chars)")
+                    
+                    # 1b-2. Inject Section 2.2 as well if possible (Hazard labelling)
+                    idx_s2 = full_html.find('2.2. Label elements')
+                    if idx_s2 < 0: idx_s2 = full_html.find('Labelling according to Regulation')
+                    idx_s2_content_start = full_html.find('<p', idx_s2) if idx_s2 >= 0 else -1
+                    idx_s2_end = full_html.find('<h2>', idx_s2_content_start) if idx_s2_content_start >= 0 else -1
+                    if idx_s2_end < 0: idx_s2_end = full_html.find('<h2', idx_s2_content_start)
+                    
+                    if idx_s2_content_start >= 0 and idx_s2_end >= 0:
+                        s2_html = full_html[idx_s2_content_start:idx_s2_end]
+                        s2_html = _re.sub(r'\s*data-bbox="[^"]*"', '', s2_html)
+                        if 'section_2' not in sds_data:
+                            sds_data['section_2'] = {}
+                        sds_data['section_2']['hazard_labelling_html'] = s2_html
+                        logger.info(f"Injected S2.2 content from Datalab JSON ({len(s2_html)} chars)")
+                    else:
+                        logger.warning("Datalab JSON found but Section 2.2 content not located within it")
+                else:
+                    logger.info(f"No Datalab JSON found at {datalab_json_path}, using XML fallback")
+            except Exception as e:
+                logger.warning(f"Could not load Datalab JSON for S3.2: {e}")
+
+        # 1c. Fill Section 12 and 16 gaps from PDF if available
         if pdf_path and os.path.exists(pdf_path):
             try:
                 from pdf_section_extractor import extract_sections_from_pdf, parse_section_16, parse_section_12
@@ -86,6 +159,17 @@ def import_sds_to_html(
                         sds_data['other_information']['additional_info_lines'] = section_16_data['additional_info_lines']
                     
                     logger.info(f"Section 16 gaps filled from PDF")
+                
+                # Integrate ATE values from PDF into section 3
+                ate_values = pdf_sections.get('ate_values', {})
+                if ate_values and 'section_3' in sds_data:
+                    ate_list = list(ate_values.values())
+                    if 'mixture_components' in sds_data['section_3']:
+                        for component in sds_data['section_3']['mixture_components']:
+                            component['ate_values'] = ate_list
+                    sds_data['section_3']['ate_values'] = ate_list
+                    logger.info(f"ATE values filled from PDF: {ate_list}")
+                
                 
                 # Fill Section 12 gaps from PDF
                 if pdf_sections and pdf_sections.get('section_12'):
@@ -146,7 +230,7 @@ def import_sds_to_html(
                     # 12.4 Mobility in soil
                     if section_12_data.get('mobility_in_soil'):
                         mobility_text = '; '.join([v.get('data', '') for v in section_12_data['mobility_in_soil'].values()])
-                        if mobility_text:
+                        if mobility_text and not sds_data['section_12'].get('mobility_info'):
                             sds_data['section_12']['mobility_info'] = mobility_text
                     
                     # 12.5 Results of PBT and vPvB assessment
@@ -154,14 +238,24 @@ def import_sds_to_html(
                         pbt_text = '; '.join([v.get('assessment', '') for v in section_12_data['pbt_vpvb_assessment'].values()])
                         if pbt_text:
                             sds_data['section_12']['pbt_vpvb_info'] = pbt_text
+                        # Also add pbt_result to each ecotox_component
+                        pbt_data = section_12_data['pbt_vpvb_assessment']
+                        for comp_name, comp_data in pbt_data.items():
+                            for comp in sds_data['section_12'].get('ecotox_components', []):
+                                comp_generic = comp.get('generic_name', '').lower()
+                                if comp_name.lower() in comp_generic or 'propan' in comp_generic:
+                                    comp['pbt_result'] = comp_data.get('assessment', '')
+                                    break
                     
                     # 12.6 Endocrine disrupting properties
                     if section_12_data.get('endocrine_disruptors') and section_12_data['endocrine_disruptors'].get('text'):
-                        sds_data['section_12']['endocrine_disrupting_info'] = section_12_data['endocrine_disruptors']['text']
+                        if not sds_data['section_12'].get('endocrine_disrupting_info'):
+                            sds_data['section_12']['endocrine_disrupting_info'] = section_12_data['endocrine_disruptors']['text']
                     
                     # 12.7 Other adverse effects
                     if section_12_data.get('other_adverse_effects') and section_12_data['other_adverse_effects'].get('text'):
-                        sds_data['section_12']['other_adverse_effects_info'] = section_12_data['other_adverse_effects']['text']
+                        if not sds_data['section_12'].get('other_adverse_effects_info'):
+                            sds_data['section_12']['other_adverse_effects_info'] = section_12_data['other_adverse_effects']['text']
                     
                     logger.info(f"Section 12 gaps filled from PDF")
                     

@@ -29,7 +29,7 @@ def process_pdf_dynamic():
         if not sds_data:
             return jsonify({'error': 'Failed to parse the SDS PDF.'}), 400
 
-        rendered_html = render_template('layout-placeholders-fixed-v2.html', **sds_data)
+        rendered_html = render_template('sds_template_final.html', **sds_data)
 
         rendered_filename = f"imported_{Path(file.filename).stem}.html"
         rendered_filepath = os.path.join(upload_folder, rendered_filename)

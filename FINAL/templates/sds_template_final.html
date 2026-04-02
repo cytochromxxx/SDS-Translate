@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safety Data Sheet – {{ meta.product_name }}</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 8.5pt;
+  color: #000;
+  background: #ccc;
+  line-height: 1.35;
+}
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 8mm auto;
+  padding: 10mm 12mm 14mm;
+  background: #fff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 6px rgba(0,0,0,.25);
+}
+@media print {
+  body { background:#fff; }
+  .page { margin:0; box-shadow:none; page-break-after:always; width:100%; }
+}
+/* ── Page header ── */
+.ph { display:flex; justify-content:space-between; align-items:flex-start;
+       border-bottom:1px solid #000; padding-bottom:2px; margin-bottom:3px; font-size:7pt; }
+.ph-left .doc { font-weight:bold; }
+.ph-left .prod { background:#c8d8e8; font-weight:bold; display:inline-block; padding:0 3px; }
+.rev { font-size:7pt; margin-bottom:2px; }
+.locale { text-align:right; font-size:6.5pt; margin-bottom:4px; line-height:1.3; }
+/* ── Logo ── */
+.logo-img { height:28px; width:auto; }
+/* ── Main title ── */
+.main-title { border:2px solid #000; padding:5px 8px; margin-bottom:5px;
+               font-size:9.5pt; font-weight:bold; text-align:center; text-decoration:underline; }
+/* ── Sections ── */
+.section { border:1px solid #000; margin-bottom:5px; }
+.sec-head { border-bottom:2px solid #000; padding:3px 6px; font-size:8.5pt;
+             font-weight:bold; text-decoration:underline; }
+.sec-body { padding:4px 6px; }
+.sh  { font-weight:bold; font-size:8.5pt; margin-top:5px; margin-bottom:2px; }
+.ssh { font-weight:bold; font-size:8pt;   margin-top:4px; margin-bottom:1px; }
+.b   { font-weight:bold; }
+.ind { padding-left:14px; }
+/* changed marker */
+.chg::before { content:"* "; font-weight:bold; }
+/* product name highlight */
+.pname { background:#c8d8e8; padding:2px 6px; display:inline-block;
+          font-weight:bold; font-size:10pt; margin:3px 0; border:1px solid #9ab8d0; }
+/* ── Tables ── */
+table { width:100%; border-collapse:collapse; margin-bottom:3px; font-size:8pt; }
+td, th { border:1px solid #000; padding:2px 4px; vertical-align:top; line-height:1.3; }
+th { font-weight:bold; background:#f0f0f0; }
+/* ── GHS pictograms ── */
+.ghs-row { display:flex; gap:16px; margin:4px 0; }
+.ghs-item { text-align:center; font-size:7pt; }
+.ghs-item img { display:block; margin:0 auto; height:70px; width:auto; }
+/* ── small GHS in ingredient table ── */
+.ghs-sm img { height:16px; width:auto; vertical-align:middle; }
+/* ── PPE ── */
+.ppe img { height:44px; width:auto; margin-bottom:4px; }
+/* ── Transport diamonds ── */
+.td-img { height:46px; width:auto; display:block; margin:0 auto; }
+.td-cell { text-align:center; vertical-align:middle; }
+/* ── Footer ── */
+.pfoot { margin-top:auto; padding-top:3px; border-top:1px solid #aaa;
+          display:flex; justify-content:flex-end; flex-direction:column;
+          align-items:flex-end; font-size:7pt; color:#444; }
+/* italic note */
+.note { font-style:italic; font-size:7.5pt; }
+/* waste code row */
+.wcrow { display:flex; border:1px solid #000; }
+.wc { border-right:1px solid #000; padding:2px 5px; min-width:68px; font-weight:bold; }
+.wd { padding:2px 5px; }
+/* kv list */
+.kv-list table { border:none; }
+.kv-list td { border:none; padding:1px 4px; }
+.kv-list td:first-child { font-weight:bold; white-space:nowrap; }
+/* abbr table */
+.abbr td { border:none; padding:1px 3px; font-size:7.5pt; }
+.abbr td:first-child { font-weight:bold; white-space:nowrap; min-width:52px; }
+/* lit table */
+.lit td { font-size:7.5pt; }
+/* tox/eco shaded rows */
+.trow-h { background:#d0d0d0; font-weight:bold; }
+.trow-d { background:#e8e8e8; font-weight:bold; }
+</style>
+</head>
+<body>
+
+<!-- ═══ PAGE 1 ═══ -->
+<div class="page">
+<div class="ph">
+  <div class="ph-left">
+    <div class="doc">Safety Data Sheet according to Regulation (EC) No. 1907/2006 (REACH)</div>
+    <div class="prod">{{ meta.product_name }}</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;">
+    <div style="font-size:7pt;">Page 1/{{ meta.total_pages }}</div>
+    <img class="logo-img" src="{{ meta.logo_url }}" alt="{{ meta.company_name }} logo">
+  </div>
+</div>
+<div class="rev"><strong>Revision date:</strong> {{ meta.revision_date }} &nbsp;<strong>Version:</strong> {{ meta.version }} &nbsp;<strong>Print date:</strong> {{ meta.print_date }}</div>
+<div class="main-title">Safety Data Sheet according to Regulation (EC) No. 1907/2006 (REACH)</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 1: Identification of the substance/mixture and of the company/undertaking</div>
+  <div class="sec-body">
+    <div class="sh">1.1. Product identifier</div>
+    <div class="b">Trade name/designation:</div>
+    <div class="pname">{{ meta.product_name }}</div>
+    <div style="margin-top:4px;"><span class="b">Article No.:</span><br>
+      <span class="ind">{{ meta.article_numbers }}</span></div>
+    <div><span class="b">UFI:</span><br>
+      <span class="ind">{{ meta.ufi }}</span></div>
+
+    <div class="sh">1.2. Relevant identified uses of the substance or mixture and uses advised against</div>
+    <div class="b">Use of the substance/mixture:</div>
+    <div class="ind">{{ sections.section1_2.use_of_substance }}</div>
+    <div style="margin-top:3px;"><span class="b">Relevant identified uses:</span></div>
+    <table style="width:auto;margin-left:14px;" class="kv-list">
+      <tr><td colspan="2" class="b">Life cycle stage [LCS]</td></tr>
+      <tr><td style="min-width:44px;">{{ sections.section1_2.lcs_code }}:</td><td>{{ sections.section1_2.lcs_description }}</td></tr>
+      <tr><td colspan="2" class="b">Sector of uses [SU]</td></tr>
+      <tr><td>{{ sections.section1_2.su_code }}:</td><td>{{ sections.section1_2.su_description }}</td></tr>
+      <tr><td colspan="2" class="b">Product Categories [PC]</td></tr>
+      <tr><td>{{ sections.section1_2.pc_code }}:</td><td>{{ sections.section1_2.pc_description }}</td></tr>
+    </table>
+
+    <div class="sh{% if sections.section1_3.changed %} chg{% endif %}">1.3. Details of the supplier of the safety data sheet</div>
+    <div class="b">Supplier (manufacturer/importer/only representative/downstream user/distributor):</div>
+    <div class="ind">
+      <div class="b">{{ meta.company_name }}</div>
+      <div>{{ meta.company_address_line1 }}</div>
+      <div>{{ meta.company_address_line2 }}</div>
+      <div>{{ meta.company_country }}</div>
+      <div><span class="b">Telephone:</span> {{ meta.company_phone }}</div>
+      <div><span class="b">E-mail:</span> {{ meta.company_email }}</div>
+      <div><span class="b">Website:</span> {{ meta.company_website }}</div>
+    </div>
+
+    <div class="sh">1.4. Emergency telephone number</div>
+    <div class="ind">{{ sections.section1_4.emergency_number }}</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 2: Hazards identification</div>
+  <div class="sec-body">
+    <div class="sh">2.1. Classification of the substance or mixture</div>
+    <div class="b" style="margin-bottom:2px;">Classification according to Regulation (EC) No 1272/2008 [CLP]</div>
+    <table>
+      <tr><th style="width:38%;">Hazard classes and hazard categories</th><th style="width:42%;">Hazard statements</th><th>Classification procedure</th></tr>
+      {% for hazard in sections.section2_1.hazards %}
+      <tr><td>{{ hazard.class_category }}</td><td>{{ hazard.statement }}</td><td>{{ hazard.procedure }}</td></tr>
+      {% endfor %}
+    </table>
+
+    <div class="sh{% if sections.section2_2.changed %} chg{% endif %}">2.2. Label elements</div>
+    <div class="b" style="margin-bottom:2px;">Labelling according to Regulation (EC) No. 1272/2008 [CLP]</div>
+    <div class="b">Hazard pictograms:</div>
+    <div class="ghs-row">
+      {% for pictogram in sections.section2_2.pictograms %}
+      <div class="ghs-item">
+        <img src="{{ pictogram.src }}" alt="{{ pictogram.alt }}">
+        <br>{{ pictogram.number }}
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if sections.section2_2.labelling.signal_word %}
+    <div class="b" style="margin-top:5px;">Signal word:</div>
+    <table style="width:100%; border-collapse:collapse; margin:3px 0;">
+      <tr><td style="border:1px solid #000; padding:2px 4px; background:#f0f0f0; font-weight:bold;">{{ sections.section2_2.labelling.signal_word }}</td></tr>
+    </table>
+    {% endif %}
+
+    {% if sections.section2_2.labelling.precautionary_statements.prevention %}
+    <div class="b" style="margin-top:5px;">Precautionary statements – Prevention:</div>
+    <table style="width:100%; border-collapse:collapse; margin:3px 0;">
+      <tr><th colspan="2" style="border:1px solid #000; padding:2px 4px; background:#d0d0d0; font-weight:bold; text-align:left;">Precautionary statements – Prevention</th></tr>
+      {% for item in sections.section2_2.labelling.precautionary_statements.prevention %}
+      <tr style="background:{% if loop.index0 % 2 == 1 %}#ededed{% endif %}">
+        <td style="border:1px solid #000; padding:2px 4px; width:15%; font-weight:bold;">{{ item.code }}</td>
+        <td style="border:1px solid #000; padding:2px 4px;">{{ item.text }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+
+    {% if sections.section2_2.labelling.precautionary_statements.response %}
+    <div class="b" style="margin-top:5px;">Precautionary statements – Response:</div>
+    <table style="width:100%; border-collapse:collapse; margin:3px 0;">
+      <tr><th colspan="2" style="border:1px solid #000; padding:2px 4px; background:#d0d0d0; font-weight:bold; text-align:left;">Precautionary statements – Response</th></tr>
+      {% for item in sections.section2_2.labelling.precautionary_statements.response %}
+      <tr style="background:{% if loop.index0 % 2 == 1 %}#ededed{% endif %}">
+        <td style="border:1px solid #000; padding:2px 4px; width:15%; font-weight:bold;">{{ item.code }}</td>
+        <td style="border:1px solid #000; padding:2px 4px;">{{ item.text }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+
+    <div class="sh" style="margin-top:5px;">2.3. Other hazards</div>
+    <div class="ind">{{ sections.section2_3.other_hazards }}</div>
+  </div>
+</div>
+
+<!-- ═══ PAGE 2 ═══ -->
+<div class="page">
+<div class="ph">
+  <div class="ph-left"><div class="doc">Safety Data Sheet according to Regulation (EC) No. 1907/2006 (REACH)</div><div class="prod">{{ meta.product_name }}</div></div>
+  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;"><div style="font-size:7pt;">Page 2/{{ meta.total_pages }}</div><img class="logo-img" src="{{ meta.logo_url }}" alt="{{ meta.company_name }} logo"></div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 3: Composition/information on ingredients</div>
+  <div class="sec-body">
+    <div class="sh">3.1. Substances</div>
+    <div class="ind">{{ sections.section3_1.substances_text }}</div>
+
+    <div class="sh">3.2. Mixtures</div>
+    <table>
+      <tr><th style="width:25%;">Chemical name</th><th style="width:15%;">CAS No.</th><th style="width:15%;">EC No.</th><th style="width:15%;">Index No.</th><th style="width:15%;">REACH No.</th><th style="width:15%;">Concentration</th></tr>
+      {% for ingredient in sections.section3_2.ingredients %}
+      <tr>
+        <td>{{ ingredient.name }}</td>
+        <td>{{ ingredient.cas_no }}</td>
+        <td>{{ ingredient.ec_no }}</td>
+        <td>{{ ingredient.index_no }}</td>
+        <td>{{ ingredient.reach_no }}</td>
+        <td>{{ ingredient.concentration }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 4: First aid measures</div>
+  <div class="sec-body">
+    <div class="sh">4.1. Description of first aid measures</div>
+    <div class="b">General advice:</div><div class="ind">{{ sections.section4_1.general_advice }}</div>
+    <div class="b" style="margin-top:2px;">Following inhalation:</div><div class="ind">{{ sections.section4_1.inhalation }}</div>
+    <div class="b" style="margin-top:2px;">Following skin contact:</div><div class="ind">{{ sections.section4_1.skin_contact }}</div>
+    <div class="b" style="margin-top:2px;">Following eye contact:</div><div class="ind">{{ sections.section4_1.eye_contact }}</div>
+    <div class="b" style="margin-top:2px;">Following ingestion:</div><div class="ind">{{ sections.section4_1.ingestion }}</div>
+
+    <div class="sh">4.2. Most important symptoms and effects, both acute and delayed</div>
+    <div class="ind">{{ sections.section4_2.symptoms_effects }}</div>
+
+    <div class="sh">4.3. Indication of any immediate medical attention and special treatment needed</div>
+    <div class="ind">{{ sections.section4_3.medical_attention }}</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 5: Firefighting measures</div>
+  <div class="sec-body">
+    <div class="sh">5.1. Extinguishing media</div>
+    <div class="b">Suitable extinguishing media:</div><div class="ind">{{ sections.section5_1.suitable_media }}</div>
+    <div class="b" style="margin-top:2px;">Unsuitable extinguishing media:</div><div class="ind">{{ sections.section5_1.unsuitable_media }}</div>
+
+    <div class="sh">5.2. Special hazards arising from the substance or mixture</div>
+    <div class="ind">{{ sections.section5_2.special_hazards }}</div>
+
+    <div class="sh">5.3. Advice for firefighters</div>
+    <div class="ind">{{ sections.section5_3.firefighter_advice }}</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 6: Accidental release measures</div>
+  <div class="sec-body">
+    <div class="sh">6.1. Personal precautions, protective equipment and emergency procedures</div>
+    <div class="ind">{{ sections.section6_1.personal_precautions }}</div>
+
+    <div class="sh">6.2. Environmental precautions</div>
+    <div class="ind">{{ sections.section6_2.environmental_precautions }}</div>
+
+    <div class="sh">6.3. Methods and material for containment and cleaning up</div>
+    <div class="ind">{{ sections.section6_3.containment_cleaning }}</div>
+
+    <div class="sh">6.4. Reference to other sections</div>
+    <div class="ind">{{ sections.section6_4.reference_sections }}</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 7: Handling and storage</div>
+  <div class="sec-body">
+    <div class="sh">7.1. Precautions for safe handling</div>
+    <div class="ind">{{ sections.section7_1.safe_handling }}</div>
+
+    <div class="sh">7.2. Conditions for safe storage, including any incompatibilities</div>
+    <div class="ind">{{ sections.section7_2.safe_storage }}</div>
+
+    <div class="sh">7.3. Specific end use(s)</div>
+    <div class="ind">{{ sections.section7_3.specific_end_uses }}</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 8: Exposure controls/personal protection</div>
+  <div class="sec-body">
+    <div class="sh">8.1. Control parameters</div>
+    <table>
+      <tr><th style="width:25%;">Name</th><th style="width:15%;">CAS No.</th><th style="width:15%;">EC No.</th><th style="width:15%;">DNEL</th><th style="width:15%;">PNEC</th><th style="width:15%;">Other</th></tr>
+      {% for control in sections.section8_1.control_parameters %}
+      <tr>
+        <td>{{ control.name }}</td>
+        <td>{{ control.cas_no }}</td>
+        <td>{{ control.ec_no }}</td>
+        <td>{{ control.dnel }}</td>
+        <td>{{ control.pnec }}</td>
+        <td>{{ control.other }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <div class="sh">8.2. Exposure controls</div>
+    <div class="b">Appropriate engineering controls:</div><div class="ind">{{ sections.section8_2.engineering_controls }}</div>
+    <div class="b" style="margin-top:2px;">Individual protection measures, such as personal protective equipment:</div>
+    <div class="ind">{{ sections.section8_2.personal_protection }}</div>
+    <div class="b" style="margin-top:2px;">Hand protection:</div><div class="ind">{{ sections.section8_2.hand_protection }}</div>
+    <div class="b" style="margin-top:2px;">Eye protection:</div><div class="ind">{{ sections.section8_2.eye_protection }}</div>
+    <div class="b" style="margin-top:2px;">Skin and body protection:</div><div class="ind">{{ sections.section8_2.skin_protection }}</div>
+    <div class="b" style="margin-top:2px;">Respiratory protection:</div><div class="ind">{{ sections.section8_2.respiratory_protection }}</div>
+    <div class="b" style="margin-top:2px;">Thermal hazards:</div><div class="ind">{{ sections.section8_2.thermal_hazards }}</div>
+    <div class="b" style="margin-top:2px;">Hygiene measures:</div><div class="ind">{{ sections.section8_2.hygiene_measures }}</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 9: Physical and chemical properties</div>
+  <div class="sec-body">
+    <table class="kv-list">
+      {% for property in sections.section9.properties %}
+      <tr><td>{{ property.key }}:</td><td>{{ property.value }}</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 10: Stability and reactivity</div>
+  <div class="sec-body">
+    <div class="sh">10.1. Reactivity</div>
+    <div class="ind">{{ sections.section10_1.reactivity }}</div>
+
+    <div class="sh">10.2. Chemical stability</div>
+    <div class="ind">{{ sections.section10_2.chemical_stability }}</div>
+
+    <div class="sh">10.3. Possibility of hazardous reactions</div>
+    <div class="ind">{{ sections.section10_3.hazardous_reactions }}</div>
+
+    <div class="sh">10.4. Conditions to avoid</div>
+    <div class="ind">{{ sections.section10_4.conditions_to_avoid }}</div>
+
+    <div class="sh">10.5. Incompatible materials</div>
+    <div class="ind">{{ sections.section10_5.incompatible_materials }}</div>
+
+    <div class="sh">10.6. Hazardous decomposition products</div>
+    <div class="ind">{{ sections.section10_6.hazardous_decomposition }}</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 11: Toxicological information</div>
+  <div class="sec-body">
+    <div class="sh">11.1. Information on toxicological effects</div>
+    <table style="font-size:7.5pt;margin-bottom:2px;">
+      {% for ingredient in sections.section11_1.ingredients %}
+      <tr><td class="trow-h">{{ ingredient.name }} &nbsp; CAS No.: {{ ingredient.cas_no }} &nbsp; EC No.: {{ ingredient.ec_no }}</td></tr>
+      {% for toxicity in ingredient.toxicities %}
+      <tr><td class="trow-d">{{ toxicity }}</td></tr>
+      {% endfor %}
+      {% endfor %}
+    </table>
+    <div class="b">Acute oral toxicity:</div><div class="ind">{{ sections.section11_1.acute_oral }}</div>
+    <div class="b" style="margin-top:2px;">Acute dermal toxicity:</div><div class="ind">{{ sections.section11_1.acute_dermal }}</div>
+    <div class="b" style="margin-top:2px;">Acute inhalation toxicity:</div><div class="ind">{{ sections.section11_1.acute_inhalation }}</div>
+    <div class="b" style="margin-top:2px;">Skin corrosion/irritation:</div><div class="ind">{{ sections.section11_1.skin_corrosion }}</div>
+    <div class="b" style="margin-top:2px;">Serious eye damage/irritation:</div><div class="ind">{{ sections.section11_1.eye_damage }}</div>
+    <div class="b" style="margin-top:2px;">Respiratory or skin sensitisation:</div><div class="ind">{{ sections.section11_1.sensitisation }}</div>
+    <div class="b" style="margin-top:2px;">Germ cell mutagenicity:</div><div class="ind">{{ sections.section11_1.mutagenicity }}</div>
+    <div class="b" style="margin-top:2px;">Carcinogenicity:</div><div class="ind">{{ sections.section11_1.carcinogenicity }}</div>
+    <div class="b" style="margin-top:2px;">Reproductive toxicity:</div><div class="ind">{{ sections.section11_1.reproductive_toxicity }}</div>
+    <div class="b" style="margin-top:2px;">STOT-single exposure:</div><div class="ind">{{ sections.section11_1.stot_single }}</div>
+    <div class="b" style="margin-top:2px;">STOT-repeated exposure:</div><div class="ind">{{ sections.section11_1.stot_repeated }}</div>
+    <div class="b" style="margin-top:2px;">Aspiration hazard:</div><div class="ind">{{ sections.section11_1.aspiration_hazard }}</div>
+    <div class="b" style="margin-top:2px;">Additional information:</div><div class="ind">{{ sections.section11_1.additional_info }}</div>
+    <div class="sh">11.2. Information on other hazards</div>
+    <div class="ind">{{ sections.section11_2.other_hazards }}</div>
+  </div>
+</div>
+
+<div class="pfoot"><div>{{ meta.language_codes }}</div><div>{{ meta.source_system }}</div></div>
+</div>
+
+<!-- ═══ PAGE 3 ═══ -->
+<div class="page">
+<div class="ph">
+  <div class="ph-left"><div class="doc">Safety Data Sheet according to Regulation (EC) No. 1907/2006 (REACH)</div><div class="prod">{{ meta.product_name }}</div></div>
+  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;"><div style="font-size:7pt;">Page 3/{{ meta.total_pages }}</div><img class="logo-img" src="{{ meta.logo_url }}" alt="{{ meta.company_name }} logo"></div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 12: Ecological information</div>
+  <div class="sec-body">
+    <div class="sh">12.1. Toxicity</div>
+    {% for ingredient in sections.section12_1.ingredients %}
+    <table style="font-size:7.5pt;margin-bottom:2px;">
+      <tr><td class="trow-h">{{ ingredient.name }} &nbsp; CAS No.: {{ ingredient.cas_no }} &nbsp; EC No.: {{ ingredient.ec_no }}</td></tr>
+      {% for toxicity in ingredient.toxicities %}
+      <tr><td class="trow-d">{{ toxicity }}</td></tr>
+      {% endfor %}
+    </table>
+    {% endfor %}
+    <div class="sh">12.2. Persistence and degradability</div>
+    {% for ingredient in sections.section12_2.ingredients %}
+    <table style="font-size:7.5pt;">
+      <tr><td class="trow-h">{{ ingredient.name }} &nbsp; CAS No.: {{ ingredient.cas_no }} &nbsp; EC No.: {{ ingredient.ec_no }}</td></tr>
+      <tr><td class="trow-d">{{ ingredient.biodegradation }}</td></tr>
+    </table>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-body">
+    <div class="sh">12.3. Bioaccumulative potential</div>
+    {% for ingredient in sections.section12_3.ingredients %}
+    <table style="font-size:7.5pt;margin-bottom:2px;">
+      <tr><td class="trow-h">{{ ingredient.name }} &nbsp; CAS No.: {{ ingredient.cas_no }} &nbsp; EC No.: {{ ingredient.ec_no }}</td></tr>
+      <tr><td class="trow-d">Log K<sub>OW</sub>: {{ ingredient.log_kow }}</td></tr>
+      <tr><td class="trow-d">Bioconcentration factor (BCF): {{ ingredient.bcf }}</td></tr>
+    </table>
+    {% endfor %}
+    <div class="sh">12.4. Mobility in soil</div><div class="ind">{{ sections.section12_4.mobility_soil }}</div>
+    <div class="sh">12.5. Results of PBT and vPvB assessment</div>
+    {% for ingredient in sections.section12_5.ingredients %}
+    <table style="font-size:7.5pt;margin-bottom:2px;">
+      <tr><td class="trow-h">{{ ingredient.name }} &nbsp; CAS No.: {{ ingredient.cas_no }} &nbsp; EC No.: {{ ingredient.ec_no }}</td></tr>
+      <tr><td class="trow-d"><span class="b">Results of PBT and vPvB assessment:</span> {{ ingredient.pbt_assessment }}</td></tr>
+    </table>
+    {% endfor %}
+    <div class="sh">12.6. Endocrine disrupting properties</div><div class="ind">{{ sections.section12_6.endocrine_disrupting }}</div>
+    <div class="sh">12.7. Other adverse effects</div><div class="ind">{{ sections.section12_7.other_adverse_effects }}</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 13: Disposal considerations</div>
+  <div class="sec-body">
+    <div class="sh">13.1. Waste treatment methods</div>
+    <div class="ind">{{ sections.section13_1.waste_treatment }}</div>
+    <div class="ssh" style="margin-top:4px;">13.1.1. Product/Packaging disposal</div>
+    <div class="b" style="margin-top:3px;">Waste codes/waste designations according to EWC/AVV</div>
+    <div class="b" style="margin-top:2px;">Waste code product</div>
+    {% for waste_code in sections.section13_1.waste_codes %}
+    <div class="wcrow"><div class="wc">{{ waste_code.code }}</div><div class="wd">{{ waste_code.description }}</div></div>
+    {% endfor %}
+    <div class="note" style="margin-top:1px;">{{ sections.section13_1.waste_note }}</div>
+    <div class="b" style="margin-top:3px;">Waste code packaging</div>
+    {% for packaging_code in sections.section13_1.packaging_codes %}
+    <div class="wcrow" style="margin-top:2px;"><div class="wc">{{ packaging_code.code }}</div><div class="wd">{{ packaging_code.description }}</div></div>
+    {% endfor %}
+    <div class="b" style="margin-top:4px;">Waste treatment options</div>
+    <div class="b" style="margin-top:2px;">Appropriate disposal / Product:</div>
+    <div class="ind">{{ sections.section13_1.disposal_product }}</div>
+    <div class="b" style="margin-top:2px;">Appropriate disposal / Package:</div>
+    <div class="ind">{{ sections.section13_1.disposal_package }}</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 14: Transport information</div>
+  <div class="sec-body">
+    <table style="font-size:7.5pt;">
+      <tr>
+        <th style="width:25%;">Land transport (ADR/RID)</th>
+        <th style="width:25%;">Inland waterway craft (ADN)</th>
+        <th style="width:25%;">Sea transport (IMDG)</th>
+        <th style="width:25%;">Air transport (ICAO-TI / IATA-DGR)</th>
+      </tr>
+      <tr><td colspan="4" style="font-weight:bold;background:#f0f0f0;">14.1. UN number or ID number</td></tr>
+      {% for transport_mode in sections.section14.transport_modes %}
+      <tr><td>{{ transport_mode.adr_rid }}</td><td>{{ transport_mode.adn }}</td><td>{{ transport_mode.imdg }}</td><td>{{ transport_mode.icao_iata }}</td></tr>
+      {% endfor %}
+      <tr><td colspan="4" style="font-weight:bold;background:#f0f0f0;">14.2. UN proper shipping name</td></tr>
+      {% for transport_mode in sections.section14.transport_modes %}
+      <tr><td>{{ transport_mode.shipping_name_adr_rid }}</td><td>{{ transport_mode.shipping_name_adn }}</td><td>{{ transport_mode.shipping_name_imdg }}</td><td>{{ transport_mode.shipping_name_icao_iata }}</td></tr>
+      {% endfor %}
+      <tr><td colspan="4" style="font-weight:bold;background:#f0f0f0;">* 14.3. Transport hazard class(es)</td></tr>
+      {% for transport_mode in sections.section14.transport_modes %}
+      <tr>
+        <td class="td-cell">{{ transport_mode.hazard_class_adr_rid }}</td>
+        <td class="td-cell">{{ transport_mode.hazard_class_adn }}</td>
+        <td class="td-cell">{{ transport_mode.hazard_class_imdg }}</td>
+        <td class="td-cell">{{ transport_mode.hazard_class_icao_iata }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 15: Regulatory information</div>
+  <div class="sec-body">
+    <div class="sh">15.1. Safety, health and environmental regulations/legislation specific for the substance or mixture</div>
+    <div class="ind">{{ sections.section15_1.regulations }}</div>
+
+    <div class="sh">15.2. Chemical safety assessment</div>
+    <div class="ind">{{ sections.section15_2.chemical_safety_assessment }}</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 16: Other information</div>
+  <div class="sec-body">
+    <div class="sh">16.1. Indication of changes</div>
+    <div class="ind">{{ sections.section16_1.indication_changes }}</div>
+
+    <div class="sh">16.2. Abbreviations and acronyms</div>
+    <table class="abbr">
+      {% for abbr in sections.section16_2.abbreviations %}
+      <tr><td>{{ abbr.key }}:</td><td>{{ abbr.value }}</td></tr>
+      {% endfor %}
+    </table>
+
+    <div class="sh">16.3. Key literature references and sources for data</div>
+    <table class="lit">
+      {% for ref in sections.section16_3.literature_references %}
+      <tr><td>{{ ref }}</td></tr>
+      {% endfor %}
+    </table>
+
+    <div class="sh">16.4. Classification and procedure used</div>
+    <div class="ind">{{ sections.section16_4.classification_procedure }}</div>
+
+    <div class="sh">16.5. SDS number</div>
+    <div class="ind">{{ sections.section16_5.sds_number }}</div>
+
+    <div class="sh">16.6. Date of compilation</div>
+    <div class="ind">{{ sections.section16_6.date_compilation }}</div>
+
+    <div class="sh">16.7. Revision date</div>
+    <div class="ind">{{ sections.section16_7.revision_date }}</div>
+
+    <div class="sh">16.8. Revision number</div>
+    <div class="ind">{{ sections.section16_8.revision_number }}</div>
+  </div>
+</div>
+
+<div class="pfoot"><div>{{ meta.language_codes }}</div><div>{{ meta.source_system }}</div></div>
+</div>
+
+</body>
+</html>
