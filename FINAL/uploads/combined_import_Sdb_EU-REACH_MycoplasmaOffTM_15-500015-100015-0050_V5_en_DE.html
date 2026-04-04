@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safety Data Sheet – Mycoplasma Off™</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 8.5pt;
+  color: #000;
+  background: #fff;
+  line-height: 1.35;
+}
+@page {
+    size: A4;
+    margin-top: 28mm;
+    margin-bottom: 20mm;
+    margin-left: 12mm;
+    margin-right: 12mm;
+    @top-center { content: element(header); width: 100%; }
+    @bottom-center { content: element(footer); width: 100%; }
+}
+.running-header { position: running(header); }
+.running-footer { position: running(footer); }
+.page-number-counter::after { content: counter(page) " / " counter(pages); }
+@media screen {
+  body { background-color: #525659; padding: 10mm; display: flex; flex-direction: column; align-items: center; }
+  .sds-document { width: 210mm; background-color: #ffffff; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 10mm 15mm; margin-bottom: 20px; box-sizing: border-box; }
+  .running-header { position: static; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 15px; }
+  .running-footer { position: static; border-top: 1px solid #ccc; padding-top: 10px; margin-top: 20px; }
+}
+/* ── Page header ── */
+.ph { display:flex; justify-content:space-between; align-items:flex-start;
+       border-bottom:1px solid #000; padding-bottom:2px; margin-bottom:3px; font-size:7pt; }
+.ph-left .doc { font-weight:bold; }
+.ph-left .prod { background:#c8d8e8; font-weight:bold; display:inline-block; padding:0 3px; }
+.rev { font-size:7pt; margin-bottom:2px; }
+.locale { text-align:right; font-size:6.5pt; margin-bottom:4px; line-height:1.3; }
+/* ── Logo ── */
+.logo-img { height:28px; width:auto; }
+/* ── Main title ── */
+.main-title { border:2px solid #000; padding:5px 8px; margin-bottom:5px;
+               font-size:9.5pt; font-weight:bold; text-align:center; text-decoration:underline; }
+/* ── Sections ── */
+.section { border:1px solid #000; margin-bottom:5px; page-break-inside: auto; }
+.sec-head { border-bottom:2px solid #000; padding:3px 6px; font-size:8.5pt;
+             font-weight:bold; text-decoration:underline; }
+.sec-body { padding:4px 6px; }
+.sh  { font-weight:bold; font-size:8.5pt; margin-top:5px; margin-bottom:2px; page-break-after: avoid; }
+.ssh { font-weight:bold; font-size:8pt;   margin-top:4px; margin-bottom:1px; page-break-after: avoid; }
+.b   { font-weight:bold; page-break-after: avoid; }
+.ind { padding-left:14px; }
+/* changed marker */
+.chg::before { content:"* "; font-weight:bold; }
+/* product name highlight */
+.pname { background:#c8d8e8; padding:2px 6px; display:inline-block;
+          font-weight:bold; font-size:10pt; margin:3px 0; border:1px solid #9ab8d0; }
+/* ── Tables ── */
+p, ul, ol { page-break-inside: avoid; margin-bottom: 3px; }
+table { width:100%; border-collapse:collapse; margin-bottom:3px; font-size:8pt; page-break-inside: auto; }
+td, th { border:1px solid #000; padding:2px 4px; vertical-align:top; line-height:1.3; }
+th { font-weight:bold; background:#f0f0f0; }
+tr { page-break-inside: avoid; }
+/* ── GHS pictograms ── */
+.ghs-row { display:flex; gap:16px; margin:4px 0; }
+.ghs-item { text-align:center; font-size:7pt; }
+.ghs-item img { display:block; margin:0 auto; height:70px; width:auto; }
+/* ── small GHS in ingredient table ── */
+.ghs-sm img { height:16px; width:auto; vertical-align:middle; }
+/* ── PPE ── */
+.ppe img { height:36px; width:auto; margin-bottom:4px; vertical-align:middle; mix-blend-mode: multiply; }
+/* ── Transport diamonds ── */
+.td-img { height:46px; width:auto; display:block; margin:0 auto; }
+.td-cell { text-align:center; vertical-align:middle; }
+/* ── Footer ── */
+.pfoot { margin-top:auto; padding-top:3px; border-top:1px solid #aaa;
+          display:flex; justify-content:flex-end; flex-direction:column;
+          align-items:flex-end; font-size:7pt; color:#444; }
+/* italic note */
+.note { font-style:italic; font-size:7.5pt; }
+/* waste code row */
+.wcrow { display:flex; border:1px solid #000; }
+.wc { border-right:1px solid #000; padding:2px 5px; min-width:68px; font-weight:bold; }
+.wd { padding:2px 5px; }
+/* kv list */
+.kv-list table { border:none; }
+.kv-list td { border:none; padding:1px 4px; }
+.kv-list td:first-child { font-weight:bold; white-space:nowrap; }
+/* abbr table */
+.abbr td { border:none; padding:1px 3px; font-size:7.5pt; }
+.abbr td:first-child { font-weight:bold; white-space:nowrap; min-width:52px; }
+/* lit table */
+.lit td { font-size:7.5pt; }
+/* tox/eco shaded rows */
+.trow-h { background:#d0d0d0; font-weight:bold; }
+.trow-d { background:#e8e8e8; font-weight:bold; }
+/* Precautionary grid from reference */
+.precautionary-grid { display: block; width: 100%; border: 1px solid #000; margin: 4px 0; }
+.precautionary-header { background:#f0f0f0; border-bottom:1px solid #000; padding:2px 5px; font-weight:bold; }
+.precautionary-item { display:flex; border-bottom: 1px solid #000; }
+.precautionary-item:last-child { border-bottom: none; }
+.p-code { width:15%; border-right:1px solid #000; padding:2px 5px; font-weight:bold; }
+.p-text { width:85%; padding:2px 5px; }
+</style>
+</head>
+<body>
+
+<div class="sds-document original-content">
+<div class="ph running-header">
+  <div class="ph-left">
+    <div class="doc">Safety Data Sheet according to Regulation (EC) No. 1907/2006 (REACH)</div>
+    <div class="prod">Mycoplasma Off™</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;">
+    <div style="font-size:7pt;">Page <span class="page-number-counter"></span></div>
+    <img class="logo-img" src="mb_logo.svg" alt="Logo">
+  </div>
+</div>
+
+<div class="pfoot running-footer">
+    <div>en / DE</div>
+    <div>GeSi.de</div>
+</div>
+<div class="rev"><strong>Revision date:</strong> 21.08.2024 &nbsp;<strong>Version:</strong> 5 &nbsp;<strong>Print date:</strong> 12.03.2026</div>
+<div class="locale">en / DE<br>GeSi.de</div>
+
+<div class="main-title">Safety Data Sheet according to Regulation (EC) No. 1907/2006 (REACH)</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 1: Identification of the substance/mixture and of the company/undertaking</div>
+  <div class="sec-body">
+    <div class="sh">1.1. Product identifier</div>
+    <div class="b">Trade name/designation:</div>
+    <div class="pname">Mycoplasma Off™</div>
+    <div style="margin-top:4px;"><span class="b">Article No.:</span><br>
+      <span class="ind">15-5000, 15-1000, 15-0050</span></div>
+    <div><span class="b">UFI:</span><br>
+      <span class="ind">XF6K-E0M5-UP1H-N57C</span></div>
+
+    <div class="sh">1.2. Relevant identified uses of the substance or mixture and uses advised against</div>
+    <div class="b">Use of the substance/mixture:</div>
+    <div class="ind">The product is intended for research, analysis and scientific education.</div>
+    
+    <div style="margin-top:3px;"><span class="b">Relevant identified uses:</span></div>
+    <table class="kv-list" style="width:auto;margin-left:14px;">
+      <tr><td class="b">Life cycle stage [LCS]</td><td>PW: Widespread use by professional workers</td></tr>
+      <tr><td class="b">Sector of uses [SU]</td><td>SU24: Scientific research and development</td></tr>
+      <tr><td class="b">Product Categories [PC]</td><td>PC8: Biocidal product</td></tr>
+      <tr><td></td><td>PC35: Washing and cleaning products</td></tr>
+    </table>
+
+    <div class="sh chg">1.3. Details of the supplier of the safety data sheet</div>
+    <div class="b">Supplier (manufacturer/importer/only representative/downstream user/distributor):</div>
+    <div class="ind">
+      <div class="b">Minerva Biolabs GmbH</div>
+      <div>Schkopauer Ring 13, 12681 Berlin</div><div>DE</div>
+      <div><span class="b">Telephone:</span> +49 30 2000437 0</div>
+      <div><span class="b">E-mail:</span> ehs@minerva-biolabs.com</div>
+      <div><span class="b">Website:</span> www.minerva-biolabs.com</div>
+    </div>
+
+    <div class="sh">1.4. Emergency telephone number</div>
+    <div class="ind">24h, +49 761 19240</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 2: Hazards identification</div>
+  <div class="sec-body">
+    <div class="sh">2.1. Classification of the substance or mixture</div>
+    <div class="b" style="margin-bottom:2px;">Classification according to Regulation (EC) No 1272/2008 [CLP]</div>
+    <table>
+      <tr><th style="width:38%;">Hazard classes and hazard categories</th><th style="width:42%;">Hazard statements</th><th>Classification procedure</th></tr>
+      
+      <tr><td>Flammable liquid Category 3</td><td>226: Flammable liquid and vapour.</td><td>On basis of test data.</td></tr>
+      
+      <tr><td>Serious eye damage Category 1</td><td>318: Causes serious eye damage.</td><td>Calculation method.</td></tr>
+      
+      <tr><td>Specific target organ toxicity - single exposure Category 3</td><td>336: May cause drowsiness or dizziness.</td><td>Calculation method.</td></tr>
+      
+    </table>
+
+    <div class="sh chg">2.2. Label elements</div>
+    
+    <div class="b" style="margin-bottom:2px;">Labelling according to Regulation (EC) No. 1272/2008 [CLP]</div>
+    
+    
+    <div class="b">Hazard pictograms:</div>
+    <div class="ghs-row">
+      
+      <div class="ghs-item"><img src="ghs/GHS02.png" alt="GHS02"><div><strong>GHS02</strong></div></div>
+      
+      <div class="ghs-item"><img src="ghs/GHS05.png" alt="GHS05"><div><strong>GHS05</strong></div></div>
+      
+      <div class="ghs-item"><img src="ghs/GHS07.png" alt="GHS07"><div><strong>GHS07</strong></div></div>
+      
+    </div>
+    
+
+    
+    <div class="signal-word" style="text-align:center; font-weight:bold; color:#D32F2F; font-size:10pt;">Danger</div>
+    
+
+    
+    <div class="b" style="margin-top:2px;">Hazard components for labelling:</div>
+    <div class="ind">[&#39;Propan-1-ol&#39;, &#39;Ethanol&#39;, &#39;Dipropylenglykolmonomethylether (Isomerengemisch)&#39;]</div>
+    
+
+    <table style="margin-top:5px;">
+      <tr><th colspan="2" style="text-align:left;">Hazard statements</th></tr>
+      
+      <tr><td style="width:120px;">H226</td><td>Flammable liquid and vapour.</td></tr>
+      
+      <tr><td style="width:120px;">H318</td><td>Causes serious eye damage.</td></tr>
+      
+      <tr><td style="width:120px;">H336</td><td>May cause drowsiness or dizziness.</td></tr>
+      
+    </table>
+
+    
+    <table style="margin-top:5px;">
+        <tr><th colspan="2" style="text-align:left;">Precautionary statements - Prevention</th></tr>
+        
+        <tr>
+            <td style="width:120px;">P210</td>
+            <td>Keep away from heat, hot surfaces, sparks, open flames and other ignition sources. No smoking.</td>
+        </tr>
+        
+        <tr>
+            <td style="width:120px;">P280.4</td>
+            <td>Wear protective gloves/protective clothing and eye protection/face protection.</td>
+        </tr>
+        
+    </table>
+    
+
+    
+    <table style="margin-top:5px;">
+        <tr><th colspan="2" style="text-align:left;">Precautionary statements - Response</th></tr>
+        
+        <tr>
+            <td style="width:120px;">P303</td>
+            <td>IF ON SKIN (or hair): Take off immediately all contaminated clothing. Rinse skin with water [or shower].</td>
+        </tr>
+        
+        <tr>
+            <td style="width:120px;">P304</td>
+            <td>IF INHALED: Remove person to fresh air and keep comfortable for breathing.</td>
+        </tr>
+        
+        <tr>
+            <td style="width:120px;">P305</td>
+            <td>IF IN EYES: Rinse cautiously with water for several minutes. Remove contact lenses, if present and easy to do. Continue rinsing.</td>
+        </tr>
+        
+    </table>
+    
+
+    
+    
+
+    <div class="sh">2.3. Other hazards</div>
+    <div class="ind"><span class="b">Adverse physicochemical effects:</span><br>
+      In case of insufficient ventilation and/or through use, explosive/highly flammable mixtures may develop.</div>
+    <div class="ind" style="margin-top:3px;"><span class="b">Adverse human health effects and symptoms:</span><br>
+      This product does not contain a substance that has endocrine disrupting properties with respect to humans as no components meets the criteria.</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 3: Composition/information on ingredients</div>
+  <div class="sec-body">
+    <div class="sh chg">3.2. Mixtures</div>
+    <div class="b">Hazardous ingredients / Hazardous impurities / Stabilisers:</div>
+    <table>
+      <tr><th style="width:28%;">Product identifiers</th><th>Substance name<br><span style="font-weight:normal;font-size:7.5pt;">Classification according to Regulation (EC) No 1272/2008 [CLP]</span></th><th style="width:18%;">Concentration</th></tr>
+      
+      <tr>
+        <td>
+          CAS No.: 71-23-8<br>
+          EC No.: 200-746-9<br>
+          
+          REACH No.: 01-2119486761-29
+        </td>
+        <td>
+          <div class="b">Propan-1-ol</div>
+          
+          <div>Flammable liquid Category 2: Highly flammable liquid and vapour.</div>
+          
+          <div>Serious eye damage Category 1: Causes serious eye damage.</div>
+          
+          <div>Specific target organ toxicity - single exposure Category 3: May cause drowsiness or dizziness.</div>
+          
+          
+          
+          <div class="note" style="margin-top:2px;"><strong>Acute Toxicity Estimate / Tox. Info</strong><br>
+            LD50 Oral: 8000.0 mg/kg Rat (Rat)<br>LD50 Dermal: 4032.0 mg/kg Rabbit (Rabbit)<br>LC50 Inhalation(Vapour): gt 33.8 mg/L Rat (Rat)<br>LC50 Inhalation(Dust/Mist): gt 51.91 mg/L rat (rat)<br>
+          </div>
+          
+        </td>
+        <td>30.0 - 50.0 Weight-%</td>
+      </tr>
+      
+      <tr>
+        <td>
+          CAS No.: 64-17-5<br>
+          EC No.: 200-578-6<br>
+          
+          REACH No.: 01-2119457610-43-XXXX
+        </td>
+        <td>
+          <div class="b">Ethanol</div>
+          
+          <div>Flammable liquid Category 2: Highly flammable liquid and vapour.</div>
+          
+          
+          
+          <div class="note" style="margin-top:2px;"><strong>Acute Toxicity Estimate / Tox. Info</strong><br>
+            LD50 Oral: 10470.0 mg/kg Rat (Rat)<br>LD50 Dermal: gt 2000.0 mg/kg Rat (Rat)<br>LC50 Inhalation(Vapour): 116.9 mg/L Rat (Rat)<br>
+          </div>
+          
+        </td>
+        <td>10.0 - 30.0 Weight-%</td>
+      </tr>
+      
+      <tr>
+        <td>
+          CAS No.: 34590-94-8<br>
+          EC No.: 252-104-2<br>
+          
+          REACH No.: 01-2119450011-60-XXXX
+        </td>
+        <td>
+          <div class="b">Dipropylenglykolmonomethylether (Isomerengemisch)</div>
+          
+          
+          
+          <div class="note" style="margin-top:2px;"><strong>Acute Toxicity Estimate / Tox. Info</strong><br>
+            LD50 Oral: gt 5000.0 mg/kg rat (rat)<br>LD50 Dermal: 9510.0 mg/kg rabbit (rabbit)<br>
+          </div>
+          
+        </td>
+        <td>1.0 - 5.0 Weight-%</td>
+      </tr>
+      
+    </table>
+    <div class="note" style="margin-top:3px;">Full text of H- and EUH-phrases: see section 16.</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 4: First aid measures</div>
+  <div class="sec-body">
+    <div class="sh">4.1. Description of first aid measures</div>
+    <div class="ssh">General information:</div>
+    <div class="ind">In case of accident or unwellness, seek medical advice immediately (show directions for use or safety data sheet if possible). Remove victim out of the danger area. Remove contaminated, saturated clothing immediately. Do not leave affected person unattended. If unconscious but breathing normally, place in recovery position and seek medical advice. Warning First aider: Pay attention to self-protection!</div>
+    <div class="ssh">Following inhalation:</div>
+    <div class="ind">Provide fresh air. In case of respiratory tract irritation, consult a physician. Get medical advice/attention if you feel unwell.</div>
+    <div class="ssh">In case of skin contact:</div>
+    <div class="ind">After contact with skin, wash immediately with plenty of water and soap. Take off immediately all contaminated clothing. If skin irritation or rash occurs: Get medical advice/attention.</div>
+    <div class="ssh">After eye contact:</div>
+    <div class="ind">In case of contact with eyes flush immediately with plenty of flowing water for 10 to 15 minutes holding eyelids apart and consult an ophthalmologist.</div>
+    <div class="ssh">Following ingestion:</div>
+    <div class="ind">Rinse mouth. Get medical advice/attention if you feel unwell. Let 1 glass of water be drunken in little sips (dilution effect).</div>
+    <div class="ssh">Self-protection of the first aider:</div>
+    <div class="ind">Use personal protection equipment.</div>
+    
+    <div class="sh">4.2. Most important symptoms and effects, both acute and delayed</div>
+    <div class="ind">Serious eye damage/eye irritation</div>
+    
+    <div class="sh">4.3. Indication of any immediate medical attention and special treatment needed</div>
+    <div class="ind">Treat symptomatically.</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 5: Firefighting measures</div>
+  <div class="sec-body">
+    <div class="sh">5.1. Extinguishing media</div>
+    <div class="ind"><span class="b">Suitable extinguishing media:</span> Water spray jet , alcohol resistant foam , Extinguishing powder , Carbon dioxide (CO2)</div>
+    <div class="ind"><span class="b">Unsuitable extinguishing media:</span> Full water jet</div>
+    
+    <div class="sh">5.2. Special hazards arising from the substance or mixture</div>
+    <div class="ind">Combustible . Vapours are heavier than air, spread along floors and form explosive mixtures with air.</div>
+    <div class="ind" style="margin-top:3px;"><span class="b">Hazardous combustion products:</span> In case of fire: Carbon monoxide , Carbon dioxide (CO2) . Vapours can form explosive mixtures with air.</div>
+    
+    <div class="sh">5.3. Advice for firefighters</div>
+    <div class="ind">Fight fire with normal precautions from a reasonable distance. Wear a self-contained breathing apparatus and chemical protective clothing.</div>
+    
+    <div class="sh">5.4. Additional information</div>
+    <div class="ind">Collect contaminated fire extinguishing water separately. Do not allow entering drains or surface water.</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 6: Accidental release measures</div>
+  <div class="sec-body">
+    <div class="sh">6.1. Personal precautions, protective equipment and emergency procedures</div>
+    <div class="ssh">6.1.1. For non-emergency personnel</div>
+    <div class="ind"><span class="b">Personal precautions:</span> Remove persons to safety. Use personal protective equipment as required. Avoid contact with skin, eyes and clothes.</div>
+    <div class="ind" style="margin-top:2px;"><span class="b">Protective equipment:</span> Wear protective gloves/protective clothing and eye protection/face protection.</div>
+    <div class="ssh">6.1.2. For emergency responders</div>
+    <div class="ind">Personal protection equipment: see section 8</div>
+    
+    <div class="sh">6.2. Environmental precautions</div>
+    <div class="ind">Do not allow to enter into surface water or drains.</div>
+    
+    <div class="sh">6.3. Methods and material for containment and cleaning up</div>
+    <div class="ind"><span class="b">For containment:</span> Absorb with liquid-binding material (sand, diatomaceous earth, acid- or universal binding agents).</div>
+    <div class="ind" style="margin-top:2px;"><span class="b">For cleaning up:</span> Water (with cleaning agent)</div>
+    
+    <div class="sh">6.4. Reference to other sections</div>
+    <div class="ind">Safe handling: see section 7 , Personal protection equipment: see section 8 , Disposal: see section 13</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 7: Handling and storage</div>
+  <div class="sec-body">
+    <div class="sh">7.1. Precautions for safe handling</div>
+    <div class="ssh">Protective measures</div>
+    <div class="ind"><span class="b">Advices on safe handling:</span> Wear personal protection equipment (refer to section 8). Wash hands before breaks and after work. Keep away from: Food and feedingstuffs . If local exhaust ventilation is not possible or not sufficient, the entire working area should be ventilated by technical means. Do not breathe mist/vapours/spray.</div>
+    <div class="ind" style="margin-top:2px;"><span class="b">Fire prevent measures:</span> Keep away from heat, hot surfaces, sparks, open flames and other ignition sources. No smoking. Vapours can form explosive mixtures with air.</div>
+    <div class="ssh">Advices on general occupational hygiene</div>
+    <div class="ind">Avoid contact with skin, eyes and clothes. When using do not eat, drink, smoke, sniff.</div>
+    
+    <div class="sh">7.2. Conditions for safe storage, including any incompatibilities</div>
+    <div class="ind"><span class="b">Technical measures and storage conditions:</span> Keep container tightly closed in a cool, well-ventilated place. Keep out of reach of children.</div>
+    <div class="ind" style="margin-top:2px;"><span class="b">Requirements for storage rooms and vessels:</span> Keep container tightly closed in a cool, well-ventilated place. Recommended storage temperature : at room temperature . Protect from sunlight.</div>
+    <div class="ind" style="margin-top:2px;"><span class="b">Hints on storage assembly:</span> Do not store together with: Food and feedingstuffs ( TRGS 510 )</div>
+    <div class="ind" style="margin-top:2px;"><span class="b">Storage class (TRGS 510, Germany):</span> 3 – Entzündbare Flüssigkeiten</div>
+    
+    <div class="sh">7.3. Specific end use(s)</div>
+    <div class="ind"></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 8: Exposure controls/personal protection</div>
+  <div class="sec-body">
+    <div class="sh">8.1. Control parameters</div>
+    <table style="font-size:7.5pt;">
+      <tr>
+        <th style="width:22%;">Limit value type<br>(country of origin)</th>
+        <th style="width:28%;">Substance name</th>
+        <th>① Long-term occupational exposure limit value<br>② Short-term occupational exposure limit value<br>③ Instantaneous value<br>④ Monitoring and observation processes<br>⑤ Remark</th>
+      </tr>
+      
+      <tr>
+        <td>TRGS 900 (DE)</td>
+        <td>ethanol<br>CAS No.: </td>
+        <td>
+          
+            <built-in method values of dict object at 0x00000258662C0640>
+          
+        </td>
+      </tr>
+      
+      <tr>
+        <td>IOELV (EU)</td>
+        <td>Dipropylene glycol monomethyl ether<br>CAS No.: </td>
+        <td>
+          
+            <built-in method values of dict object at 0x00000258662BBE00>
+          
+        </td>
+      </tr>
+      
+      <tr>
+        <td>TRGS 900 (DE)</td>
+        <td>Dipropylene glycol monomethyl ether<br>CAS No.: </td>
+        <td>
+          
+            <built-in method values of dict object at 0x00000258662BB1C0>
+          
+        </td>
+      </tr>
+      
+    </table>
+    <div class="ind" style="margin-top:3px;">None known.</div>
+    
+    <div class="sh">8.2. Exposure controls</div>
+    <div class="ssh">8.2.1. Appropriate engineering controls</div>
+    <div class="ind">Provide adequate ventilation.</div>
+    <div class="ssh">8.2.2. Personal protection equipment</div>
+    <div class="ind">
+        <div class="ppe">
+            
+            <span class="b">Eye/face protection:</span> Eye glasses with side protection ( EN 166 )
+        </div>
+        <div class="ppe" style="margin-top:4px;">
+            
+            <span class="b">Skin protection:</span> Tested protective gloves must be worn ( EN ISO 374 ). Take recovery periods for skin regeneration. Breakthrough times and swelling properties of the material must be taken into consideration. Suitable material: Butyl caoutchouc (butyl rubber) , Thickness of the glove material : &gt; 0,35 mm. In the case of wanting to use the gloves again, clean them before taking off and air them well.
+        </div>
+        <div class="ppe" style="margin-top:4px;">
+            
+            <span class="b">Respiratory protection:</span> Usually no personal respirative protection necessary. This product should not be used under conditions of poor ventilation unless a protective mask with an appropriate gas filter (i.e. type A1 according to standard EN 14387) is used.
+        </div>
+        <div class="ppe" style="margin-top:4px;">
+            
+            <span class="b">Body protection:</span> Tested protective gloves must be worn ( EN ISO 374 ). Take recovery periods for skin regeneration. Breakthrough times and swelling properties of the material must be taken into consideration. Suitable material: Butyl caoutchouc (butyl rubber) , Thickness of the glove material : &gt; 0,35 mm. In the case of wanting to use the gloves again, clean them before taking off and air them well.
+        </div>
+    </div>
+    <div class="ssh">8.2.3. Environmental exposure controls</div>
+    <div class="ind"></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 9: Physical and chemical properties</div>
+  <div class="sec-body">
+    <div class="sh">9.1. Information on basic physical and chemical properties</div>
+    <div class="ssh">Appearance</div>
+    <div class="ind">Color: transparent, Odour: Alcohol</div>
+    <div class="ssh">Safety relevant basis data</div>
+    <table>
+      <tr><th>Parameter</th><th>Value</th><th>at °C</th><th>Method</th></tr>
+      
+      <tr><td>pH</td><td>ca 8.0</td><td>20.0 C</td><td></td></tr>
+      
+      <tr><td>Melting point</td><td>-114.5 C</td><td></td><td>OECD 102</td></tr>
+      
+      <tr><td>Freezing point</td><td>No data available</td><td></td><td></td></tr>
+      
+      <tr><td>Initial boiling point and boiling range</td><td>No data available</td><td></td><td></td></tr>
+      
+      <tr><td>Flash point</td><td>28.0 C</td><td></td><td>DIN 51755 part 1</td></tr>
+      
+      <tr><td>Evaporation rate</td><td>No data available</td><td></td><td></td></tr>
+      
+      <tr><td>Auto-ignition temperature</td><td>No data available</td><td></td><td></td></tr>
+      
+      <tr><td>Upper/lower flammability or explosive limits</td><td>2.5 Vol-% - 15.0 Vol-%</td><td></td><td></td></tr>
+      
+      <tr><td>Vapour pressure</td><td>No data available</td><td></td><td></td></tr>
+      
+      <tr><td>Vapour density</td><td>No data available</td><td></td><td></td></tr>
+      
+      <tr><td>Density</td><td>0.9 g/cm3</td><td>20.0 C</td><td></td></tr>
+      
+      <tr><td>Bulk density</td><td>No data available</td><td></td><td></td></tr>
+      
+      <tr><td>Water solubility</td><td>No data available</td><td></td><td></td></tr>
+      
+      <tr><td>Dynamic viscosity</td><td>No data available</td><td></td><td></td></tr>
+      
+      <tr><td>Kinematic viscosity</td><td>No data available</td><td></td><td></td></tr>
+      
+    </table>
+    
+    <div class="sh">9.2. Other information</div>
+    <div class="ind">No data available.</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 10: Stability and reactivity</div>
+  <div class="sec-body">
+    <div class="sh">10.1. Reactivity</div>
+    <div class="ind">This material is considered to be non-reactive under normal use conditions.</div>
+    <div class="sh">10.2. Chemical stability</div>
+    <div class="ind">The product is chemically stable under recommended conditions of storage, use and temperature.</div>
+    <div class="sh">10.3. Possibility of hazardous reactions</div>
+    <div class="ind">No hazardous reaction when handled and stored according to provisions.</div>
+    <div class="sh">10.4. Conditions to avoid</div>
+    <div class="ind">Further information on proper storage: see section 7.</div>
+    <div class="sh">10.5. Incompatible materials</div>
+    <div class="ind">No further relevant information available.</div>
+    <div class="sh">10.6. Hazardous decomposition products</div>
+    <div class="ind">No known hazardous decomposition products. Decomposition products in case of fire: see section 5.</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 11: Toxicological information</div>
+  <div class="sec-body">
+    <div class="sh">11.1. Information on hazard classes as defined in Regulation (EC) No 1272/2008</div>
+    <table style="font-size:7.5pt;margin-bottom:2px;width:100%;">
+        
+        <tr><td class="trow-h" colspan="2">Propan-1-ol &nbsp; CAS No.: 71-23-8 &nbsp; EC No.: 200-746-9</td></tr>
+        
+        <tr><td class="trow-d" colspan="2">LD50 Oral: 8000.0 mg/kg Rat (Rat)</td></tr>
+        
+        <tr><td class="trow-d" colspan="2">LD50 Dermal: 4032.0 mg/kg Rabbit (Rabbit)</td></tr>
+        
+        <tr><td class="trow-d" colspan="2">LC50 Inhalation(Vapour): gt 33.8 mg/L Rat (Rat)</td></tr>
+        
+        <tr><td class="trow-d" colspan="2">LC50 Inhalation(Dust/Mist): gt 51.91 mg/L rat (rat)</td></tr>
+        
+        
+        <tr><td class="trow-h" colspan="2">Ethanol &nbsp; CAS No.: 64-17-5 &nbsp; EC No.: 200-578-6</td></tr>
+        
+        <tr><td class="trow-d" colspan="2">LD50 Oral: 10470.0 mg/kg Rat (Rat)</td></tr>
+        
+        <tr><td class="trow-d" colspan="2">LD50 Dermal: gt 2000.0 mg/kg Rat (Rat)</td></tr>
+        
+        <tr><td class="trow-d" colspan="2">LC50 Inhalation(Vapour): 116.9 mg/L Rat (Rat)</td></tr>
+        
+        
+        <tr><td class="trow-h" colspan="2">Dipropylenglykolmonomethylether (Isomerengemisch) &nbsp; CAS No.: 34590-94-8 &nbsp; EC No.: 252-104-2</td></tr>
+        
+        <tr><td class="trow-d" colspan="2">LD50 Oral: gt 5000.0 mg/kg rat (rat)</td></tr>
+        
+        <tr><td class="trow-d" colspan="2">LD50 Dermal: 9510.0 mg/kg rabbit (rabbit)</td></tr>
+        
+        
+    </table>
+    <div style="margin-top:5px;">
+        <div><span class="b">Acute toxicity:</span> Based on available data, the classification criteria are not met. Based on available data, the classification criteria are not met. Based on available data, the classification criteria are not met.</div>
+        <div><span class="b">Skin corrosion/irritation:</span> Based on available data, the classification criteria are not met.</div>
+        <div><span class="b">Serious eye damage/irritation:</span> Causes serious eye damage.</div>
+        <div><span class="b">Respiratory or skin sensitisation:</span> Based on available data, the classification criteria are not met.</div>
+    </div>
+    <div class="sh">11.2. Information on other hazards</div>
+    <div class="ind">No data available.</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 12: Ecological information</div>
+  <div class="sec-body">
+    <div class="sh">12.1. Toxicity</div>
+    
+    <table style="font-size:7.5pt;margin-bottom:2px;width:100%;">
+        <tr><td class="trow-h" colspan="2">Propan-1-ol &nbsp; CAS No.: 71-23-8 &nbsp; EC No.: 200-746-9</td></tr>
+        
+        <tr><td class="trow-d" colspan="2">LC50: 4555.0 mg/L   (Pimephales promelas) </td></tr>
+        
+        <tr><td class="trow-d" colspan="2">LC50: 4555.0 mg/L   (Activated sludge) </td></tr>
+        
+        <tr><td class="trow-d" colspan="2">LC50: 4555.0 mg/L   (Pimephales promelas) OECD Guideline 203 (Fish, Acute Toxicity Test)</td></tr>
+        
+        <tr><td class="trow-d" colspan="2">EC50: 3644.0 mg/L   (Daphnia magna) </td></tr>
+        
+        <tr><td class="trow-d" colspan="2">NOEC: 68.3 mg/L   (Daphnia magna) </td></tr>
+        
+        <tr><td class="trow-d" colspan="2">LC50: 1000.0 mg/L   (Gammarus pulex) </td></tr>
+        
+        <tr><td class="trow-d" colspan="2">EC50: 3644.0 mg/L   (Daphnia magna) DIN 38412 Part 11, Daphnia- Short term test</td></tr>
+        
+        <tr><td class="trow-d" colspan="2">EC50: gt 1000.0 mg/L   (Activated sludge) </td></tr>
+        
+        <tr><td class="trow-d" colspan="2">EC50: 9170.0 mg/L   (Raphidocelis subcapitata (previous names: Pseudokirchneriella subcapitata, Selenastrum capricornutum)) </td></tr>
+        
+        <tr><td class="trow-d" colspan="2">NOEC: gt 100.0 mg/L   (Daphnia magna) </td></tr>
+        
+        <tr><td class="trow-d" colspan="2">NOEC: 1150.0 mg/L   () </td></tr>
+        
+        <tr><td class="trow-d" colspan="2">NOEC: 1150.0 mg/L   (Chlorella pyrenoidosa) </td></tr>
+        
+        
+        
+        
+        
+    </table>
+    
+    <table style="font-size:7.5pt;margin-bottom:2px;width:100%;">
+        <tr><td class="trow-h" colspan="2">Ethanol &nbsp; CAS No.: 64-17-5 &nbsp; EC No.: 200-578-6</td></tr>
+        
+        <tr><td class="trow-d" colspan="2">LC50: 14200.0 mg/L   (Pimephales promelas) US EPA method E03-05</td></tr>
+        
+        <tr><td class="trow-d" colspan="2">EC50: 12900.0 mg/L   (Pimephales promelas) US EPA method E03-05</td></tr>
+        
+        <tr><td class="trow-d" colspan="2">LC50: 5012.0 mg/L   (Ceriodaphnia dubia) ASTM E729-80</td></tr>
+        
+        <tr><td class="trow-d" colspan="2">NOEC: 2.0 mg/L   (Ceriodaphnia dubia) </td></tr>
+        
+        <tr><td class="trow-d" colspan="2">EC50: 275.0 mg/L   (Chlorella vulgaris) OECD Guideline 201 (Alga, Growth Inhibition Test)</td></tr>
+        
+        <tr><td class="trow-d" colspan="2">EC50: 675.0 mg/L   (Chlorella vulgaris) OECD Guideline 201 (Alga, Growth Inhibition Test)</td></tr>
+        
+        
+        
+        
+        
+    </table>
+    
+    <table style="font-size:7.5pt;margin-bottom:2px;width:100%;">
+        <tr><td class="trow-h" colspan="2">Dipropylenglykolmonomethylether (Isomerengemisch) &nbsp; CAS No.: 34590-94-8 &nbsp; EC No.: 252-104-2</td></tr>
+        
+        <tr><td class="trow-d" colspan="2">LC50: gt 1000.0 mg/L   (Poecilia reticulata) </td></tr>
+        
+        <tr><td class="trow-d" colspan="2">LC50: gt 1000.0 mg/L   (Crangon crangon) EPA OPP 72-3 (Estuarine/Marine Fish, Mollusk, or Shrimp Acute Toxicity Test)</td></tr>
+        
+        <tr><td class="trow-d" colspan="2">LC50: gt 1000.0 mg/L   (Crangon crangon) EPA OPP 72-3 (Estuarine/Marine Fish, Mollusk, or Shrimp Acute Toxicity Test)</td></tr>
+        
+        <tr><td class="trow-d" colspan="2">LC50: gt 1000.0 mg/L   (Crangon crangon) EPA OPP 72-3 (Estuarine/Marine Fish, Mollusk, or Shrimp Acute Toxicity Test)</td></tr>
+        
+        <tr><td class="trow-d" colspan="2">LOEC: 0.5 mg/L   (Daphnia magna) </td></tr>
+        
+        <tr><td class="trow-d" colspan="2">EC50: gt 969.0 mg/L   (Raphidocelis subcapitata (previous names: Pseudokirchneriella subcapitata, Selenastrum capricornutum)) </td></tr>
+        
+        <tr><td class="trow-d" colspan="2">EC50: gt 969.0 mg/L   (Raphidocelis subcapitata (previous names: Pseudokirchneriella subcapitata, Selenastrum capricornutum)) </td></tr>
+        
+        <tr><td class="trow-d" colspan="2">NOEC: 969.0 mg/L   (Raphidocelis subcapitata (previous names: Pseudokirchneriella subcapitata, Selenastrum capricornutum)) </td></tr>
+        
+        <tr><td class="trow-d" colspan="2">NOEC: 969.0 mg/L   (Raphidocelis subcapitata (previous names: Pseudokirchneriella subcapitata, Selenastrum capricornutum)) </td></tr>
+        
+        
+        
+        
+        
+    </table>
+    
+    
+    <div class="sh">12.2. Persistence and degradability</div>
+    <div class="ind"></div>
+    <div class="sh">12.3. Bioaccumulative potential</div>
+    <div class="ind"></div>
+    <div class="sh">12.4. Mobility in soil</div>
+    <div class="ind">No data available.</div>
+    <div class="sh">12.5. Results of PBT and vPvB assessment</div>
+    <div class="ind">No data available.</div>
+    <div class="sh">12.6. Endocrine disrupting properties</div>
+    <div class="ind">No data available.</div>
+    <div class="sh">12.7. Other adverse effects</div>
+    <div class="ind">No data available.</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 13: Disposal considerations</div>
+  <div class="sec-body">
+    <div class="sh">13.1. Waste treatment methods</div>
+    <div class="ind">Consult the appropriate local waste disposal expert about waste disposal. Completely emptied packages can be recycled.</div>
+    <div class="ind" style="margin-top:2px;"></div>
+    
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 14: Transport information</div>
+  <div class="sec-body">
+    <table>
+      <tr class="trow-h"><td></td><td style="width:23%;">Land transport (ADR/RID)</td><td style="width:23%;">Inland waterway craft (ADN)</td><td style="width:23%;">Sea transport (IMDG)</td><td style="width:23%;">Air transport (ICAO-TI / IATA-DGR)</td></tr>
+      <tr><td class="b">14.1. UN number</td><td>1987</td><td>1987</td><td>1987</td><td>1987</td></tr>
+      <tr><td class="b">14.2. UN proper shipping name</td><td>ALCOHOLS, N.O.S.</td><td>ALCOHOLS, N.O.S.</td><td>ALCOHOLS, N.O.S.</td><td>ALCOHOLS, N.O.S.</td></tr>
+      <tr><td class="b">14.3. Transport hazard class(es)</td>
+        <td class="td-cell">
+          <img class="td-img" src="ghs/class3.png" onerror="this.style.display='none'"><br>
+          <div class="b">3</div>
+        </td>
+        <td class="td-cell">
+          <img class="td-img" src="ghs/class3.png" onerror="this.style.display='none'"><br>
+          <div class="b">3</div>
+        </td>
+        <td class="td-cell">
+          <img class="td-img" src="ghs/class3.png" onerror="this.style.display='none'"><br>
+          <div class="b">3</div>
+        </td>
+        <td class="td-cell">
+          <img class="td-img" src="ghs/class3.png" onerror="this.style.display='none'"><br>
+          <div class="b">3</div>
+        </td>
+      </tr>
+      <tr><td class="b">14.4. Packing group</td><td>III</td><td>III</td><td>III</td><td>III</td></tr>
+      <tr><td class="b">14.5. Environmental hazards</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+    </table>
+    
+    <div class="sh">14.6. Special precautions for user</div>
+    <div class="ind">No data available.</div>
+    <div class="sh">14.7. Maritime transport in bulk according to IMO instruments</div>
+    <div class="ind">Not applicable.</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 15: Regulatory information</div>
+  <div class="sec-body">
+    <div class="sh">15.1. Safety, health and environmental regulations/legislation specific for the substance or mixture</div>
+    <div class="ssh">15.1.1. EU regulations</div>
+    <div class="ind">Other</div>
+    <div class="ssh">15.1.2. National regulations</div>
+    <div style="display:flex;align-items:center;gap:0;margin-bottom:3px;padding-left:14px;">
+      <span style="display:inline-block;width:13px;height:8px;background:#000;"></span>
+      <span style="display:inline-block;width:13px;height:8px;background:#d00;"></span>
+      <span style="display:inline-block;width:13px;height:8px;background:#ffce00;"></span>
+      <span class="b" style="margin-left:5px;">[DE] National regulations</span>
+    </div>
+    <div class="ind">
+        <div><span class="b">Water hazard class (WGK):</span> 1 - slightly hazardous to water</div>
+        
+        <div><span class="b">regulation:</span> s/legislation specific for the substance or mixture</div>
+        
+        <div><span class="b">regulation:</span> s (EU):</div>
+        
+        <div><span class="b">Regulation:</span> (EC) No. 648/2004 [Detergents regulation], KrW/AbfG</div>
+        
+        <div><span class="b">regulation:</span> s</div>
+        
+        <div><span class="b">regulation:</span> s</div>
+        
+        <div><span class="b">regulation:</span> s, restrictions and prohibition regulations</div>
+        
+    </div>
+    <div class="sh">15.2. Chemical Safety Assessment</div>
+    <div class="ind">No data available.</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head">SECTION 16: Other information</div>
+  <div class="sec-body">
+    <div class="sh chg">16.1. Indication of changes</div>
+    <table style="font-size:7.5pt;width:auto;">
+      
+      
+      <tr><td style="border:1px solid #000;padding:2px 5px;font-weight:bold;">1.3.</td><td style="border:1px solid #000;padding:2px 8px;">Details of the supplier of the safety data sheet</td></tr>
+      
+      
+      
+      <tr><td style="border:1px solid #000;padding:2px 5px;font-weight:bold;">2.2.</td><td style="border:1px solid #000;padding:2px 8px;">Label elements</td></tr>
+      
+      
+      
+      <tr><td style="border:1px solid #000;padding:2px 5px;font-weight:bold;">3.2.</td><td style="border:1px solid #000;padding:2px 8px;">Mixtures</td></tr>
+      
+      
+      
+      <tr><td style="border:1px solid #000;padding:2px 5px;font-weight:bold;">7.1.</td><td style="border:1px solid #000;padding:2px 8px;">Precautions for safe handling</td></tr>
+      
+      
+      
+      <tr><td style="border:1px solid #000;padding:2px 5px;font-weight:bold;">8.1.</td><td style="border:1px solid #000;padding:2px 8px;">Control parameters</td></tr>
+      
+      
+      
+      <tr><td style="border:1px solid #000;padding:2px 5px;font-weight:bold;">9.1.</td><td style="border:1px solid #000;padding:2px 8px;">Information on basic physical and chemical properties</td></tr>
+      
+      
+      
+      <tr><td style="border:1px solid #000;padding:2px 5px;font-weight:bold;">14.3.</td><td style="border:1px solid #000;padding:2px 8px;">Transport hazard class(es)</td></tr>
+      
+      
+      
+      <tr><td style="border:1px solid #000;padding:2px 5px;font-weight:bold;">15.1.</td><td style="border:1px solid #000;padding:2px 8px;">Safety, health and environmental regulations/legislation specific for the substance or mixture</td></tr>
+      
+      
+      
+      <tr><td style="border:1px solid #000;padding:2px 5px;font-weight:bold;">16.1.</td><td style="border:1px solid #000;padding:2px 8px;">Indication of changes</td></tr>
+      
+      
+      
+      <tr><td style="border:1px solid #000;padding:2px 5px;font-weight:bold;">16.5.</td><td style="border:1px solid #000;padding:2px 8px;">List of relevant hazard statements and/or precautionary statements from sections 2 to 15</td></tr>
+      
+      
+    </table>
+    <div class="sh">16.2. Abbreviations and acronyms</div>
+    <table class="abbr">
+        
+        <tr><td>ECHA</td><td>Guidance on information requirements and chemical safety assessment,</td></tr>
+        
+    </table>
+    <div class="sh">16.3. Key literature references and sources for data</div>
+    <div class="ind">TRGS 510, TRGS 525, TRGS 900, Safety data sheets for the ingredients , 1907/2006 REACH, 1272/2008 CLP GHS Substance name Type source of supply propan-1-ol LC50 Acute inhalation toxicity (dust/ Source: European Chemicals Agency, CAS No.:71-23-8 mist); LC50; EC50; NOEC http://echa.europa.eu/ EC No.:200-746-9 Dipropylene glycol monomethyl ether LD50 oral; LD50 dermal; LC50; EC50; Source: European Chemicals Agency, CAS No.:34590-94-8 NOEC; LOEC http://echa.europa.eu/ EC No.:252-104-2 ethanol LC50; EC50; NOEC Source: European Chemicals Agency, CAS No.:64-17-5 http://echa.europa.eu/ EC No.:200-578-6 en / DE GeSi.de Safety Data Sheet according to Regulation (EC) No. 1907/2006 (REACH) Page 11/11 Mycoplasma Off™ Revision date:21 Aug 2024 Version:5 Print date:21 Aug 2024</div>
+    
+    <div class="sh">16.4. Classification for mixtures and used evaluation method</div>
+    <table>
+        <tr><th>Hazard classes</th><th>Hazard statements</th><th>Procedure</th></tr>
+        
+        <tr><td>Flam. Liq. 3</td><td>H226: Flammable liquid and vapour.</td><td>On basis of test data.</td></tr>
+        
+        <tr><td>Eye Dam. 1</td><td>H318: Causes serious eye damage.</td><td>Calculation method.</td></tr>
+        
+        <tr><td>STOT SE 3</td><td>H336: May cause drowsiness or dizziness.</td><td>Calculation method.</td></tr>
+        
+    </table>
+
+    <div class="sh">16.5. List of relevant hazard statements and/or precautionary statements</div>
+    <table style="margin-top:2px;">
+      <tr><th colspan="2" style="text-align:left;">Hazard statements</th></tr>
+      
+      <tr><td style="width:120px;">H226</td><td>Flammable liquid and vapour.</td></tr>
+      
+      <tr><td style="width:120px;">H318</td><td>Causes serious eye damage.</td></tr>
+      
+      <tr><td style="width:120px;">H336</td><td>May cause drowsiness or dizziness.</td></tr>
+      
+    </table>
+    <div class="sh">16.6. Training advice</div>
+    <div class="ind">No data available</div>
+    <div class="sh">16.7. Additional information</div>
+    <div class="ind">
+        
+        <div>This data sheet was created in accordance with EU regulation (EC) No. 1907/2006 (REACH).
+The information is based on the level of knowledge and experience on the date of issue, it do not have the importance
+of assured properties. The information may not be changed or transferred to other products. Reproduction in the
+unchanged state is permitted.
+* Data changed compared with the previous version.</div>
+        
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

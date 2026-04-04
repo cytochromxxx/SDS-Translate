@@ -324,7 +324,7 @@ def import_sds_to_html(
 if __name__ == '__main__':
     # Configuration for standalone execution
     XML_FILE = 'Sdb_EU-REACH_MycoplasmaOff™_15-5000,15-1000,15-0050_V5_en_DE.xml'
-    TEMPLATE_FILE = 'layout-placeholders-fixed-v2.html'
+    TEMPLATE_FILE = 'SDS_PERFEKT_TEMPLATE.html'
     OUTPUT_FILE = 'importer_output.html'
     GAP_REPORT_FILE = 'gap_report.md'
     PDF_FILE = 'SDS_Mycoplasma_Off_15-5xxx_en_DE_Ver.05.pdf'

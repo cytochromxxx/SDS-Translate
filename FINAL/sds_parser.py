@@ -221,7 +221,9 @@ class NewSDScomParser:
                 'concentration': f"{get_text(c, 'Concentration/LowerValue')} - {get_text(c, 'Concentration/UpperValue')} {get_text(c, 'Concentration/Unit')}",
                 'classification': [f"{get_text(cl, 'ClpHazardClassCategory')}: {get_all_text_from_nodes(cl, 'ClpHazardStatement/FullText')}" for cl in c.xpath('.//*[local-name()="ClpHazardClassification"]')],
                 'toxicological_info': [],
-                'ate_values': []
+                'ate_values': [],
+                'pictograms': get_all_texts(c, 'ClpHazardPictogram/PhraseCode'),
+                'signal_word': get_text(c, 'ClpSignalWord/FullText')
             }
             tox_info = self._xpath_single(c, "ToxicologicalInformation")
             if tox_info is not None:

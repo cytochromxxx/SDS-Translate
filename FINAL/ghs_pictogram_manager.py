@@ -75,13 +75,42 @@ class GHSPictogramManager:
         conn.close()
     
     def _init_default_pictograms(self, cursor):
-        """Initialize default GHS pictogram entries."""
+        """Initialize default GHS pictogram entries and check for local high-quality icons."""
+        import shutil
+        from pathlib import Path
+        
+        # Check for local 'symbole' directory to import high-quality icons
+        # We'll use this to override the default cached images
+        library_path = Path(r"c:\Users\Flo\Coding\agentzero-sdstranslate\backup_sds_translate_latest\FINAL\symbole")
+        
         for code, data in GHS_PICTOGRAMS.items():
+            # Standard entry
             cursor.execute('''
                 INSERT OR IGNORE INTO ghs_pictograms (code, name, description, hazard_class)
                 VALUES (?, ?, ?, ?)
             ''', (code, data['name'], data['description'], data['hazard_class']))
-    
+            
+            # Map GHS01 -> GHS_01_gr.gif
+            num = code.replace("GHS0", "")
+            if len(num) == 1:
+                lib_filename = f"GHS_0{num}_gr.gif"
+            else:
+                lib_filename = f"GHS_{num}_gr.gif"
+                
+            lib_file = library_path / lib_filename
+            if lib_file.exists():
+                cache_file = self.cache_dir / f"{code}.gif"
+                # Copy to cache if not already there or to update
+                try:
+                    shutil.copy2(lib_file, cache_file)
+                    cursor.execute('''
+                        UPDATE ghs_pictograms 
+                        SET png_path = ?, last_updated = CURRENT_TIMESTAMP
+                        WHERE code = ?
+                    ''', (str(cache_file), code))
+                except Exception as e:
+                    print(f"Error copying high-quality GHS icon {code}: {e}")
+
     def download_pictogram(self, code, force_refresh=False):
         """
         Download GHS pictogram from BGN or alternative source.
@@ -90,17 +119,25 @@ class GHSPictogramManager:
         if code not in GHS_PICTOGRAMS:
             return False
         
-        svg_path = self.cache_dir / f"{code}.svg"
+        # Check if we already have it (either downloaded or copied from library)
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute('SELECT png_path FROM ghs_pictograms WHERE code = ?', (code,))
+        row = cursor.fetchone()
+        conn.close()
         
+        if row and row[0] and os.path.exists(row[0]) and not force_refresh:
+            return True
+        
+        # Standard download/generation logic
+        svg_path = self.cache_dir / f"{code}.svg"
         if not force_refresh and svg_path.exists():
             self._update_pictogram_paths(code, str(svg_path), None)
             return True
         
         success = self._generate_placeholder_pictogram(code, svg_path)
-        
         if success:
             self._update_pictogram_paths(code, str(svg_path), None)
-        
         return success
     
     def _generate_placeholder_pictogram(self, code, svg_path):

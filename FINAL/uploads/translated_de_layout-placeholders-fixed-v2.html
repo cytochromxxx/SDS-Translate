@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="{{ meta.language }}">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Safety Data Sheet – {{ meta.product_name }}</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 8.5pt;
+  color: #000;
+  background: #ccc;
+  line-height: 1.35;
+}
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 8mm auto;
+  padding: 10mm 12mm 14mm;
+  background: #fff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 6px rgba(0,0,0,.25);
+}
+@media print {
+  body { background:#fff; }
+  .page { margin:0; box-shadow:none; page-break-after:always; width:100%; }
+}
+/* ── Page header ── */
+.ph-row { display:flex; justify-content:space-between; align-items:center; font-size:7pt; margin-bottom:2px; }
+.ph-row .doc { font-weight:normal; }
+.ph-row .prod { background:#e0e8f0; font-weight:bold; display:inline-block; padding:1px 4px; font-size:8.5pt; margin-top:2px; }
+.rev { font-size:7pt; margin:4px 0 2px; }
+.header-sep { border-bottom:2px solid #000; margin-bottom:6px; }
+.locale { text-align:right; font-size:6.5pt; margin-bottom:4px; line-height:1.3; }
+/* ── Logo ── */
+.logo-img { height:28px; width:auto; }
+/* ── Main title ── */
+.main-title { border:1px solid #000; padding:5px 8px; margin-bottom:8px;
+               font-size:9.5pt; font-weight:bold; text-align:center; }
+/* ── Sections (PDF style: no box, only line under section head) ── */
+.section { border:1px solid #000; margin-bottom:5px; }
+.sec-head { background:#f0f0f0; border-bottom:1px solid #000; padding:4px 6px; font-size:8.5pt;
+             font-weight:bold; }
+.sec-body { padding:4px 6px; }
+.sh  { font-weight:bold; font-size:8.5pt; margin-top:5px; margin-bottom:2px; }
+.ssh { font-weight:bold; font-size:8pt;   margin-top:4px; margin-bottom:1px; }
+.b   { font-weight:bold; }
+.ind { padding-left:14px; }
+/* changed marker */
+.chg::before { content:"* "; font-weight:bold; }
+/* product name highlight */
+.pname { background:#e0e8f0; padding:2px 6px; display:inline-block;
+          font-weight:bold; font-size:10pt; margin:3px 0; border:1px solid #9ab8d0; }
+/* ── Tables ── */
+table { width:100%; border-collapse:collapse; margin-bottom:3px; font-size:8pt; }
+td, th { border:1px solid #000; padding:2px 4px; vertical-align:top; line-height:1.3; }
+th { font-weight:bold; background:#f0f0f0; }
+/* ── GHS pictograms ── */
+.ghs-row { display:flex; gap:16px; margin:4px 0; }
+.ghs-item { text-align:center; font-size:7pt; }
+.ghs-item img { display:block; margin:0 auto; height:70px; width:auto; }
+/* ── small GHS in ingredient table ── */
+.ghs-sm img { height:16px; width:auto; vertical-align:middle; }
+/* ── PPE ── */
+.ppe-icons { display:flex; gap:8px; margin:4px 0; }
+.ppe-icons img { height:36px; width:auto; mix-blend-mode: multiply; }
+.ppe-section { margin-top:4px; }
+.ppe-section img { height:36px; width:auto; margin-bottom:4px; vertical-align:middle; mix-blend-mode: multiply; }
+/* legacy ppe class kept for backward compat */
+.ppe img { height:36px; width:auto; margin-bottom:4px; vertical-align:middle; mix-blend-mode: multiply; }
+/* ── Transport diamonds ── */
+.td-img { height:46px; width:auto; display:block; margin:0 auto; }
+.td-cell { text-align:center; vertical-align:middle; }
+/* ── Footer ── */
+.pfoot { margin-top:auto; padding-top:3px; border-top:1px solid #aaa;
+          display:flex; justify-content:flex-end; flex-direction:column;
+          align-items:flex-end; font-size:7pt; color:#444; }
+/* italic note */
+.note { font-style:italic; font-size:7.5pt; }
+/* waste code table */
+.wcrow { display:flex; border:1px solid #000; }
+.wc { border-right:1px solid #000; padding:2px 5px; min-width:68px; font-weight:bold; }
+.wd { padding:2px 5px; }
+/* kv list */
+.kv-list table { border:none; }
+.kv-list td { border:none; padding:1px 4px; }
+.kv-list td:first-child { font-weight:bold; white-space:nowrap; }
+/* abbr list (no borders, tabbed layout) */
+.abbr td { border:none; padding:1px 3px; font-size:7.5pt; }
+.abbr td:first-child { font-weight:bold; white-space:nowrap; min-width:52px; }
+/* lit table */
+.lit td { font-size:7.5pt; }
+/* tox/eco shaded rows */
+.trow-h { background:#d0d0d0; font-weight:bold; }
+.trow-d { background:#e8e8e8; font-weight:bold; }
+/* tox/eco indented sub-rows */
+.trow-sub td { padding-left:14px; }
+/* appearance two-column */
+.appearance-row { display:flex; gap:24px; }
+.appearance-col { flex:1; }
+/* Section 9 safety data – 4 col table – keep default */
+/* ── Print & PDF Styles ── */
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm 15mm 18mm 15mm;
+  }
+  .page {
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    border: none;
+    width: 100%;
+    min-height: 0;
+  }
+  .section, table {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}
+
+/* Page numbering for WeasyPrint */
+.page-number-counter::after {
+  content: counter(page) " / " counter(pages);
+}
+</style>
+</head>
+<body>
+<div class="sds-document original-content">
+<!-- ═══ PAGE 1 ═══ -->
+<div class="page">
+<div class="ph-row">
+<div class="doc">Sicherheitsdatenblatt gemäß Verordnung (EG) Nr. 1907/2006 (REACH)</div>
+<div>Seite <span class="page-number-counter"></span></div>
+</div>
+<div class="ph-row">
+<div class="prod">{{ meta.product_name }}</div>
+<img alt="Logo" class="logo-img" src="mb_logo.svg"/>
+</div>
+<div class="rev"><strong>Revisionsdatum:</strong> {{ meta.revision_date }}  <strong>Version:</strong> {{ meta.version }}  <strong>Druckdatum:</strong> {{ meta.print_date }}</div>
+<div class="header-sep"></div>
+<div class="main-title">Sicherheitsdatenblatt gemäß Verordnung (EG) Nr. 1907/2006 (REACH)</div>
+<div class="section">
+<div class="sec-head">ABSCHNITT 1: Identifikation des Stoffs/Gemischs und des Unternehmens</div>
+<div class="sec-body">
+<div class="sh">1.1. Produktidentifikator</div>
+<div class="b">Handelsname/Bezeichnung</div>
+<div class="pname">{{ section_1.product_identifier.trade_name }}</div>
+<div style="margin-top:4px;"><span class="b">Artikelnr.:</span><br/>
+<span class="ind">{{ section_1.product_identifier.item_no }}</span></div>
+<div><span class="b">UFI:</span><br/>
+<span class="ind">{{ section_1.product_identifier.ufi }}</span></div>
+<div class="sh">1.2. Relevante identifizierte Verwendungen des Stoffs oder Gemischs und Verwendungen, von denen abgeraten wird</div>
+<div class="b">Verwendung des Stoffs/Gemischs:</div>
+<div class="ind">{{ section_1.relevant_uses.product_type }}</div>
+<div style="margin-top:3px;"><span class="b">Relevante identifizierte Verwendungen:</span></div>
+<div class="ind">
+<div class="b" style="margin-top:2px;">Lebenszyklusstadium [LCS]</div>
+<div class="ind">{{ section_1.relevant_uses.lcs }}</div>
+<div class="b" style="margin-top:2px;">Verwendungsbereiche [SU]</div>
+<div class="ind"><strong>{{ section_1.relevant_uses.su }}:</strong> {{ section_1.relevant_uses.su_fulltext }}</div>
+<div class="b" style="margin-top:2px;">Produktkategorien [PC]</div>
+<div class="ind">{{ section_1.relevant_uses.pc1 }}</div>
+      {% if section_1.relevant_uses.pc2 %}
+      <div class="ind">{{ section_1.relevant_uses.pc2 }}</div>
+      {% endif %}
+    </div>
+<div class="sh chg">1.3. Einzelheiten zum Lieferanten, der das Sicherheitsdatenblatt bereitstellt</div>
+<div class="b">Lieferant (Hersteller/Importeur/Alleinvertreter/nachgeschalteter Anwender/Händler):</div>
+<div class="ind">
+<div class="b">{{ section_1.supplier_details.name }}</div>
+<div>{{ section_1.supplier_details.address }}</div><div>{{ section_1.supplier_details.country }}</div>
+<div><span class="b">Telefon:</span> {{ section_1.supplier_details.phone }}</div>
+<div><span class="b">E-Mail:</span> {{ section_1.supplier_details.email }}</div>
+<div><span class="b">Website:</span> {{ section_1.supplier_details.website }}</div>
+</div>
+<div class="sh">1.4. Notrufnummer</div>
+<div class="ind">{{ section_1.emergency_phone.description or 'Vergiftungs-Informations-Zentrale Freiburg' }}, {{ section_1.emergency_phone.number }}</div>
+</div>
+</div>
+<div class="section">
+<div class="sec-head">ABSCHNITT 2: Mögliche Gefahren</div>
+<div class="sec-body">
+<div class="sh">2.1. Einstufung des Stoffs oder Gemischs</div>
+<div class="b" style="margin-bottom:2px;">Einstufung gemäß Verordnung (EG) Nr. 1272/2008 [CLP]</div>
+<table>
+<tr><th style="width:38%;">Gefahrenklassen und Gefahrenkategorien</th><th style="width:42%;">Gefahrenhinweise</th><th>Einstufungsverfahren</th></tr>
+      {% for item in section_2.Einstufung %}
+      <tr><td>{{ item.category }}</td><td>{{ item.code }}: {{ item.statement }}</td><td>{{ item.procedure }}</td></tr>
+      {% endfor %}
+    </table>
+<div class="sh chg">2.2. Kennzeichnungselemente</div>
+    {% if section_2.hazard_labelling_html %}
+        <div class="ind">{{ section_2.hazard_labelling_html|safe }}</div>
+    {% else %}
+    <div class="b" style="margin-bottom:2px;">Kennzeichnung gemäß Verordnung (EG) Nr. 1272/2008 [CLP]</div>
+    
+    {% if section_2.labelling.pictograms %}
+    <div class="b">Gefahrenpiktogramme:</div>
+<div class="ghs-row">
+      {% for Piktogramm in section_2.labelling.pictograms %}
+      <div class="ghs-item"><img alt="{{ pictogram }}" src="ghs/{{ pictogram }}.png"/><div><strong>{{ Piktogramm }}</strong></div></div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if section_2.labelling.signal_word %}
+    <div class="signal-word" style="font-weight:bold; font-size:10pt; margin:3px 0;"><strong>Signalwort</strong> {{ section_2.labelling.signal_word }}</div>
+    {% endif %}
+
+    {% if section_2.labelling.hazard_components %}
+    <div class="b" style="margin-top:2px;">Gefahrbestimmende Komponenten zur Etikettierung</div>
+<div class="ind">{{ section_2.labelling.hazard_components }}</div>
+    {% endif %}
+
+    {% if section_2.labelling.hazard_statements_physical %}
+    <table style="margin-top:4px;"><tr><th colspan="2">Gefahrenhinweise für physikalische Gefahren</th></tr>
+      {% for statement in section_2.labelling.hazard_statements_physical %}
+      <tr><td style="width:60px;">{{ statement.code }}</td><td>{{ statement.text }}</td></tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+
+    {% if section_2.labelling.hazard_statements_health %}
+    <table style="margin-top:3px;"><tr><th colspan="2">Gefahrenhinweise für Gesundheitsgefahren</th></tr>
+      {% for statement in section_2.labelling.hazard_statements_health %}
+      <tr><td style="width:60px;">{{ statement.code }}</td><td>{{ statement.text }}</td></tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+
+    {% if section_2.labelling.hazard_statements %}
+    <div class="ssh">Gefahrenhinweise</div>
+<table>
+      {% for statement in section_2.labelling.hazard_statements %}
+      <tr><td class="b" style="width:60px;">H{{ statement.code|string|pad(3, '0', true) }}</td><td>{{ statement.text }}</td></tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+
+    {% if section_2.labelling.supplemental_hazard_info %}
+    <div class="ssh">Zusätzliche Gefahrenhinweise:</div>
+<div class="ind">{{ section_2.labelling.supplemental_hazard_info }}</div>
+    {% endif %}
+
+    {% if section_2.labelling.precautionary_statements.prevention %}
+    <table style="margin-top:3px;"><tr><th colspan="2">Sicherheitshinweise Prävention</th></tr>
+        {% for item in section_2.labelling.precautionary_statements.prevention %}
+        <tr><td style="width:130px;">{{ item.code }}</td><td>{{ item.text }}</td></tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    {% if section_2.labelling.precautionary_statements.response %}
+    <table style="margin-top:3px;"><tr><th colspan="2">Sicherheitshinweise Reaktion</th></tr>
+        {% for item in section_2.labelling.precautionary_statements.response %}
+        <tr><td style="width:130px;">{{ item.code }}</td><td>{{ item.text }}</td></tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    {% if section_2.labelling.precautionary_statements.storage or section_2.labelling.precautionary_statements.Beseitigung %}
+    <div class="ssh">Sicherheitshinweise Lagerung &amp; Entsorgung</div>
+<table>
+        {% for item in section_2.labelling.precautionary_statements.storage %}
+        <tr><td class="b" style="width:120px;">{{ item.code }}</td><td>{{ item.text }}</td></tr>
+        {% endfor %}
+        {% for item in section_2.labelling.precautionary_statements.Beseitigung %}
+        <tr><td class="b" style="width:120px;">{{ item.code }}</td><td>{{ item.text }}</td></tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    {% endif %}
+
+    <div class="sh">2.3. Sonstige Gefahren</div>
+<div class="ssh">Mögliche schädliche physikalisch-chemische Wirkungen</div>
+<div class="ind">{{ section_2.other_hazards.physicochemical | default('No data available.', true) }}</div>
+<div class="ssh" style="margin-top:3px;">Schädliche Auswirkungen auf die menschliche Gesundheit und Symptome:</div>
+<div class="ind">{{ section_2.other_hazards.health | default('This product does not contain any substances with endocrine disrupting properties in humans.', true) }}</div>
+</div>
+</div>
+<div class="section">
+<div class="sec-head">ABSCHNITT 3: Zusammensetzung/Angaben zu Bestandteilen</div>
+<div class="sec-body">
+<div class="sh chg">3.2. Gemische</div>
+<div class="b">Gefährliche Inhaltsstoffe / Gefährliche Verunreinigungen / Stabilisatoren:</div>
+<table>
+<tr><th style="width:28%;">Produktidentifikatoren</th><th>Stoffname<br/><span style="font-weight:normal;font-size:7.5pt;">Einstufung gemäß Verordnung (EG) Nr. 1272/2008 [CLP]</span></th><th style="width:18%;">Konzentration</th></tr>
+      {% for Bestandteil eines Gemisches in section_3.mixture_components %}
+      <tr>
+<td>
+          {% if Bestandteil eines Gemisches.cas %}CAS No.: {{ Bestandteil eines Gemisches.cas }}<br/>{% endif %}
+          {% if Bestandteil eines Gemisches.ec %}EC No.: {{ Bestandteil eines Gemisches.ec }}<br/>{% endif %}
+          {% if Bestandteil eines Gemisches.index_no %}Index No.: {{ Bestandteil eines Gemisches.index_no }}<br/>{% endif %}
+          {% if Bestandteil eines Gemisches.reach_no %}REACH No.: {{ Bestandteil eines Gemisches.reach_no }}{% endif %}
+        </td>
+<td>
+<div class="b">{{ Bestandteil eines Gemisches.name }}</div>
+          {% for class in Bestandteil eines Gemisches.Einstufung %}
+          <div>{{ class }}</div>
+          {% endfor %}
+          {% if Bestandteil eines Gemisches.ate_values %}
+          <div class="note" style="margin-top:2px;"><strong>Schätzwert für die akute Toxizität (ATE)</strong><br/>
+            {% for ate in Bestandteil eines Gemisches.ate_values %}{{ ate }}<br/>{% endfor %}
+          </div>
+          {% endif %}
+        </td>
+<td>{{ Bestandteil eines Gemisches.concentration }}</td>
+</tr>
+      {% endfor %}
+    </table>
+<div class="note" style="margin-top:3px;">Vollständiger Text der H- und EUH-Sätze: siehe Abschnitt 16.</div>
+</div>
+</div>
+<div class="section">
+<div class="sec-head">ABSCHNITT 4: Erste-Hilfe-Maßnahmen</div>
+<div class="sec-body">
+<div class="sh chg">4.1. Beschreibung der Erste-Hilfe-Maßnahmen</div>
+<div class="ssh">Allgemeine Hinweise</div>
+<div class="ind">{{ section_4.description.general | default('No data available.', true) }}</div>
+<div class="ssh">Nach Einatmen</div>
+<div class="ind">{{ section_4.description.Inhalation | default('No data available.', true) }}</div>
+<div class="ssh">Bei Hautkontakt:</div>
+<div class="ind">{{ section_4.description.skin | default('No data available.', true) }}</div>
+<div class="ssh">Nach Augenkontakt:</div>
+<div class="ind">{{ section_4.description.eye | default('No data available.', true) }}</div>
+<div class="ssh">Nach Verschlucken</div>
+<div class="ind">{{ section_4.description.ingestion | default('No data available.', true) }}</div>
+<div class="ssh">Selbstschutz des Ersthelfers</div>
+<div class="ind">{{ section_4.description.self_protection | default('No data available.', true) }}</div>
+<div class="sh">4.2. Wichtigste akute und verzögert auftretende Symptome und Wirkungen</div>
+<div class="ind">{{ section_4.symptoms | default('No data available.', true) }}</div>
+<div class="sh">4.3. Hinweise auf ärztliche Soforthilfe oder Spezialbehandlung</div>
+<div class="ind">{{ section_4.treatment | default('No data available.', true) }}</div>
+</div>
+</div>
+<div class="section">
+<div class="sec-head">ABSCHNITT 5: Maßnahmen zur Brandbekämpfung</div>
+<div class="sec-body">
+<div class="sh">5.1. Löschmittel</div>
+<div class="ssh">Geeignete Löschmittel</div>
+<div class="ind">{{ section_5.suitable_media }}</div>
+<div class="ssh">Ungeeignete Löschmittel</div>
+<div class="ind">{{ section_5.unsuitable_media }}</div>
+<div class="sh">5.2. Besondere vom Stoff oder Gemisch ausgehende Gefahren</div>
+<div class="ind">{{ section_5.special_hazards }}</div>
+<div class="ssh">Gefährliche Verbrennungsprodukte</div>
+<div class="ind">{{ section_5.combustion_products }}</div>
+<div class="sh">5.3. Hinweise für die Brandbekämpfung</div>
+<div class="ind">{{ section_5.firefighter_advice }}</div>
+<div class="sh">5.4. Zusätzliche Informationen</div>
+<div class="ind">{{ section_5.additional_info }}</div>
+</div>
+</div>
+<div class="section">
+<div class="sec-head">ABSCHNITT 6: Maßnahmen bei unbeabsichtigter Freisetzung</div>
+<div class="sec-body">
+<div class="sh">6.1. Persönliche Vorsichtsmaßnahmen, Schutzausrüstungen und Notfallmaßnahmen</div>
+<div class="ssh">6.1.1. Nicht für Notfälle geschultes Personal</div>
+<div class="ssh">Persönliche Vorsichtsmaßnahmen:</div>
+<div class="ind">{{ section_6.personal_precautions }}</div>
+<div class="ssh">Schutzausrüstung:</div>
+<div class="ind">{{ section_6.protective_equipment }}</div>
+<div class="ssh">6.1.2. Einsatzkräfte</div>
+<div class="ssh">Persönliche Schutzausrüstung verwenden.</div>
+<div class="ind">{{ section_6.emergency_responders }}</div>
+<div class="sh">6.2. Umweltschutzmaßnahmen</div>
+<div class="ind">{{ section_6.environmental_precautions }}</div>
+<div class="sh">6.3. Methoden und Material für Rückhaltung und Reinigung</div>
+<div class="ssh">Für Rückhaltung:</div>
+<div class="ind">{{ section_6.containment }}</div>
+<div class="ssh">Für Reinigung:</div>
+<div class="ind">{{ section_6.cleaning }}</div>
+<div class="sh">6.4. Verweis auf andere Abschnitte</div>
+<div class="ind">{{ section_6.other_sections }}</div>
+<div class="sh">6.5. Zusätzliche Informationen</div>
+<div class="ind">{{ section_6.additional_info | default('Use appropriate container to avoid environmental Verunreinigung.', true) }}</div>
+</div>
+</div>
+<div class="section">
+<div class="sec-head">ABSCHNITT 7: Handhabung und Lagerung</div>
+<div class="sec-body">
+<div class="sh chg">7.1. Schutzmaßnahmen zur sicheren Handhabung</div>
+<div class="ssh">Schutzmaßnahmen</div>
+<div class="ssh">Hinweise zum sicheren Umgang:</div>
+<div class="ind">{{ section_7.safe_handling }}</div>
+<div class="ssh">Maßnahmen zur Brandverhütung:</div>
+<div class="ind">{{ section_7.fire_prevention }}</div>
+<div class="ssh">Hinweise zur allgemeinen Industriehygiene</div>
+<div class="ind">{{ section_7.occupational_hygiene }}</div>
+<div class="sh">7.2. Bedingungen für die sichere Lagerung unter Berücksichtigung von Unverträglichkeiten</div>
+<div class="ssh">Technische Maßnahmen und Lagerbedingungen</div>
+<div class="ind">{{ section_7.storage_conditions }}</div>
+<div class="ssh">Anforderungen an Lagerräume und Behälter</div>
+<div class="ind">{{ section_7.storage_rooms }}</div>
+<div class="ssh">Hinweise zur Lagerungsgruppe</div>
+<div class="ind">{{ section_7.storage_assembly }}</div>
+<div class="ssh">Lagerklasse (TRGS 510, Deutschland):</div>
+<div class="ind">{{ section_7.storage_class or section_15.storage_class or '3 – entzündbar liquids' }}</div>
+    {% if section_7.further_storage_info %}
+    <div class="ssh">Weitere Angaben zu Lagerbedingungen</div>
+<div class="ind">{{ section_7.further_storage_info }}</div>
+    {% endif %}
+    
+    <div class="sh">7.3. Spezifische Endverwendung(en)</div>
+<div class="ind">{{ section_7.specific_end_use }}</div>
+</div>
+</div>
+<div class="section">
+<div class="sec-head">ABSCHNITT 8: Begrenzung und Überwachung der Exposition/Persönliche Schutzausrüstung</div>
+<div class="sec-body">
+<div class="sh chg">8.1. Zu überwachende Parameter</div>
+    {% if section_8.oel_table %}
+    <div class="ssh">8.1.1. Arbeitsplatzgrenzwerte</div>
+<table>
+<tr>
+<th>Grenzwert type<br/>(country of origin)</th>
+<th>Stoffname</th>
+<th>① Langzeit-Arbeitsplatzgrenzwert</th>
+<th>② Kurzzeit-Arbeitsplatzgrenzwert</th>
+<th>③ Momentanwert</th>
+<th>④ Überwachungs- und Beobachtungsverfahren</th>
+<th>⑤ Bemerkung</th>
+</tr>
+      {% for row in section_8.oel_table %}
+      <tr>
+<td>{{ row.limit_type }}</td>
+<td><strong>{{ row.substance_name }}</strong><br/>CAS No.: {{ row.cas_no }}<br/>EC No.: {{ row.ec_no }}</td>
+<td>{{ row.long_term | default('', true) }}</td>
+<td>{{ row.short_term | default('', true) }}</td>
+<td>{{ row.instantaneous | default('', true) }}</td>
+<td>{{ row.monitoring | default('', true) }}</td>
+<td>{{ row.remark | default('', true) }}</td>
+</tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <div class="ind">{{ section_8.control_parameters | default('None known.', true) }}</div>
+    {% endif %}
+
+    {% if section_8.biological_limit_values %}
+    <div class="ssh">8.1.2. Biologische Grenzwerte</div>
+<div class="ind">{{ section_8.biological_limit_values }}</div>
+    {% endif %}
+
+    {% if section_8.dnel_pnec %}
+    <div class="ssh">8.1.3. DNEL-/PNEC-Werte</div>
+<div class="ind">{{ section_8.dnel_pnec }}</div>
+    {% endif %}
+    
+    <div class="sh">8.2. Expositionskontrollen</div>
+<div class="ssh">8.2.1. Geeignete technische Steuerungseinrichtungen</div>
+<div class="ind">{{ section_8.engineering_controls | default('Provide adequate ventilation.', true) }}</div>
+<div class="ssh">8.2.2. Persönliche Schutzausrüstung verwenden.</div>
+<div class="ind">
+        {% if section_8.ppe_icons %}
+        <div class="ppe-icons">
+            {% if section_8.ppe_icons.eye_protection %}
+            <img alt="Eye Protection" src="{{ section_8.ppe_icons.eye_protection }}"/>
+            {% endif %}
+            {% if section_8.ppe_icons.skin_protection %}
+            <img alt="Skin Protection" src="{{ section_8.ppe_icons.skin_protection }}"/>
+            {% endif %}
+            {% if section_8.ppe_icons.respiratory_protection %}
+            <img alt="Respiratory Protection" src="{{ section_8.ppe_icons.respiratory_protection }}"/>
+            {% endif %}
+            {% if section_8.ppe_icons.body_protection %}
+            <img alt="Body Protection" src="{{ section_8.ppe_icons.body_protection }}"/>
+            {% endif %}
+        </div>
+        {% endif %}
+        <div class="ppe-section">
+<div class="ssh">Augen-/Gesichtsschutz</div>
+<div class="ind">{{ section_8.eye_protection }}</div>
+</div>
+<div class="ppe-section">
+<div class="ssh">Hautschutz</div>
+<div class="ind">{{ section_8.skin_protection }}</div>
+</div>
+<div class="ppe-section">
+<div class="ssh">Atemschutz</div>
+<div class="ind">{{ section_8.respiratory_protection }}</div>
+</div>
+<div class="ppe-section">
+<div class="ssh">Weitere Schutzmaßnahmen:</div>
+<div class="ind">{{ section_8.body_protection | default(section_8.skin_protection, true) }}</div>
+</div>
+</div>
+<div class="ssh">8.2.3. Begrenzung und Überwachung der Umweltexposition</div>
+<div class="ind">{{ section_8.environmental_exposure }}</div>
+</div>
+</div>
+<div class="section">
+<div class="sec-head">ABSCHNITT 9: Physikalische und chemische Eigenschaften</div>
+<div class="sec-body">
+<div class="sh chg">9.1. Angaben zu physikalischen und chemischen Eigenschaften</div>
+<div class="ssh">Aussehen</div>
+<div class="ind">
+<div class="appearance-row">
+<div class="appearance-col"><strong>Aggregatzustand:</strong> {{ section_9.physical_state | default(section_9.appearance, true) }}</div>
+<div class="appearance-col"><strong>Farbe</strong> {{ section_9.colour | default('', true) }}</div>
+</div>
+      {% if section_9.odour %}
+      <div><strong>Geruch:</strong> {{ section_9.odour }}</div>
+      {% endif %}
+    </div>
+<div class="ssh">Sicherheitsrelevante Basisdaten</div>
+<table>
+<tr><th>Parameter</th><th>Wert</th><th>bei °C</th><th>① Methode<br/>② Bemerkung</th></tr>
+      {% for item in section_9.safety_data %}
+      <tr><td>{{ item.parameter }}</td><td>{{ item.value }}</td><td>{{ item.temperature }}</td><td>{{ item.method }}</td></tr>
+      {% endfor %}
+    </table>
+<div class="sh">9.2. Sonstige Angaben</div>
+<div class="ind">{{ section_9.other_info | default('No data available.', true) }}</div>
+</div>
+</div>
+<div class="section">
+<div class="sec-head">ABSCHNITT 10: Stabilität und Reaktivität</div>
+<div class="sec-body">
+<div class="sh">10.1. Reaktivität</div>
+<div class="ind">{{ section_10.Reaktivität }}</div>
+<div class="sh">10.2. Chemische Stabilität</div>
+<div class="ind">{{ section_10.chemical_stability }}</div>
+<div class="sh">10.3. Möglichkeit gefährlicher Reaktionen</div>
+<div class="ind">{{ section_10.hazardous_reactions }}</div>
+<div class="sh">10.4. Zu vermeidende Bedingungen</div>
+<div class="ind">{{ section_10.conditions_to_avoid }}</div>
+<div class="sh">10.5. Unverträgliche Materialien</div>
+<div class="ind">{{ section_10.incompatible_materials }}</div>
+<div class="sh">10.6. Gefährliche Zersetzungsprodukte</div>
+<div class="ind">{{ section_10.hazardous_decomposition }}</div>
+</div>
+</div>
+<div class="section">
+<div class="sec-head">ABSCHNITT 11: Toxikologische Angaben</div>
+<div class="sec-body">
+<div class="sh">11.1. Gefahrenklassen und Gefahrenkategorien</div>
+    {% for Bestandteil eines Gemisches in section_3.mixture_components %}
+    <table style="margin-top:3px;">
+<tr class="trow-h"><td colspan="1"><strong>{{ Bestandteil eines Gemisches.name }}</strong>   CAS No.: {{ Bestandteil eines Gemisches.cas }}   EC No.: {{ Bestandteil eines Gemisches.ec }}</td></tr>
+        {% for info in Bestandteil eines Gemisches.toxicological_info %}
+        <tr class="trow-sub"><td>{{ info }}</td></tr>
+        {% endfor %}
+    </table>
+    {% endfor %}
+    <div style="margin-top:5px;">
+<div class="ssh">Akute orale Toxizität</div>
+<div class="ind">{{ section_11.acute_toxicity | default('Based on available data, the Einstufung criteria are not met.', true) }}</div>
+<div class="ssh">Akute dermale Toxizität</div>
+<div class="ind">{{ section_11.acute_dermal | default('Based on available data, the Einstufung criteria are not met.', true) }}</div>
+<div class="ssh">Akute inhalative Toxizität</div>
+<div class="ind">{{ section_11.acute_inhalation | default('Based on available data, the Einstufung criteria are not met.', true) }}</div>
+<div class="ssh">Ätzwirkung auf die Haut</div>
+<div class="ind">{{ section_11.skin_corrosion | default('Based on available data, the Einstufung criteria are not met.', true) }}</div>
+<div class="ssh">Schwere Augenschädigung/Augenreizung</div>
+<div class="ind">{{ section_11.eye_damage | default('Based on available data, the Einstufung criteria are not met.', true) }}</div>
+<div class="ssh">Sensibilisierung der Atemwege</div>
+<div class="ind">{{ section_11.Sensibilisierung | default('Based on available data, the Einstufung criteria are not met.', true) }}</div>
+<div class="ssh">Keimzellmutagenität</div>
+<div class="ind">{{ section_11.Mutagenität | default('Based on available data, the Einstufung criteria are not met.', true) }}</div>
+<div class="ssh">Karzinogenität</div>
+<div class="ind">{{ section_11.Karzinogenität | default('Based on available data, the Einstufung criteria are not met.', true) }}</div>
+<div class="ssh">Reproduktionstoxizität</div>
+<div class="ind">{{ section_11.reproductive_toxicity | default('Based on available data, the Einstufung criteria are not met.', true) }}</div>
+<div class="ssh">STOT-einmalige Exposition</div>
+<div class="ind">{{ section_11.stot_single | default('Based on available data, the Einstufung criteria are not met.', true) }}</div>
+<div class="ssh">spezifische Zielorgan-Toxizität bei wiederholter Exposition</div>
+<div class="ind">{{ section_11.stot_repeated | default('Based on available data, the Einstufung criteria are not met.', true) }}</div>
+<div class="ssh">Aspirationsgefahr</div>
+<div class="ind">{{ section_11.aspiration_hazard | default('Based on available data, the Einstufung criteria are not met.', true) }}</div>
+        {% if section_11.additional_info %}
+        <div class="ssh">Zusätzliche Informationen</div>
+<div class="ind">{{ section_11.additional_info }}</div>
+        {% endif %}
+    </div>
+<div class="sh">11.2. Angaben über sonstige Gefahren</div>
+<div class="ind">{{ section_11.other_hazards | default('No data available.', true) }}</div>
+</div>
+</div>
+<div class="section">
+<div class="sec-head">ABSCHNITT 12: Umweltbezogene Angaben</div>
+<div class="sec-body">
+<div class="sh">12.1. Toxizität</div>
+    {% for Bestandteil eines Gemisches in section_12.ecotox_components %}
+    <table style="margin-top:3px;">
+<tr class="trow-h"><td><strong>{{ Bestandteil eines Gemisches.generic_name }}</strong>   CAS No.: {{ Bestandteil eines Gemisches.cas_no }}   EC No.: {{ Bestandteil eines Gemisches.ec_no | default('', true) }}</td></tr>
+        {% for entry in Bestandteil eines Gemisches.aquatic_toxicity_entries %}
+        <tr class="trow-sub"><td>  {{ entry.effect_dose }}: {{ entry.value }} {{ entry.unit }} {{ entry.exposure_time }} ({{ entry.species }}) {{ entry.method }}</td></tr>
+        {% endfor %}
+    </table>
+    {% endfor %}
+    
+    <div class="sh">12.2. Persistenz und Abbaubarkeit</div>
+    {% if section_12.persistence_components %}
+    {% for Bestandteil eines Gemisches in section_12.persistence_components %}
+    <table style="margin-top:3px;">
+<tr class="trow-h"><td><strong>{{ Bestandteil eines Gemisches.name }}</strong>   CAS No.: {{ Bestandteil eines Gemisches.cas_no }}   EC No.: {{ Bestandteil eines Gemisches.ec_no | default('', true) }}</td></tr>
+<tr class="trow-sub"><td>  <strong>Biologischer Abbau</strong> {{ Bestandteil eines Gemisches.biologischer Abbau }}</td></tr>
+</table>
+    {% endfor %}
+    {% else %}
+    <div class="ind">{{ section_12.Persistenz | default(section_12.persistence_info, true) }}</div>
+    {% endif %}
+
+    <div class="sh">12.3. Bioakkumulationspotenzial</div>
+    {% if section_12.bioaccumulation_components %}
+    {% for Bestandteil eines Gemisches in section_12.bioaccumulation_components %}
+    <table style="margin-top:3px;">
+<tr class="trow-h"><td><strong>{{ Bestandteil eines Gemisches.name }}</strong>   CAS No.: {{ Bestandteil eines Gemisches.cas_no }}   EC No.: {{ Bestandteil eines Gemisches.ec_no | default('', true) }}</td></tr>
+<tr class="trow-sub"><td>  <strong>Log K<sub>OW</sub>:</strong> {{ Bestandteil eines Gemisches.log_kow }}</td></tr>
+        {% if Bestandteil eines Gemisches.bcf %}
+        <tr class="trow-sub"><td>  <strong>Biokonzentrationsfaktor (BCF)</strong> {{ Bestandteil eines Gemisches.bcf }}</td></tr>
+        {% endif %}
+    </table>
+    {% endfor %}
+    {% else %}
+    <div class="ind">{{ section_12.Bioakkumulation }}</div>
+    {% endif %}
+
+    <div class="sh">12.4. Mobilität im Boden</div>
+<div class="ind">{{ section_12.mobility_info | default('No data available.', true) }}</div>
+<div class="sh">12.5. Ergebnisse der PBT- und vPvB-Beurteilung</div>
+    {% if section_12.pbt_components %}
+    {% for Bestandteil eines Gemisches in section_12.pbt_components %}
+    <table style="margin-top:3px;">
+<tr class="trow-h"><td><strong>{{ Bestandteil eines Gemisches.name }}</strong>   CAS No.: {{ Bestandteil eines Gemisches.cas_no }}   EC No.: {{ Bestandteil eines Gemisches.ec_no | default('', true) }}</td></tr>
+<tr class="trow-sub"><td>  <strong>Ergebnisse der PBT- und vPvB-Beurteilung</strong> {{ Bestandteil eines Gemisches.result }}</td></tr>
+</table>
+    {% endfor %}
+    {% else %}
+    <div class="ind">{{ section_12.pbt_result | default('No data available.', true) }}</div>
+    {% endif %}
+
+    <div class="sh">12.6. Endokrinschädliche Eigenschaften</div>
+<div class="ind">{{ section_12.endocrine_disrupting_info | default('No data available.', true) }}</div>
+<div class="sh">12.7. Andere schädliche Wirkungen</div>
+<div class="ind">{{ section_12.other_adverse_effects_info | default('No data available.', true) }}</div>
+</div>
+</div>
+<div class="section">
+<div class="sec-head">ABSCHNITT 13: Hinweise zur Entsorgung</div>
+<div class="sec-body">
+<div class="sh">13.1. Verfahren der Abfallbehandlung</div>
+<div class="ind">{{ section_13.waste_treatment }}</div>
+<div class="ssh">13.1.1. Produkt/Verpackung Entsorgung</div>
+<div class="ssh">Waste codes/Abfall designations according to EWC/AVV</div>
+
+    {% if section_13.waste_code_product %}
+    <div class="ssh">Abfallschlüssel Produkt</div>
+<table style="width:auto;">
+<tr><td class="b" style="width:80px;">{{ section_13.waste_code_product }}</td><td>{{ section_13.waste_code_product_desc }}</td></tr>
+</table>
+    {% if section_13.waste_code_product_note %}
+    <div class="note ind">{{ section_13.waste_code_product_note }}</div>
+    {% endif %}
+    {% endif %}
+
+    {% if section_13.waste_code_packaging %}
+    <div class="ssh">Abfallschlüssel Verpackung</div>
+<table style="width:auto;">
+<tr><td class="b" style="width:80px;">{{ section_13.waste_code_packaging }}</td><td>{{ section_13.waste_code_packaging_desc }}</td></tr>
+</table>
+    {% endif %}
+
+    <div class="ssh">Entsorgungsmöglichkeiten</div>
+    {% if section_13.appropriate_disposal_product %}
+    <div class="ssh">Sachgerechte Entsorgung / Produkt</div>
+<div class="ind">{{ section_13.appropriate_disposal_product }}</div>
+    {% endif %}
+    {% if section_13.appropriate_disposal_package %}
+    <div class="ssh">Appropriate Beseitigung / Verpackung:</div>
+<div class="ind">{{ section_13.appropriate_disposal_package }}</div>
+    {% endif %}
+
+    {% if section_13.eu_requirements %}
+    <div class="ind" style="margin-top:2px;">{{ section_13.eu_requirements }}</div>
+    {% endif %}
+  </div>
+</div>
+<div class="section">
+<div class="sec-head">ABSCHNITT 14: Angaben zum Transport</div>
+<div class="sec-body">
+<table>
+<tr class="trow-h"><td></td><td style="width:23%;">Landtransport (ADR/RID)</td><td style="width:23%;">Inland waterway craft (ADN)</td><td style="width:23%;">Seeschiffstransport (IMDG)</td><td style="width:23%;">Air transport (ICAO-TI / IATA-DGR)</td></tr>
+<tr><td class="b">14.1. UN Nummer oder ID Nummer</td><td>{{ section_14.land.un_number }}</td><td>{{ section_14.inland.un_number }}</td><td>{{ section_14.sea.un_number }}</td><td>{{ section_14.air.un_number }}</td></tr>
+<tr><td class="b">Name</td><td>{{ section_14.land.shipping_name }}</td><td>{{ section_14.inland.shipping_name }}</td><td>{{ section_14.sea.shipping_name }}</td><td>{{ section_14.air.shipping_name }}</td></tr>
+<tr><td class="b">14.3. Transportgefahrenklassen</td>
+<td class="td-cell"><div class="b">{{ section_14.land.transport_class }}</div></td>
+<td class="td-cell"><div class="b">{{ section_14.inland.transport_class }}</div></td>
+<td class="td-cell"><div class="b">{{ section_14.sea.transport_class }}</div></td>
+<td class="td-cell"><div class="b">{{ section_14.air.transport_class }}</div></td>
+</tr>
+<tr><td class="b">14.4. Verpackungsgruppe</td><td>{{ section_14.land.packing_group }}</td><td>{{ section_14.inland.packing_group }}</td><td>{{ section_14.sea.packing_group }}</td><td>{{ section_14.air.packing_group }}</td></tr>
+<tr><td class="b">14.5. Umweltgefahren</td><td>{{ section_14.land.environmental_hazards }}</td><td>{{ section_14.inland.environmental_hazards }}</td><td>{{ section_14.sea.environmental_hazards }}</td><td>{{ section_14.air.environmental_hazards }}</td></tr>
+</table>
+<div class="sh">14.6. Besondere Vorsichtsmaßnahmen für den Verwender</div>
+<div class="ind">{{ section_14.special_precautions | default('No data available.', true) }}</div>
+
+    {% if section_14.land.special_provisions or section_14.land.limited_quantity %}
+    <table style="margin-top:4px;">
+<tr class="trow-h"><td></td><td style="width:23%;">Landtransport (ADR/RID)</td><td style="width:23%;">Inland waterway craft (ADN)</td><td style="width:23%;">Seeschiffstransport (IMDG)</td><td style="width:23%;">Air transport (ICAO-TI / IATA-DGR)</td></tr>
+      {% if section_14.land.special_provisions %}
+      <tr><td class="b">Sondervorschriften</td><td>{{ section_14.land.special_provisions }}</td><td>{{ section_14.inland.special_provisions }}</td><td>{{ section_14.sea.special_provisions }}</td><td>{{ section_14.air.special_provisions }}</td></tr>
+      {% endif %}
+      {% if section_14.land.limited_quantity %}
+      <tr><td class="b">Begrenzte Menge (LQ)</td><td>{{ section_14.land.limited_quantity }}</td><td>{{ section_14.inland.limited_quantity }}</td><td>{{ section_14.sea.limited_quantity }}</td><td>{{ section_14.air.limited_quantity }}</td></tr>
+      {% endif %}
+      {% if section_14.land.excepted_quantities %}
+      <tr><td class="b">Freigestellte Mengen (EQ)</td><td>{{ section_14.land.excepted_quantities }}</td><td>{{ section_14.inland.excepted_quantities }}</td><td>{{ section_14.sea.excepted_quantities }}</td><td>{{ section_14.air.excepted_quantities }}</td></tr>
+      {% endif %}
+      {% if section_14.land.hazard_id_number %}
+      <tr><td class="b">Gefahr-Nr. (Kemlerzahl)</td><td>{{ section_14.land.hazard_id_number }}</td><td></td><td></td><td></td></tr>
+      {% endif %}
+      {% if section_14.land.classification_code %}
+      <tr><td class="b">Klassifizierungscode</td><td>{{ section_14.land.classification_code }}</td><td></td><td>{{ section_14.sea.classification_code | default('', true) }}</td><td></td></tr>
+      {% endif %}
+      {% if section_14.land.tunnel_restriction_code %}
+      <tr><td class="b">Tunnelbeschränkungscode</td><td>{{ section_14.land.tunnel_restriction_code }}</td><td></td><td></td><td></td></tr>
+      {% endif %}
+      {% if section_14.sea.ems_no %}
+      <tr><td class="b">EmS-No.</td><td></td><td></td><td>{{ section_14.sea.ems_no }}</td><td></td></tr>
+      {% endif %}
+    </table>
+    {% endif %}
+
+    <div class="sh">14.7. Massenguttransport zur See gemäß IMO‑Instrumenten</div>
+<div class="ind">{{ section_14.bulk_transport | default('No transport as bulk according to IBC Code.', true) }}</div>
+</div>
+</div>
+<div class="section">
+<div class="sec-head">ABSCHNITT 15: Rechtsvorschriften</div>
+<div class="sec-body">
+<div class="sh chg">15.1. Für den Stoff oder das Gemisch spezifische Sicherheits‑, Gesundheits‑ und Umweltvorschriften/‑gesetzgebung</div>
+<div class="ssh">15.1.1. EU-Vorschriften</div>
+    {% if section_15.eu_other_regulations %}
+    <div class="ssh">Sonstige EU-Vorschriften</div>
+<div class="ind">
+      {{ section_15.eu_other_regulations }}
+    </div>
+    {% else %}
+    <div class="ind">{{ section_15.eu_legislation | default('No data available.', true) }}</div>
+    {% endif %}
+
+    <div class="ssh">15.1.2. Nationale Vorschriften</div>
+<div class="ssh">🇩🇪 [DE] Nationale Vorschriften</div>
+<div class="ind">
+        {% if section_15.restrictions_of_occupation %}
+        <div class="ssh">Hinweise zur Beschäftigungsbeschränkung</div>
+<div class="ind">{{ section_15.restrictions_of_occupation }}</div>
+        {% endif %}
+        {% if section_15.stoerfallverordnung %}
+        <div class="ssh">Störfallverordnung (12. BImSchV)</div>
+<div class="ind">{{ section_15.stoerfallverordnung }}</div>
+        {% endif %}
+        {% if section_15.betrsichv %}
+        <div class="ssh">Betriebssicherheitsverordnung (BetrSichV)</div>
+<div class="ind">{{ section_15.betrsichv }}</div>
+        {% endif %}
+        {% if section_15.wgk %}<div><span class="b">Wassergefährdungsklasse</span></div>
+<div class="ind"><strong>WGK:</strong> {{ section_15.wgk }}</div>{% endif %}
+        {% if section_15.dguv %}
+        <div class="ssh">Berufsgenossenschaftliche Vorschriften (BGV)</div>
+<div class="ind">{{ section_15.dguv }}</div>
+        {% endif %}
+        {% for item in section_15.national_legislation %}
+        <div><span class="b">{{ item.Kennzeichnungsetikett }}:</span> {{ item.value }}</div>
+        {% endfor %}
+    </div>
+<div class="sh">15.2. Stoffsicherheitsbeurteilung</div>
+<div class="ind">{{ section_15.chemical_safety_assessment | default('For this substance a chemical safety assessment has not been carried out.', true) }}</div>
+</div>
+</div>
+<div class="section">
+<div class="sec-head">SECTION 16: Sonstige Angaben</div>
+<div class="sec-body">
+<div class="sh chg">16.1. Änderungshinweise</div>
+<table>
+<tr><th style="width:50px;">Section</th><th>Beschreibung</th></tr>
+        {% for change in other_information.indication_of_changes %}
+        {% if change is mapping %}
+        <tr><td class="b">{{ change.section }}</td><td>{{ change.description }}</td></tr>
+        {% else %}
+        <tr><td colspan="2">{{ change }}</td></tr>
+        {% endif %}
+        {% endfor %}
+    </table>
+<div class="sh">16.2. Abkürzungen und Akronyme</div>
+<table class="abbr">
+        {% for abbr in other_information.abbreviations %}
+        <tr><td>{{ abbr.short }}</td><td>{{ abbr.long }}</td></tr>
+        {% endfor %}
+    </table>
+<div class="sh">16.3. Wesentliche Literaturhinweise und Datenquellen</div>
+    {% if other_information.literature_table %}
+    <table>
+<tr><th>Stoffname</th><th>Art</th><th>Bezugsquelle</th></tr>
+        {% for item in other_information.literature_table %}
+        <tr><td>{{ item.substance_name }}</td><td>{{ item.type }}</td><td>{{ item.source }}</td></tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <div class="ind">{{ other_information.literature_references }}</div>
+    {% endif %}
+    
+    <div class="sh">16.4. Einstufung für Gemische und verwendete Bewertungsmethode gemäß Verordnung (EG) Nr. 1272/2008 [CLP]</div>
+<table>
+<tr><th>Gefahrenklassen und Gefahrenkategorien</th><th>Gefahrenhinweise</th><th>Einstufungsverfahren</th></tr>
+        {% for item in hazard_identification.clp_classifications %}
+        <tr><td>{{ item.clp_hazard_class_category }}</td><td>H{{ item.clp_hazard_statement_code }}: {{ item.clp_hazard_statement_text }}</td><td>{{ item.clp_classification_procedure }}</td></tr>
+        {% endfor %}
+    </table>
+<div class="sh chg">16.5. Liste der relevanten Gefahrenhinweise und/oder Sicherheitshinweise aus den Abschnitten 2 bis 15</div>
+<table style="margin-top:2px;">
+<tr><th colspan="2">Gefahrenhinweise</th></tr>
+      {% for item in hazard_identification.clp_classifications %}
+      <tr><td class="b" style="width:60px;">H{{ item.clp_hazard_statement_code }}</td><td>{{ item.clp_hazard_statement_text }}</td></tr>
+      {% endfor %}
+    </table>
+<div class="sh">16.6. Schulungshinweise</div>
+<div class="ind">{{ other_information.training_advice }}</div>
+<div class="sh">16.7. Zusätzliche Informationen</div>
+<div class="ind">
+        {% for line in other_information.additional_info_lines %}
+        <div>{{ line }}</div>
+        {% endfor %}
+    </div>
+
+    {% if other_information.change_note %}
+    <div style="margin-top:8px;">{{ other_information.change_note }}</div>
+    {% endif %}
+  </div>
+</div>
+<div class="pfoot"><div>{{ meta.language }} / {{ meta.country }}</div><div>{{ meta.provider_url or 'GeSi.de' }}</div></div>
+</div>
+</div>
+</body>
+</html>

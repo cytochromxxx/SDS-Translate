@@ -107,11 +107,13 @@ from routes.main import main_bp
 from routes.database import database_bp
 from routes.pdf import pdf_bp
 from routes.ghs import ghs_bp
+from routes.json_import import json_import_bp
 
 app.register_blueprint(main_bp)
 app.register_blueprint(database_bp)
 app.register_blueprint(pdf_bp)
 app.register_blueprint(ghs_bp)
+app.register_blueprint(json_import_bp)
 
 # --- Initialize database indices for better performance ---
 # This runs automatically on startup to ensure indices exist

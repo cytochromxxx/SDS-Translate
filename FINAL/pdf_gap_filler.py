@@ -283,43 +283,113 @@ class SDSPDFGapFiller:
         logger.info(f"Extracted {len(results)} OEL entries from PDF")
         return results
 
+    def _get_symbol_as_base64(self, filename: str) -> str:
+        """Helper to load a symbol from the 'symbole' folder and return it as a base64 data URI."""
+        import base64
+        import os
+        from pathlib import Path
+        
+        # Try to find the 'symbole' directory relative to the current file
+        # or in the base project directory
+        base_dir = Path(__file__).parent
+        symbol_path = base_dir / "symbole" / filename
+        
+        # Check absolute path fallback if relative fails
+        if not symbol_path.exists():
+            symbol_path = Path(r"c:\Users\Flo\Coding\agentzero-sdstranslate\backup_sds_translate_latest\FINAL\symbole") / filename
+            
+        if not symbol_path.exists():
+            logger.debug(f"Symbol file not found: {filename} at {symbol_path}")
+            return ""
+            
+        try:
+            with open(symbol_path, "rb") as f:
+                img_data = f.read()
+                b64 = base64.b64encode(img_data).decode("utf-8")
+                # Detect mime type by extension
+                ext = filename.lower().split('.')[-1]
+                mime = f"image/{ext}"
+                if ext == 'jpg': mime = 'image/jpeg'
+                return f"data:{mime};base64,{b64}"
+        except Exception as e:
+            logger.error(f"Error encoding symbol {filename}: {e}")
+            return ""
+
     def extract_section_8_ppe(self) -> Dict[str, str]:
-        """Extracts PPE icons from section 8 as base64 data URIs using PyMuPDF."""
+        """Extracts PPE icons from section 8. 
+        First tries to map keywords to the high-quality 'symbole' folder, falls back to PDF cropping."""
         try:
             import base64
             import fitz
+            import os
+            
+            if not os.path.exists(self.pdf_path):
+                return {}
+                
             doc = fitz.open(self.pdf_path)
             target_page = None
+            page_text = ""
             for i in range(len(doc)):
                 text = doc[i].get_text()
                 if "8.2" in text and ("protection" in text.lower() or "schutz" in text.lower()):
                     target_page = doc[i]
+                    page_text = text
                     break
             
             if not target_page:
                 return {}
             
             results = {}
-            phrases = {
-                "eye_protection": ["Eye/face protection", "Eye / face protection", "Augen-/Gesichtsschutz", "Augenschutz"],
-                "skin_protection": ["Skin protection", "Hautschutz", "Handschutz", "Hand protection"],
-                "respiratory_protection": ["Respiratory protection", "Atemschutz", "Körperschutz", "Body protection"]
+            # Library Mapping (Keyword -> Filename)
+            library_mapping = {
+                "eye_protection": {
+                    "keywords": ["Eye/face protection", "Eye / face protection", "Augen-/Gesichtsschutz", "Augenschutz", "Eye glasses", "Schutzbrille"],
+                    "filename": "M004_Augenschutz-benutzen.jpg"
+                },
+                "skin_protection": {
+                    "keywords": ["Skin protection", "Hautschutz", "Handschutz", "Hand protection", "Protective gloves", "Handschuhe"],
+                    "filename": "M009_Handschutz_benutzen.jpg"
+                },
+                "respiratory_protection": {
+                    "keywords": ["Respiratory protection", "Atemschutz", "Protective mask", "Atemschutzmaske"],
+                    "filename": "M017_Atemschutz-benutzen.jpg"
+                },
+                "body_protection": {
+                    "keywords": ["Body protection", "Körperschutz", "Schutzkleidung", "Protective clothing", "Schutzanzug"],
+                    "filename": "M010_Schutzkleidung-benutzen.jpg"
+                }
             }
             
-            for key, search_terms in phrases.items():
-                for phrase in search_terms:
-                    rects = target_page.search_for(phrase)
-                    if rects:
-                        r = rects[0]
-                        icon_rect = fitz.Rect(max(0, r.x0 - 50), r.y0 - 5, r.x0 - 5, r.y1 + 15)
-                        pix = target_page.get_pixmap(clip=icon_rect, matrix=fitz.Matrix(2, 2))
-                        img_data = pix.tobytes("png")
-                        b64 = base64.b64encode(img_data).decode("utf-8")
-                        results[key] = f"data:image/png;base64,{b64}"
-                        break
+            # 1. Try Library Mapping first (Higher Quality)
+            for key, config in library_mapping.items():
+                for kw in config["keywords"]:
+                    if kw.lower() in page_text.lower():
+                        b64 = self._get_symbol_as_base64(config["filename"])
+                        if b64:
+                            results[key] = b64
+                            logger.info(f"Matched keyword '{kw}' to library icon {config['filename']}")
+                            break
+            
+            # 2. Fallback to cropping if something wasn't found in library
+            # Only crop if the key isn't already filled by the library
+            for key, config in library_mapping.items():
+                if key not in results:
+                    for phrase in config["keywords"]:
+                        rects = target_page.search_for(phrase)
+                        if rects:
+                            r = rects[0]
+                            # Look to the left of the text for the icon
+                            icon_rect = fitz.Rect(max(0, r.x0 - 50), r.y0 - 5, r.x0 - 5, r.y1 + 15)
+                            pix = target_page.get_pixmap(clip=icon_rect, matrix=fitz.Matrix(2, 2))
+                            img_data = pix.tobytes("png")
+                            b64 = base64.b64encode(img_data).decode("utf-8")
+                            results[key] = f"data:image/png;base64,{b64}"
+                            logger.info(f"Cropped PDF icon for {key} using phrase '{phrase}'")
+                            break
+                            
             return results
         except Exception as e:
-            logger.warning(f"Could not extract PPE icons with PyMuPDF: {e}")
+            logger.warning(f"Could not extract PPE icons: {e}")
             return {}
 
     # ------------------------------------------------------------------

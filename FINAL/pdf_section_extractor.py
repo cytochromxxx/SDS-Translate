@@ -141,13 +141,13 @@ def parse_section_16(text):
     if changes_match:
         changes_text = changes_match.group(1)
         # Extract individual changes - look for numbered items like "1.", "2." or bullet points
-        changes = re.findall(r'(?:^|\n)\s*[*\-]?\s*(\d+\.?|\*)\s*([^\n]+)', changes_text)
+        changes = re.findall(r'(?:^|\n)\s*[*\-]?\s*(\d+\.\d+\.?)\s*([^\n]+)', changes_text)
         if changes:
-            result['indication_of_changes'] = [c[1].strip() for c in changes if c[1].strip()]
+            result['indication_of_changes'] = [{'section': c[0].strip(), 'description': c[1].strip()} for c in changes if c[1].strip()]
         else:
             # Alternative: look for any numbered items
-            changes = re.findall(r'(\d+\.\s*[^\n]+)', changes_text)
-            result['indication_of_changes'] = [c.strip() for c in changes if c.strip()]
+            changes = re.findall(r'(?:^|\n)\s*[*\-]?\s*(\d+\.?|\*)\s*([^\n]+)', changes_text)
+            result['indication_of_changes'] = [{'section': c[0].strip() if c[0].strip() != '*' else '', 'description': c[1].strip()} for c in changes if c[1].strip()]
     
     # 16.2 Abbreviations and acronyms - look for table format
     abbr_match = re.search(r'16\.2\.?[^\d]*?Abbreviat[^:]*[:\s]*([\s\S]*?)(?=16\.3|$)', text, re.IGNORECASE)

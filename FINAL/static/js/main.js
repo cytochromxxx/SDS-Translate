@@ -26,7 +26,7 @@
                  themeToggle.textContent = 'LIGHT';
             }
 
-            selectFileType('html');
+            selectFileType('json');
             showTab('translate', document.querySelector('nav button'));
             loadDatabaseOptions();
             loadGHSPictograms();
@@ -263,13 +263,19 @@
         
         function selectFileType(type) {
             currentFileType = type;
-            ['btnHtml', 'btnPdf', 'btnXml', 'btnCombined'].forEach(id => {
+            ['btnHtml', 'btnPdf', 'btnJson', 'btnXml', 'btnCombined'].forEach(id => {
                 const btn = document.getElementById(id);
+                if (!btn) return;
                 const isActive = id.toLowerCase().includes(type);
-                btn.classList.toggle('bg-minerva-hover', isActive);
-                btn.classList.toggle('text-minerva-green', isActive);
-                btn.classList.toggle('text-light-text-secondary', !isActive);
-                btn.classList.toggle('dark:text-minerva-gray', !isActive);
+                
+                // Clear all classes first to be safe
+                btn.classList.remove('bg-minerva-hover', 'text-minerva-green', 'bg-minerva-green', 'text-white', 'text-light-text-secondary', 'dark:text-minerva-gray');
+                
+                if (isActive) {
+                    btn.classList.add('bg-minerva-green', 'text-white');
+                } else {
+                    btn.classList.add('text-light-text-secondary', 'dark:text-minerva-gray');
+                }
             });
             
             // Toggle between single and combined file upload
@@ -406,13 +412,14 @@
             document.getElementById('file-label').innerHTML = `<span class="text-light-text dark:text-white font-bold">${file.name}</span>`;
             
             const extension = file.name.split('.').pop().toLowerCase();
-            if (['html', 'pdf', 'xml'].includes(extension)) {
+            if (['html', 'pdf', 'xml', 'json'].includes(extension)) {
                 selectFileType(extension);
             }
 
             if (currentFileType === 'html') uploadFile(file);
             else if (currentFileType === 'pdf') processPdfFile(file);
             else if (currentFileType === 'xml') processXmlFile(file);
+            else if (currentFileType === 'json') processJsonFile(file);
         }
         
         async function uploadFile(file) {
@@ -489,6 +496,10 @@
 
         function processXmlFile(file) {
             processGenericFile(file, '/api/sdscom/process');
+        }
+
+        function processJsonFile(file) {
+            processGenericFile(file, '/api/import/json');
         }
 
         async function translateFile() {
@@ -1056,6 +1067,20 @@
             exportBtn.innerHTML = '⏳ Exportiere...';
             exportBtn.disabled = true;
             
+            // Save content from editor if active
+            const editor = document.getElementById('richTextEditor');
+            if (editor.style.display === 'block') {
+                try {
+                    await fetch('/api/save/translated', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ content: editor.innerHTML })
+                    });
+                } catch (error) {
+                    console.error("Failed to save content before export:", error);
+                }
+            }
+
             try {
                 const response = await fetch('/api/export', {
                     method: 'POST',

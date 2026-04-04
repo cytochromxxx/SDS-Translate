@@ -427,11 +427,12 @@
                         <div class="flex items-center gap-2 mb-6">
                             <h2 class="section-header text-light-text-secondary dark:text-minerva-gray">Datei-Upload</h2>
                         </div>
-                        <div class="flex mb-4 bg-light-bg dark:bg-minerva-black p-1 rounded">
+                        <div class="flex mb-4 bg-light-bg dark:bg-minerva-black p-1 rounded overflow-x-auto">
                             <button class="flex-1 py-1.5 text-[11px] font-bold rounded text-light-text-secondary dark:text-minerva-gray" id="btnHtml" onclick="selectFileType('html')">HTML</button>
                             <button class="flex-1 py-1.5 text-[11px] font-bold rounded text-light-text-secondary dark:text-minerva-gray" id="btnPdf" onclick="selectFileType('pdf')">PDF</button>
+                            <button class="flex-1 py-1.5 text-[11px] font-bold rounded text-light-text-secondary dark:text-minerva-gray" id="btnJson" onclick="selectFileType('json')">JSON</button>
                             <button class="flex-1 py-1.5 text-[11px] font-bold rounded text-light-text-secondary dark:text-minerva-gray" id="btnXml" onclick="selectFileType('xml')">XML</button>
-                            <button class="flex-1 py-1.5 text-[11px] font-bold rounded bg-minerva-green text-white" id="btnCombined" onclick="selectFileType('combined')">XML+PDF</button>
+                            <button class="flex-1 py-1.5 text-[11px] font-bold rounded text-light-text-secondary dark:text-minerva-gray" id="btnCombined" onclick="selectFileType('combined')">XML+PDF</button>
                         </div>
                         
                         <!-- Single File Upload (for HTML, PDF, XML) -->

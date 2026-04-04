@@ -11,7 +11,7 @@ main_bp = Blueprint('main', __name__)
 @main_bp.route('/')
 def index():
     """Main page with default template loaded."""
-    default_template = "layout-placeholders-fixed-v2.html"
+    default_template = "SDS_PERFEKT_TEMPLATE.html"
     template_loaded = False
     
     if os.path.exists(default_template):
@@ -303,34 +303,6 @@ def export_translated_pdf(html_content, target_lang, lang_name):
     import tempfile
     import shutil
     
-    # Apply PDF-specific formatting requirements
-    # Add company logo to header
-    logo_path = os.path.join(os.path.dirname(__file__), '..', 'mb_logo.svg')
-    if os.path.exists(logo_path):
-        with open(logo_path, 'r') as f:
-            logo_svg = f.read()
-        html_content = html_content.replace('<!-- COMPANY_LOGO_PLACEHOLDER -->', logo_svg)
-    
-    # Add H prefix to hazard statements
-    import re
-    html_content = re.sub(r'(<div class="hazard-statement">)(.*?)(</div>)', r'\1H\2\3', html_content)
-    
-    # Add subtitle where required
-    html_content = html_content.replace('<!-- SUPPLEMENTAL_HAZARD_INFO_PLACEHOLDER -->', '<h3>Supplemental hazard information: none</h3>')
-    
-    # Add H in column 1 of physical-hazard table
-    html_content = html_content.replace('<!-- PHYSICAL_HAZARD_H_PLACEHOLDER -->', '<td>H</td>')
-    
-    # Add P-codes to prevention/response tables
-    html_content = html_content.replace('<!-- PREVENTION_P_CODES_PLACEHOLDER -->', '<td>P-123</td><td>P-456</td>')
-    html_content = html_content.replace('<!-- RESPONSE_P_CODES_PLACEHOLDER -->', '<td>P-789</td><td>P-012</td>')
-    
-    # Remove gap before Section 3
-    html_content = html_content.replace('<!-- SECTION_3_GAP_PLACEHOLDER -->', '')
-    
-    # Add ATE values to Section 3.2 table
-    html_content = html_content.replace('<!-- ATE_VALUES_PLACEHOLDER -->', '<td>propan-1-ol</td><td>ethanol</td><td>dipropylene glycol monomethyl ether</td>')
-    
     # Get the uploads folder path
     upload_folder = os.path.abspath('uploads')
     
@@ -357,13 +329,14 @@ def export_translated_pdf(html_content, target_lang, lang_name):
             f.write(html_content)
         
         # Use WeasyPrint with base_url pointing to temp directory
+        # We rely on the template's internal styles for most formatting.
         pdf_css = CSS(string='''
-            @page { size: A4; margin: 12mm 15mm 18mm 15mm; }
-            body { font-family: Arial, Helvetica, "Nimbus Sans", sans-serif; font-size: 9.5pt; line-height: 1.25; }
-            .ghs-pictogram { width: 23mm !important; height: 23mm !important; }
-            .header-logo img { width: 35mm; height: auto; }
-            .pictograms img { width: 34px; height: 34px; }
-            .ghs-pictograms img { width: 84px; height: 84px; }
+            /* Fix WeasyPrint flexbox column bug */
+            .page, .sds-document {
+                display: block !important;
+                height: auto !important;
+                min-height: 0 !important;
+            }
         ''')
         
         html_obj = HTML(filename=html_file, base_url=temp_dir)
@@ -377,6 +350,7 @@ def export_translated_pdf(html_content, target_lang, lang_name):
     finally:
         # Clean up temp directory
         shutil.rmtree(temp_dir, ignore_errors=True)
+
 
 
 def _prepare_html_for_export(html_content):
@@ -539,7 +513,7 @@ def process_sdscom_xml():
         file.save(temp_xml_path)
         
         from sds_xml_importer import import_sds_to_html
-        template_path = os.path.join(current_app.root_path, 'layout-placeholders-fixed-v2.html')
+        template_path = os.path.join(current_app.root_path, 'SDS_PERFEKT_TEMPLATE.html')
         rendered_html = import_sds_to_html(temp_xml_path, template_path)
         
         if not rendered_html:
@@ -747,7 +721,7 @@ def process_combined_import():
         
         # Render template with combined data
         from jinja2 import Environment, FileSystemLoader
-        template_path = os.path.join(current_app.root_path, 'layout-placeholders-fixed-v2.html')
+        template_path = os.path.join(current_app.root_path, 'SDS_PERFEKT_TEMPLATE.html')
         template_dir = os.path.dirname(template_path)
         template_file = os.path.basename(template_path)
         
@@ -794,7 +768,7 @@ def process_combined_import():
 
 @main_bp.route('/api/template', methods=['GET'])
 def get_template():
-    template_path = os.path.join(current_app.root_path, 'layout-placeholders-fixed-v2.html')
+    template_path = os.path.join(current_app.root_path, 'SDS_PERFEKT_TEMPLATE.html')
     try:
         with open(template_path, 'r', encoding='utf-8') as f:
             content = f.read()
@@ -823,8 +797,8 @@ def save_template():
         if pattern.lower() in content.lower():
             return jsonify({'success': False, 'error': 'Verdächtige Inhalte erkannt: ' + pattern})
     
-    template_path = os.path.join(current_app.root_path, 'layout-placeholders-fixed-v2.html')
-    backup_path = os.path.join(current_app.root_path, 'layout-placeholders-fixed-v2.backup.html')
+    template_path = os.path.join(current_app.root_path, 'SDS_PERFEKT_TEMPLATE.html')
+    backup_path = os.path.join(current_app.root_path, 'SDS_PERFEKT_TEMPLATE.backup.html')
     try:
         # Create backup if it doesn't exist to allow resetting
         if not os.path.exists(backup_path) and os.path.exists(template_path):
@@ -849,7 +823,7 @@ def save_template():
 
 @main_bp.route('/api/template/reset', methods=['POST'])
 def reset_template():
-    template_path = os.path.join(current_app.root_path, 'layout-placeholders-fixed-v2.html')
+    template_path = os.path.join(current_app.root_path, 'SDS_PERFEKT_TEMPLATE.html')
     try:
         if os.path.exists(template_path):
             with open(template_path, 'r', encoding='utf-8') as f:

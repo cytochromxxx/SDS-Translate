@@ -1,0 +1,28 @@
+{
+  "section_16": {
+    "indication_of_changes": [
+      "3. Details of the supplier of the safety data sheet",
+      "2. Label elements",
+      "2. Mixtures",
+      "1. Precautions for safe handling",
+      "1. Control parameters",
+      "1. Information on basic physical and chemical properties",
+      "3. Transport hazard class(es)",
+      "1. Safety, health and environmental regulations/legislation specific for the substance or mixture",
+      "1. Indication of changes",
+      "5. List of relevant hazard statements and/or precautionary statements from sections 2 to 15"
+    ],
+    "abbreviations": [
+      {
+        "short": "ECHA",
+        "long": "Guidance on information requirements and chemical safety assessment,"
+      }
+    ],
+    "abbreviations_source_note": "",
+    "literature_references": "references and sources for data\nTRGS 510, TRGS 525, TRGS 900, Safety data sheets for the ingredients , 1907/2006 REACH, 1272/2008 CLP GHS\nSubstance name Type source of supply\npropan-1-ol\nCAS No.: 71-23-8\nEC No.: 200-746-9LC50 Acute inhalation toxicity (dust/\nmist); LC 50; EC 50; NOECSource: European Chemicals Agency,\nhttp://echa.europa.eu/\nDipropylene glycol monomethyl ether\nCAS No.: 34590-94-8\nEC No.: 252-104-2LD50 oral; LD 50 dermal; LC 50; EC 50;\nNOEC; LOECSource: European Chemicals Agency,\nhttp://echa.europa.eu/\nethanol\nCAS No.: 64-17-5\nEC No.: 200-578-6LC50; EC 50; NOEC Source: European Chemicals Agency,\nhttp://echa.europa.eu/\nSafety Data Sheet according to Regulation (EC) No. 1907/2006 (REACH) Page 11/11\nMycoplasma Off™\nRevision date: 21 Aug 2024 Version: 5Print date: 21 Aug 2024\nen / DE\nGeSi.de",
+    "training_advice": "No data available",
+    "additional_info_lines": [
+      "This data sheet was created in accordance with EU regulation (EC) No. 1907/2006 (REACH).\nThe information is based on the level of knowledge and experience on the date of issue, it do not have the importance\nof assured properties. The information may not be changed or transferred to other products. Reproduction in the\nunchanged state is permitted.\n* Data changed compared with the previous version."
+    ]
+  }
+}
