@@ -510,13 +510,6 @@
                 width: 100% !important;
                 border: none !important;
             }
-            /* Hide JS-generated pages during print; print will use standard CSS paged media on the original content (unhidden) */
-            .js-page {
-                display: none !important;
-            }
-            .sds-document.original-content {
-                display: block !important;
-            }
         }
         
         .page-number { font-size: 8pt; color: #000000; }
@@ -596,6 +589,15 @@
                     {% for item in section_2.classification %}
                     <tr><td style="border: 1px solid #000; padding: 3px 5px;">{{ item.category }}</td><td style="border: 1px solid #000; padding: 3px 5px;">{{ item.code }}: {{ item.statement }}</td><td style="border: 1px solid #000; padding: 3px 5px;">{{ item.procedure }}</td></tr>
                     {% endfor %}
+                    {% if component.biodegradation %}
+                    <tr><td colspan="2"><strong>Biodegradation:</strong> {{ component.biodegradation }}</td></tr>
+                    {% endif %}
+                    {% if component.log_kow %}
+                    <tr><td colspan="2"><strong>Log K<sub>OW</sub>:</strong> {{ component.log_kow }}</td></tr>
+                    {% endif %}
+                    {% if component.bcf %}
+                    <tr><td colspan="2"><strong>Bioconcentration factor (BCF):</strong> {{ component.bcf }}</td></tr>
+                    {% endif %}
                 </tbody>
             </table>
 
@@ -697,11 +699,19 @@
                             {% for class in component.classification %}
                             {{ class }}<br>
                             {% endfor %}
+                            {% if component.pictograms %}
+                            <div style="margin-top:2px;">
+                              {% for pic in component.pictograms %}
+                              <span class="ghs-sm"><img src="ghs/{{ pic|lower }}.png" onerror="this.style.display='none'" style="height:16px; width:auto; vertical-align:middle;"></span>
+                              {% endfor %}
+                              {% if component.signal_word %}&nbsp;<strong>{{ component.signal_word }}</strong>{% endif %}
+                            </div>
+                            {% endif %}
                             {% if component.ate_values %}
-                            <span style="font-weight:normal; font-size:8pt;"><strong>Acute Toxicity Estimate</strong><br>
+                            <div style="font-weight:normal; font-size:8pt; margin-top:2px;"><b>Acute Toxicity Estimate</b><br>
                             {% for ate in component.ate_values %}
-                            {{ ate }}<br>
-                            {% endfor %}</span>
+                            {% if ate is mapping %}{{ ate.label }} {{ ate.value }} {{ ate.unit }}{% else %}{{ ate }}{% endif %}<br>
+                            {% endfor %}</div>
                             {% endif %}
                         </td>
                         <td style="white-space: nowrap;">{{ component.concentration }}</td>
@@ -835,22 +845,22 @@
             <div class="subsection-title">8.2. Exposure controls</div>
             <div class="subsubsection">8.2.2. Personal protection equipment</div>
             <p>
-                {% if section_8.ppe_icons and section_8.ppe_icons.eye_protection %}
-                <img src="{{ section_8.ppe_icons.eye_protection }}" style="height: 30px; vertical-align: middle; margin-right: 5px; mix-blend-mode: multiply;">
+                {% if section_8.eye_protection %}
+                <img src="ghs/eye_protection.png" style="height: 30px; vertical-align: middle; margin-right: 5px; mix-blend-mode: multiply;" onerror="this.src='ghs/eye.png'; this.onerror=null;">
                 {% endif %}
                 <strong>Eye/face protection:</strong>
             </p>
             <p style="margin-left: 15px;">{{ section_8.eye_protection }}</p>
             <p>
-                {% if section_8.ppe_icons and section_8.ppe_icons.skin_protection %}
-                <img src="{{ section_8.ppe_icons.skin_protection }}" style="height: 30px; vertical-align: middle; margin-right: 5px; mix-blend-mode: multiply;">
+                {% if section_8.skin_protection %}
+                <img src="ghs/skin_protection.png" style="height: 30px; vertical-align: middle; margin-right: 5px; mix-blend-mode: multiply;" onerror="this.src='ghs/hands.png'; this.onerror=null;">
                 {% endif %}
                 <strong>Skin protection:</strong>
             </p>
             <p style="margin-left: 15px;">{{ section_8.skin_protection }}</p>
             <p>
-                {% if section_8.ppe_icons and section_8.ppe_icons.respiratory_protection %}
-                <img src="{{ section_8.ppe_icons.respiratory_protection }}" style="height: 30px; vertical-align: middle; margin-right: 5px; mix-blend-mode: multiply;">
+                {% if section_8.respiratory_protection %}
+                <img src="ghs/respiratory_protection.png" style="height: 30px; vertical-align: middle; margin-right: 5px; mix-blend-mode: multiply;" onerror="this.src='ghs/mask.png'; this.onerror=null;">
                 {% endif %}
                 <strong>Respiratory protection:</strong>
             </p>
@@ -920,9 +930,9 @@
                     <tr style="background-color: #f2f2f2;">
                         <td><strong>{{ component.name | default('[Component Name]') }}</strong><br>CAS No.: {{ component.cas | default('[CAS]') }} EC No.: {{ component.ec | default('[EC]') }}</td>
                     </tr>
-                    {% for info in component.toxicological_info %}
+                    {% for info in component.toxicological_info or component.ate_values %}
                     <tr>
-                        <td>{{ info }}</td>
+                        <td>{% if info is mapping %}{{ info.label }}: {{ info.value }} {{ info.unit }}{% else %}{{ info }}{% endif %}</td>
                     </tr>
                     {% else %}
                     <tr>
@@ -988,60 +998,47 @@
             {% endfor %}
 
             <div class="subsection-title">12.2. Persistence and degradability</div>
+            {% if section_12.persistence %}
+            <p>{{ section_12.persistence }}</p>
+            {% endif %}
             {% for component in section_12.ecotox_components %}
+            {% if component.biodegradation %}
             <table class="sds">
                 <tbody>
                     <tr style="background-color: #f2f2f2;">
-                        <td><strong>{{ component.generic_name | default('[Komponentenname]') }}</strong> CAS No.: {{ component.cas_no | default('[CAS]') }} EC No.: {{ component.ec_no | default('[EC]') }}</td>
+                        <td colspan="2"><strong>{{ component.generic_name | default('[Component Name]') }}</strong> CAS No.: {{ component.cas_no | default('[]') }} EC No.: {{ component.ec_no | default('[]') }}</td>
                     </tr>
                     <tr>
-                        <td><strong>Biodegradation:</strong> {{ component.biodegradation | default('[Keine Daten]') }}</td>
+                        <td><strong>Biodegradation:</strong> {{ component.biodegradation | default('Yes, rapidly') }}</td>
                     </tr>
                 </tbody>
             </table>
-            {% else %}
-            <table class="sds">
-                <tbody>
-                    <tr style="background-color: #f2f2f2;">
-                        <td><strong>[Komponentenname]</strong> CAS No.: [CAS] EC No.: [EC]</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Biodegradation:</strong> [Keine Daten]</td>
-                    </tr>
-                </tbody>
-            </table>
+            {% endif %}
             {% endfor %}
+            {% if not section_12.persistence and not section_12.ecotox_components %}
+            <p>No data available.</p>
+            {% endif %}
 
             <div class="subsection-title">12.3. Bioaccumulative potential</div>
+            {% if section_12.bioaccumulation %}
+            <p>{{ section_12.bioaccumulation }}</p>
+            {% endif %}
             {% for component in section_12.ecotox_components %}
+            {% if component.log_kow or component.bcf %}
             <table class="sds">
                 <tbody>
                     <tr style="background-color: #f2f2f2;">
-                        <td><strong>{{ component.generic_name | default('[Komponentenname]') }}</strong> CAS No.: {{ component.cas_no | default('[CAS]') }} EC No.: {{ component.ec_no | default('[EC]') }}</td>
+                        <td colspan="2"><strong>{{ component.generic_name | default('[Component Name]') }}</strong> CAS No.: {{ component.cas_no | default('[]') }} EC No.: {{ component.ec_no | default('[]') }}</td>
                     </tr>
-                    <tr>
-                        <td><strong>Log K<sub>OW</sub>:</strong> {{ component.log_kow | default('[Keine Daten]') }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Bioconcentration factor (BCF):</strong> {{ component.bcf | default('[Keine Daten]') }}</td>
-                    </tr>
+                    {% if component.log_kow %}<tr><td><strong>Log K<sub>OW</sub>:</strong></td><td>{{ component.log_kow }}</td></tr>{% endif %}
+                    {% if component.bcf %}<tr><td><strong>Bioconcentration factor (BCF):</strong></td><td>{{ component.bcf }}</td></tr>{% endif %}
                 </tbody>
             </table>
-            {% else %}
-            <table class="sds">
-                <tbody>
-                    <tr style="background-color: #f2f2f2;">
-                        <td><strong>[Komponentenname]</strong> CAS No.: [CAS] EC No.: [EC]</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Log K<sub>OW</sub>:</strong> [Keine Daten]</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Bioconcentration factor (BCF):</strong> [Keine Daten]</td>
-                    </tr>
-                </tbody>
-            </table>
+            {% endif %}
             {% endfor %}
+            {% if not section_12.bioaccumulation and not section_12.ecotox_components %}
+            <p>No data available.</p>
+            {% endif %}
 
             <div class="subsection-title">12.4. Mobility in soil</div>
             <table class="sds">
@@ -1053,29 +1050,26 @@
             </table>
 
             <div class="subsection-title">12.5. Results of PBT and vPvB assessment</div>
+            {% if section_12.pbt_result %}
+            <p>{{ section_12.pbt_result }}</p>
+            {% endif %}
             {% for component in section_12.ecotox_components %}
+            {% if component.pbt_result %}
             <table class="sds">
                 <tbody>
                     <tr style="background-color: #f2f2f2;">
-                        <td><strong>{{ component.generic_name | default('[Komponentenname]') }}</strong> CAS No.: {{ component.cas_no | default('[CAS]') }} EC No.: {{ component.ec_no | default('[EC]') }}</td>
+                        <td colspan="2"><strong>{{ component.generic_name | default('[Component Name]') }}</strong> CAS No.: {{ component.cas_no | default('[]') }} EC No.: {{ component.ec_no | default('[]') }}</td>
                     </tr>
                     <tr>
                         <td><strong>Results of PBT and vPvB assessment:</strong> {{ component.pbt_result | default('This substance does not meet the PBT/vPvB criteria of REACH, Annex XIII.') }}</td>
                     </tr>
                 </tbody>
             </table>
-            {% else %}
-            <table class="sds">
-                <tbody>
-                    <tr style="background-color: #f2f2f2;">
-                        <td><strong>Result:</strong></td>
-                    </tr>
-                    <tr>
-                        <td>This substance does not meet the PBT/vPvB criteria of REACH, Annex XIII.</td>
-                    </tr>
-                </tbody>
-            </table>
+            {% endif %}
             {% endfor %}
+            {% if not section_12.pbt_result and not section_12.ecotox_components %}
+            <p>No data available.</p>
+            {% endif %}
 
             <div class="subsection-title">12.6. Endocrine disrupting properties</div>
             <table class="sds">
@@ -1087,7 +1081,7 @@
             </table>
 
             <div class="subsection-title">12.7. Other adverse effects</div>
-            <p style="margin-left: 15px;">{{ section_12.other_adverse_effects_info | default('[Keine Daten zu anderen schädlichen Wirkungen]') }}</p>
+            <p style="margin-left: 15px;">{{ section_12.other_adverse_effects_info | default('No data available.') }}</p>
         </div>
 
         <div class="section">
@@ -1245,6 +1239,10 @@
             <p>{{ line }}</p>
             {% endfor %}
         </div>
+    </div>
+
+    <div class="footer running-footer">
+        <div>{{ meta.language }} / {{ meta.country }}</div>
     </div>
 </div>
 </body>

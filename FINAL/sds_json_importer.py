@@ -63,7 +63,7 @@ def import_sds_json_to_html(
     # 4. Render the template
     try:
         template = env.get_template(template_file)
-        rendered_html = template.render(sds_data)
+        rendered_html = template.render(**sds_data)
         logger.info("Successfully rendered HTML template from JSON data.")
         return rendered_html, gap_report_md
     except Exception as e:

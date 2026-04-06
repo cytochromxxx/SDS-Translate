@@ -275,6 +275,19 @@ def export_translated_html(html_content, target_lang, lang_name):
                     f'src="{ghs_data_uri}"',
                     html_content
                 )
+                
+    # Replace transport images with data URIs
+    transport_dir = 'transport'
+    if os.path.exists(transport_dir):
+        for t_file in os.listdir(transport_dir):
+            if t_file.endswith('.png'):
+                t_path = os.path.join(transport_dir, t_file)
+                t_data_uri = image_to_data_uri(t_path)
+                html_content = re.sub(
+                    rf'src=["\']?transport/{re.escape(t_file)}["\']?',
+                    f'src="{t_data_uri}"',
+                    html_content
+                )
     
     # Add meta header to the content
     full_html = f"""<!DOCTYPE html>
@@ -322,6 +335,12 @@ def export_translated_pdf(html_content, target_lang, lang_name):
         ghs_dest = os.path.join(temp_dir, 'ghs')
         if os.path.exists(ghs_src):
             shutil.copytree(ghs_src, ghs_dest)
+            
+        # Copy transport folder if it exists
+        transport_src = 'transport'
+        transport_dest = os.path.join(temp_dir, 'transport')
+        if os.path.exists(transport_src):
+            shutil.copytree(transport_src, transport_dest)
         
         # Save the HTML content to temp directory
         html_file = os.path.join(temp_dir, 'document.html')
@@ -385,6 +404,13 @@ def _prepare_html_for_export(html_content):
     # Also handle any relative GHS image paths
     html_content = re.sub(
         r'src=["\']/?(ghs/[^"\']+)["\']',
+        f'src="{base_url}/\1"',
+        html_content
+    )
+    
+    # Handle relative transport image paths
+    html_content = re.sub(
+        r'src=["\']/?(transport/[^"\']+)["\']',
         f'src="{base_url}/\1"',
         html_content
     )
@@ -737,7 +763,7 @@ def process_combined_import():
         
         env.filters['pad'] = pad_filter
         template = env.get_template(template_file)
-        rendered_html = template.render(sds_data)
+        rendered_html = template.render(**sds_data)
         
         # Save output
         rendered_filename = f"combined_import_{os.path.splitext(secure_filename(xml_file.filename))[0]}.html"

@@ -473,7 +473,11 @@
                     progressFill.style.width = '100%';
                     progressText.textContent = 'Import erfolgreich!';
                     
-                    document.getElementById('uploadStatus').innerHTML = `<div class="text-green-500 text-xs p-2 bg-green-500/10 rounded">✅ <strong>${file.name}</strong> erfolgreich importiert.</div>`;
+                    if (result.is_embedded_xml) {
+                        document.getElementById('uploadStatus').innerHTML = `<div class="text-green-500 text-xs p-2 bg-green-500/10 rounded">✅ <strong>${file.name}</strong> verarbeitet.<br>💡 Eingebettete XML-Datei erkannt und für einen fehlerfreien Import verwendet!</div>`;
+                    } else {
+                        document.getElementById('uploadStatus').innerHTML = `<div class="text-green-500 text-xs p-2 bg-green-500/10 rounded">✅ <strong>${file.name}</strong> erfolgreich importiert.</div>`;
+                    }
                     
                     document.getElementById('originalPreview').srcdoc = result.preview;
                     document.getElementById('previewContainer').style.display = 'flex';
@@ -1187,12 +1191,16 @@
                 
                 // Inject CSS into content
                 const processContent = (content) => {
-                    if (content && content.includes('</head>')) {
-                        return content.replace('</head>', editingCSS + '</head>');
-                    } else if (content && content.includes('<html>')) {
-                        return '<html><head>' + editingCSS + '</head><body>' + content.replace(/<html>|<\/html>|<body>|<\/body>/g, '') + '</body></html>';
+                    let processed = content;
+                    if (processed && processed.includes('</head>')) {
+                        processed = processed.replace('</head>', editingCSS + '</head>');
+                    } else if (processed && processed.includes('<html>')) {
+                        processed = '<html><head>' + editingCSS + '</head><body>' + processed.replace(/<html>|<\/html>|<body>|<\/body>/g, '') + '</body></html>';
                     }
-                    return content;
+                    
+                    // Prevent 404 errors for template variables
+                    processed = processed.replace(/src=["'][^"']*\{\{[^"']+\}\}[^"']*["']/g, 'data-src="placeholder"');
+                    return processed;
                 };
                 
                 originalEditor.innerHTML = processContent(originalContent);
@@ -1933,9 +1941,12 @@
                 content = wysiwygEditor.innerHTML;
             }
             
+            // Prevent 404 errors in the template preview for Jinja tags
+            let previewContent = content.replace(/src=["'][^"']*\{\{[^"']+\}\}[^"']*["']/g, 'data-src="placeholder"');
+            
             const previewDoc = previewFrame.contentDocument || previewFrame.contentWindow.document;
             previewDoc.open();
-            previewDoc.write(content);
+            previewDoc.write(previewContent);
             previewDoc.close();
         }
         
@@ -2107,4 +2118,4 @@
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
-        }
+        } 

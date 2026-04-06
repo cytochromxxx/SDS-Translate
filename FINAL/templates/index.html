@@ -474,20 +474,6 @@
                         </div>
                     </section>
                     
-                    <!-- GHS Pictograms -->
-                    <section class="bg-light-card dark:bg-minerva-card border border-light-border dark:border-minerva-border rounded-lg p-6">
-                        <div class="flex items-center justify-between mb-6">
-                            <h2 class="section-header text-light-text-secondary dark:text-minerva-gray">GHS Piktogramme</h2>
-                            <span class="text-[9px] font-bold bg-minerva-green/20 text-minerva-green px-2 py-0.5 rounded border border-minerva-green/20">MAX 3</span>
-                        </div>
-                        <div class="grid grid-cols-3 gap-3 mb-5" id="ghsSelectedDisplay">
-                           <!-- GHS pictograms will be shown here -->
-                        </div>
-                        <button onclick="openGHSModal()" class="w-full py-2.5 text-[11px] font-bold border border-minerva-green/40 text-minerva-green rounded hover:bg-minerva-green hover:text-white transition-all uppercase tracking-wider">
-                            Piktogramme Verwalten
-                        </button>
-                    </section>
-
                     <!-- Target Language -->
                     <section class="bg-light-card dark:bg-minerva-card border border-light-border dark:border-minerva-border rounded-lg p-6 space-y-5">
                         <div>
@@ -502,6 +488,20 @@
                         </div>
                         <button id="translateBtn" onclick="translateFile()" disabled class="w-full btn-primary py-4 rounded font-bold text-xs uppercase tracking-[0.15em] flex items-center justify-center gap-3">
                             Übersetzung Starten
+                        </button>
+                    </section>
+
+                    <!-- GHS Pictograms -->
+                    <section class="bg-light-card dark:bg-minerva-card border border-light-border dark:border-minerva-border rounded-lg p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="section-header text-light-text-secondary dark:text-minerva-gray">GHS Piktogramme</h2>
+                            <span class="text-[9px] font-bold bg-minerva-green/20 text-minerva-green px-2 py-0.5 rounded border border-minerva-green/20">MAX 3</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3 mb-5" id="ghsSelectedDisplay">
+                           <!-- GHS pictograms will be shown here -->
+                        </div>
+                        <button onclick="openGHSModal()" class="w-full py-2.5 text-[11px] font-bold border border-minerva-green/40 text-minerva-green rounded hover:bg-minerva-green hover:text-white transition-all uppercase tracking-wider">
+                            Piktogramme Verwalten
                         </button>
                     </section>
                 </aside>

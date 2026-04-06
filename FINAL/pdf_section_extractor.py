@@ -30,6 +30,8 @@ def extract_sections_from_pdf(pdf_path):
         
         # Extrahiere Abschnitt 12, 15 und 16
         sections = {
+            'section_1': extract_section(full_text, '1'),
+            'section_2': extract_section(full_text, '2'),
             'section_12': extract_section(full_text, '12'),
             'section_15': extract_section(full_text, '15'),
             'section_16': extract_section(full_text, '16'),
@@ -95,6 +97,36 @@ def extract_section(text, section_num):
             return max(matches, key=len).strip()
     
     return ""
+
+def parse_section_1(text):
+    """Parst Abschnitt 1 - Identifikation"""
+    result = {}
+    
+    # Notrufnummer-Name
+    emergency_match = re.search(r'1\.4\.\s*Emergency telephone number\s*([^\n,]+)', text, re.IGNORECASE)
+    if emergency_match:
+        result['emergency_telephone_name'] = emergency_match.group(1).strip()
+        
+    return result
+
+def parse_section_2(text):
+    """Parst Abschnitt 2 - Mögliche Gefahren"""
+    result = {
+        'hazard_components': [],
+        'endocrine_disruptors_human': ''
+    }
+    
+    # Gefahrbestimmende Komponenten
+    comp_match = re.search(r'Hazard components for labelling:?\s*([^\n]+)', text, re.IGNORECASE)
+    if comp_match:
+        result['hazard_components'] = [c.strip() for c in comp_match.group(1).split(',')]
+        
+    # Endokrine Disruptoren (Gesundheit)
+    endo_match = re.search(r'2\.3\.?[^\d]*?Other hazards[\s\S]*?(This product does not contain a substance that has endocrine disrupting properties[^.\n]*\.)', text, re.IGNORECASE)
+    if endo_match:
+        result['endocrine_disruptors_human'] = endo_match.group(1).strip()
+        
+    return result
 
 def parse_section_15(text):
     """Parst Abschnitt 15 - Regulatory information"""
@@ -202,6 +234,7 @@ def parse_section_12(text):
     persist_match = re.search(r'12\.2\.?[^\d]*?Persistence and degradability[:\s]*([\s\S]*?)(?=12\.3|$)', text, re.IGNORECASE)
     if persist_match:
         persist_text = persist_match.group(1)
+        result['persistence_text'] = persist_text.strip()
         # Find all component blocks and their biodegradation data
         for match in re.finditer(r'(propan-1-ol|ethanol|dipropylene glycol monomethyl ether)\s+CAS No\.:\s*[^\n]+.*?Biodegradation:\s*([^\n]+)', persist_text, re.IGNORECASE | re.DOTALL):
             comp_name = match.group(1).strip()
@@ -213,6 +246,7 @@ def parse_section_12(text):
     bio_match = re.search(r'12\.3\.?[^\d]*?Bioaccumulative potential[:\s]*([\s\S]*?)(?=12\.4|$)', text, re.IGNORECASE)
     if bio_match:
         bio_text = bio_match.group(1)
+        result['bioaccumulation_text'] = bio_text.strip()
         # Check for Log KOW
         for match in re.finditer(r'(propan-1-ol|ethanol|dipropylene glycol monomethyl ether)\s+CAS No\.:\s*[^\n]+.*?Log K[OW]:\s*([^\n]+)', bio_text, re.IGNORECASE | re.DOTALL):
             comp_name = match.group(1).strip()
@@ -239,6 +273,7 @@ def parse_section_12(text):
     pbt_match = re.search(r'12\.5\.?[^\d]*?Results of PBT and vPvB assessment[:\s]*([\s\S]*?)(?=12\.6|$)', text, re.IGNORECASE)
     if pbt_match:
         pbt_text = pbt_match.group(1)
+        result['pbt_text'] = pbt_text.strip()
         for comp in ['propan-1-ol', 'ethanol', 'dipropylene glycol monomethyl ether']:
             if comp.lower() in pbt_text.lower():
                 result['pbt_vpvb_assessment'][comp] = {'assessment': 'This substance is not considered to be persistent, bioaccumulative and toxic (PBT).'}
@@ -275,10 +310,14 @@ def main():
         # Speichere als JSON
         import json
         
+        parsed_1 = parse_section_1(sections.get('section_1', ''))
+        parsed_2 = parse_section_2(sections.get('section_2', ''))
         parsed_15 = parse_section_15(sections['section_15'])
         parsed_16 = parse_section_16(sections['section_16'])
         
         output = {
+            'section_1': parsed_1,
+            'section_2': parsed_2,
             'section_15': parsed_15,
             'section_16': parsed_16
         }

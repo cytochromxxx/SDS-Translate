@@ -24,12 +24,40 @@ def process_pdf_dynamic():
     
     try:
         file.save(temp_pdf_path)
-        from sds_parser import parse_sds_pdf
-        sds_data = parse_sds_pdf(temp_pdf_path)
-        if not sds_data:
-            return jsonify({'error': 'Failed to parse the SDS PDF.'}), 400
 
-        rendered_html = render_template('sds_template_final.html', **sds_data)
+        # Smart Detection: Check for embedded XML files (SDScom standard)
+        xml_extracted = False
+        temp_xml_path = None
+        try:
+            import fitz
+            doc = fitz.open(temp_pdf_path)
+            embfile_names = doc.embfile_names()
+            for i in range(doc.embfile_count()):
+                file_name = embfile_names[i]
+                if file_name.lower().endswith('.xml') or 'sdscom' in file_name.lower():
+                    xml_bytes = doc.embfile_get(i)
+                    temp_xml_path = os.path.join(upload_folder, f"xml_{uuid.uuid4().hex}_{file_name}")
+                    with open(temp_xml_path, 'wb') as f:
+                        f.write(xml_bytes)
+                    xml_extracted = True
+                    break
+            doc.close()
+        except Exception as e:
+            print(f"Error checking PDF attachments: {e}")
+
+        if xml_extracted and temp_xml_path:
+            from sds_xml_importer import import_sds_to_html
+            template_path = os.path.join(current_app.root_path, 'SDS_PERFEKT_TEMPLATE.html')
+            rendered_html, gap_report = import_sds_to_html(temp_xml_path, template_path, pdf_path=temp_pdf_path)
+            if not rendered_html:
+                return jsonify({'error': 'Failed to parse the embedded SDScom XML file.'}), 400
+            product_name = 'Extracted from embedded XML'
+        else:
+            # Fallback for plain PDFs without embedded XML is currently not implemented
+            # as the system relies on SDScom XML for accurate parsing.
+            return jsonify({
+                'error': 'Die hochgeladene PDF-Datei enthält keine eingebettete XML-Datei. Bitte laden Sie eine PDF mit eingebetteter SDScom XML hoch oder nutzen Sie den kombinierten XML+PDF Import.'
+            }), 400
 
         rendered_filename = f"imported_{Path(file.filename).stem}.html"
         rendered_filepath = os.path.join(upload_folder, rendered_filename)
@@ -38,14 +66,18 @@ def process_pdf_dynamic():
             
         session['uploaded_file'] = rendered_filepath
         session['original_filename'] = rendered_filename
-        session['is_pdf_import'] = True
+        session['is_pdf_import'] = not xml_extracted
+        session['is_xml_import'] = xml_extracted
         session['pdf_source_file'] = temp_pdf_path
+        if xml_extracted:
+            session['xml_source_file'] = temp_xml_path
 
         return jsonify({
             'success': True,
             'filename': file.filename,
-            'product_name': sds_data.get('meta', {}).get('product_name', 'Unknown'),
-            'preview': rendered_html
+            'product_name': product_name,
+            'preview': rendered_html,
+            'is_embedded_xml': xml_extracted
         })
 
     except Exception as e:

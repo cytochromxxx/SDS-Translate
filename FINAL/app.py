@@ -95,7 +95,7 @@ except ImportError:
     print("SDS Template import module not available")
     
 try:
-    from sds_parser import parse_sds_pdf
+    from sds_parser import parse_sds_xml
     app.config['SDS_PARSER_V5_AVAILABLE'] = True
 except ImportError:
     app.config['SDS_PARSER_V5_AVAILABLE'] = False
@@ -134,6 +134,14 @@ def serve_logo():
         return send_file('mb_logo.svg', mimetype='image/svg+xml')
     return "Logo not found", 404
 
+# --- Favicon Route ---
+@app.route('/favicon.ico')
+def serve_favicon():
+    from flask import send_file
+    if os.path.exists('mb_logo.svg'):
+        return send_file('mb_logo.svg', mimetype='image/svg+xml')
+    return "Favicon not found", 404
+
 # --- Uploaded Files Route ---
 @app.route('/uploads/<path:filename>')
 def serve_upload(filename):
@@ -146,4 +154,4 @@ def serve_upload(filename):
 if __name__ == '__main__':
     # Determine debug mode from environment (default: False for security)
     debug_mode = os.environ.get('FLASK_DEBUG', 'False').lower() in ('true', '1', 'yes')
-    app.run(debug=debug_mode, host='0.0.0.0', port=5000)
+    app.run(debug=debug_mode, host='0.0.0.0', port=5050)

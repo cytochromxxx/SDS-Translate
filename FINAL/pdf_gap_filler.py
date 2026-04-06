@@ -18,8 +18,11 @@ def _is_empty(value: Any) -> bool:
     """Return True if a value is considered empty/missing."""
     if value is None:
         return True
-    if isinstance(value, str) and not value.strip():
-        return True
+    if isinstance(value, str):
+        v = value.strip().lower()
+        if not v or v in ['none', 'none known.', 'none known', 'no data available', 'no data available.', 'keine daten verfügbar', 'keine daten verfügbar.', 'keine bekannt.', 'keine bekannt']:
+            return True
+        return False
     if isinstance(value, (list, dict)) and not value:
         return True
     return False
@@ -766,6 +769,25 @@ class SDSPDFGapFiller:
 
             if current_component:
                 results.append(current_component)
+                
+            # Supplement missing values using text regex (Bio/LogKow/BCF)
+            text = "\n".join([self._page_text(i) for i in range(6, 9)])
+            parts = re.split(r'(?i)CAS No\.:\s*([\d\-]+)', text)
+            for i in range(1, len(parts) - 1, 2):
+                cas = parts[i].strip()
+                chunk = parts[i+1][:2000]
+                comp = next((c for c in results if cas in str(c.get('cas_no',''))), None)
+                if not comp:
+                    continue
+                bio_match = re.search(r'Biodegradation:\s*([^\n]+)', chunk, re.IGNORECASE)
+                if bio_match and _is_empty(comp.get('biodegradation')):
+                    comp['biodegradation'] = bio_match.group(1).strip()
+                log_match = re.search(r'Log KOW:\s*([^\n]+)', chunk, re.IGNORECASE)
+                if log_match and _is_empty(comp.get('log_kow')):
+                    comp['log_kow'] = log_match.group(1).strip()
+                bcf_match = re.search(r'Bioconcentration factor \(BCF\):\s*([^\n]+)', chunk, re.IGNORECASE)
+                if bcf_match and _is_empty(comp.get('bcf')):
+                    comp['bcf'] = bcf_match.group(1).strip()
 
         except Exception as e:
             logger.error(f"Error extracting Section 12 component tables: {e}", exc_info=True)
@@ -848,6 +870,40 @@ class SDSPDFGapFiller:
             logger.warning(f"Could not extract Section 15 EU legislation: {e}")
         return ""
 
+    def extract_section_15_national(self) -> List[Dict[str, str]]:
+        """Extract national regulations like Störfallverordnung, etc."""
+        results = []
+        try:
+            text = "\n".join([self._page_text(i) for i in range(8, 11)])
+            restr_match = re.search(r'(Restrictions of occupation|Beschäftigungsbeschränkungen)\s*\n\s*([^\n]+)', text, re.IGNORECASE)
+            if restr_match:
+                results.append({'label': 'Restrictions of occupation', 'value': restr_match.group(2).strip()})
+            storf_match = re.search(r'Störfallverordnung[^\n]*\n([\s\S]*?)(?=Betriebssicherheitsverordnung|Water hazard class|15\.2|\Z)', text, re.IGNORECASE)
+            if storf_match:
+                val = " ".join(storf_match.group(1).split())
+                results.append({'label': 'Störfallverordnung (12. BImSchV)', 'value': val})
+            betr_match = re.search(r'Betriebssicherheitsverordnung\s*\(BetrSichV\)\s*\n\s*([^\n]+)', text, re.IGNORECASE)
+            if betr_match:
+                results.append({'label': 'Betriebssicherheitsverordnung (BetrSichV)', 'value': betr_match.group(1).strip()})
+        except Exception as e:
+            logger.warning(f"Could not extract Section 15 national legislation: {e}")
+        return results
+
+    def extract_section_13_waste_codes(self) -> Dict[str, str]:
+        """Extract waste codes for product and packaging."""
+        result = {}
+        try:
+            text = "\n".join([self._page_text(i) for i in range(7, 10)])
+            prod_match = re.search(r'Waste code product\s*\n\s*([\d\s\*]+)\s*(.*?)(?=\nWaste|\Z)', text, re.IGNORECASE)
+            if prod_match:
+                result['product'] = f"{prod_match.group(1).strip()} {prod_match.group(2).strip()}".strip()
+            pack_match = re.search(r'Waste code packaging\s*\n\s*([\d\s\*]+)\s*(.*?)(?=\nWaste|\Z)', text, re.IGNORECASE)
+            if pack_match:
+                result['packaging'] = f"{pack_match.group(1).strip()} {pack_match.group(2).strip()}".strip()
+        except Exception as e:
+            logger.warning(f"Could not extract Section 13 waste codes: {e}")
+        return result
+
     # ------------------------------------------------------------------
     # Main gap-filling entry point
     # ------------------------------------------------------------------
@@ -861,6 +917,48 @@ class SDSPDFGapFiller:
         """
         import copy
         data = copy.deepcopy(parsed_data)
+
+        # Clean text helper (deduplication & fixing HTML artifacts like 'gt')
+        def _clean_text(val):
+            if not isinstance(val, str):
+                return val
+            val = re.sub(r'\bgt\s+([\d\.]+)', r'> \1', val)
+            if len(val) > 20:
+                sentences = [s.strip() for s in val.split('. ') if s.strip()]
+                seen = set()
+                unique_s = []
+                for s in sentences:
+                    cmp_s = s.rstrip('.')
+                    if cmp_s not in seen:
+                        seen.add(cmp_s)
+                        unique_s.append(s)
+                if len(unique_s) < len(sentences):
+                    val = '. '.join(unique_s)
+                    if not val.endswith('.') and '.' in val:
+                        val += '.'
+            # Fix duplicate rat
+            val = val.replace('rat (Ratte)', 'Ratte').replace('rabbit (Kaninchen)', 'Kaninchen')
+            return val
+
+        # Clean Section 3 ATE Values
+        try:
+            sec3 = data.get("section_3", {})
+            if "mixture_components" in sec3:
+                for comp in sec3["mixture_components"]:
+                    if comp.get("ate_values"):
+                        comp["ate_values"] = [_clean_text(ate) for ate in comp["ate_values"]]
+            data["section_3"] = sec3
+        except Exception:
+            pass
+
+        # Clean Section 11 Text
+        try:
+            sec11 = data.get("section_11", {})
+            for k, v in sec11.items():
+                sec11[k] = _clean_text(v)
+            data["section_11"] = sec11
+        except Exception:
+            pass
 
         # --- Section 2: Precautionary Statements ---
         try:
@@ -947,6 +1045,21 @@ class SDSPDFGapFiller:
         except Exception as e:
             logger.warning(f"Could not fill Section 8 PPE icons: {e}")
 
+        # --- Section 9: Water solubility ---
+        try:
+            sec9 = data.get("section_9", {})
+            if "safety_data" in sec9:
+                for item in sec9["safety_data"]:
+                    if "solubility" in item.get("parameter", "").lower() and _is_empty(item.get("value")):
+                        text = "\n".join([self._page_text(i) for i in range(4, 7)])
+                        m = re.search(r'Water solubility\s*(completely miscible|vollständig mischbar|[\d\.]+\s*g/l)', text, re.IGNORECASE)
+                        if m and not _is_empty(m.group(1)):
+                            item["value"] = m.group(1).strip()
+                            data["section_9"] = sec9
+                            break
+        except Exception:
+            pass
+
         # --- Section 12: Ecotoxicological Component Data & Text Gaps ---
         try:
             sec12 = data.get("section_12", {})
@@ -986,7 +1099,25 @@ class SDSPDFGapFiller:
         except Exception as e:
             logger.warning(f"Could not fill Section 12 gaps: {e}")
 
-        # --- Section 15: EU Legislation + WGK ---
+        # --- Section 13: Waste Codes ---
+        try:
+            sec13 = data.get("section_13", {})
+            waste_codes = self.extract_section_13_waste_codes()
+            if waste_codes:
+                changed = False
+                if _is_empty(sec13.get("waste_code_product")) and 'product' in waste_codes:
+                    sec13["waste_code_product"] = waste_codes['product']
+                    changed = True
+                if _is_empty(sec13.get("waste_code_packaging")) and 'packaging' in waste_codes:
+                    sec13["waste_code_packaging"] = waste_codes['packaging']
+                    changed = True
+                if changed:
+                    data["section_13"] = sec13
+                    logger.info("Filled Section 13 Waste Codes from PDF")
+        except Exception as e:
+            logger.warning(f"Could not fill Section 13 gaps: {e}")
+
+        # --- Section 15: EU Legislation + WGK + National ---
         try:
             sec15 = data.get("section_15", {})
             changed15 = False
@@ -1002,6 +1133,12 @@ class SDSPDFGapFiller:
                     sec15["wgk"] = wgk
                     changed15 = True
                     logger.info(f"Filled Section 15 WGK from PDF: {wgk}")
+            if _is_empty(sec15.get("national_legislation")):
+                nat_leg = self.extract_section_15_national()
+                if nat_leg:
+                    sec15["national_legislation"] = nat_leg
+                    changed15 = True
+                    logger.info("Filled Section 15 National legislation from PDF")
             if changed15:
                 data["section_15"] = sec15
         except Exception as e:

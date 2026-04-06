@@ -66,6 +66,12 @@ th { font-weight:bold; background:#f0f0f0; }
 .ghs-sm img { height:16px; width:auto; vertical-align:middle; }
 /* ── PPE ── */
 .ppe img { height:36px; width:auto; margin-bottom:4px; vertical-align:middle; mix-blend-mode: multiply; }
+/* ── PPE icons row ── */
+.ppe-icons-row { display:flex; gap:12px; margin:4px 0 6px 0; flex-wrap:wrap; }
+.ppe-icons-row img { height:36px; width:auto; vertical-align:middle; mix-blend-mode: multiply; }
+/* ── PPE icons row ── */
+.ppe-icons-row { display:flex; gap:12px; margin:4px 0 6px 0; flex-wrap:wrap; }
+.ppe-icons-row img { height:36px; width:auto; vertical-align:middle; mix-blend-mode: multiply; }
 /* ── Transport diamonds ── */
 .td-img { height:46px; width:auto; display:block; margin:0 auto; }
 .td-cell { text-align:center; vertical-align:middle; }
@@ -384,28 +390,48 @@ th { font-weight:bold; background:#f0f0f0; }
     <div class="ind">{{ section_8.engineering_controls | default('Provide adequate ventilation.', true) }}</div>
     <div class="ssh">8.2.2. Personal protection equipment</div>
     <div class="ind">
-        <div class="ppe">
+        <!-- All PPE icons in a single row below the heading -->
+        <div class="ppe-icons-row">
             {% if section_8.ppe_icons and section_8.ppe_icons.eye_protection %}
-            <img src="{{ section_8.ppe_icons.eye_protection }}" alt="Eye Protection">
+            <img src="{{ section_8.ppe_icons.eye_protection }}" alt="Eye Protection" onerror="this.style.display='none'">
             {% endif %}
+            {% if section_8.ppe_icons and section_8.ppe_icons.skin_protection %}
+            <img src="{{ section_8.ppe_icons.skin_protection }}" alt="Skin Protection" onerror="this.style.display='none'">
+            {% endif %}
+            {% if section_8.ppe_icons and section_8.ppe_icons.respiratory_protection %}
+            <img src="{{ section_8.ppe_icons.respiratory_protection }}" alt="Respiratory Protection" onerror="this.style.display='none'">
+            {% endif %}
+            {% if section_8.ppe_icons and section_8.ppe_icons.body_protection %}
+            <img src="{{ section_8.ppe_icons.body_protection }}" alt="Body Protection" onerror="this.style.display='none'">
+            {% endif %}
+        </div>
+        
+        <!-- Text content without icons -->
+        <div style="margin-top:2px;">
             <span class="b">Eye/face protection:</span> {{ section_8.eye_protection }}
         </div>
-        <div class="ppe" style="margin-top:4px;">
-            {% if section_8.ppe_icons and section_8.ppe_icons.skin_protection %}
-            <img src="{{ section_8.ppe_icons.skin_protection }}" alt="Skin Protection">
-            {% endif %}
+        <div style="margin-top:3px;">
             <span class="b">Skin protection:</span> {{ section_8.skin_protection }}
         </div>
-        <div class="ppe" style="margin-top:4px;">
-            {% if section_8.ppe_icons and section_8.ppe_icons.respiratory_protection %}
-            <img src="{{ section_8.ppe_icons.respiratory_protection }}" alt="Respiratory Protection">
-            {% endif %}
+        <div style="margin-top:3px;">
             <span class="b">Respiratory protection:</span> {{ section_8.respiratory_protection }}
         </div>
-        <div class="ppe" style="margin-top:4px;">
-            {% if section_8.ppe_icons and section_8.ppe_icons.body_protection %}
-            <img src="{{ section_8.ppe_icons.body_protection }}" alt="Body Protection">
-            {% endif %}
+        <div style="margin-top:3px;">
+            <span class="b">Body protection:</span> {{ section_8.skin_protection }}
+        </div>
+    </div>
+        
+        <!-- Text content without icons -->
+        <div style="margin-top:2px;">
+            <span class="b">Eye/face protection:</span> {{ section_8.eye_protection }}
+        </div>
+        <div style="margin-top:3px;">
+            <span class="b">Skin protection:</span> {{ section_8.skin_protection }}
+        </div>
+        <div style="margin-top:3px;">
+            <span class="b">Respiratory protection:</span> {{ section_8.respiratory_protection }}
+        </div>
+        <div style="margin-top:3px;">
             <span class="b">Body protection:</span> {{ section_8.skin_protection }}
         </div>
     </div>

@@ -131,9 +131,27 @@ def import_sds_to_html(
         # 1c. Fill Section 12 and 16 gaps from PDF if available
         if pdf_path and os.path.exists(pdf_path):
             try:
-                from pdf_section_extractor import extract_sections_from_pdf, parse_section_16, parse_section_12
+                from pdf_section_extractor import extract_sections_from_pdf, parse_section_16, parse_section_12, parse_section_1, parse_section_2
                 pdf_sections = extract_sections_from_pdf(pdf_path)
                 
+                # Fill Section 1 and 2 gaps from PDF
+                if pdf_sections:
+                    if pdf_sections.get('section_1') and 'section_1' in sds_data:
+                        section_1_data = parse_section_1(pdf_sections.get('section_1', ''))
+                        if section_1_data.get('emergency_telephone_name'):
+                            sds_data['section_1']['emergency_phone']['description'] = section_1_data['emergency_telephone_name']
+                            logger.info("Section 1 emergency name filled from PDF")
+                            
+                    if pdf_sections.get('section_2') and 'section_2' in sds_data:
+                        section_2_data = parse_section_2(pdf_sections.get('section_2', ''))
+                        if section_2_data.get('hazard_components'):
+                            sds_data['section_2']['labelling']['hazard_components'] = ", ".join(section_2_data['hazard_components'])
+                        if section_2_data.get('endocrine_disruptors_human'):
+                            if 'other_hazards' not in sds_data['section_2']:
+                                sds_data['section_2']['other_hazards'] = {}
+                            sds_data['section_2']['other_hazards']['health'] = section_2_data['endocrine_disruptors_human']
+                        logger.info("Section 2 gaps filled from PDF")
+
                 # Fill Section 16 gaps from PDF
                 if pdf_sections and pdf_sections.get('section_16'):
                     section_16_data = parse_section_16(pdf_sections.get('section_16', ''))
@@ -200,6 +218,10 @@ def import_sds_to_html(
                                     'biodegradation': comp_data.get('biodegradation', '')
                                 })
                     
+                    # 12.2 Raw Text Fallback
+                    if section_12_data.get('persistence_text'):
+                        sds_data['section_12']['persistence'] = section_12_data['persistence_text']
+                    
                     # 12.3 Bioaccumulative potential - add log_kow and bcf to components
                     if section_12_data.get('bioaccumulative_potential'):
                         bio_data = section_12_data['bioaccumulative_potential']
@@ -227,6 +249,10 @@ def import_sds_to_html(
                                     found = True
                                     break
                     
+                    # 12.3 Raw Text Fallback
+                    if section_12_data.get('bioaccumulation_text'):
+                        sds_data['section_12']['bioaccumulation'] = section_12_data['bioaccumulation_text']
+                    
                     # 12.4 Mobility in soil
                     if section_12_data.get('mobility_in_soil'):
                         mobility_text = '; '.join([v.get('data', '') for v in section_12_data['mobility_in_soil'].values()])
@@ -235,6 +261,8 @@ def import_sds_to_html(
                     
                     # 12.5 Results of PBT and vPvB assessment
                     if section_12_data.get('pbt_vpvb_assessment'):
+                        if section_12_data.get('pbt_text'):
+                            sds_data['section_12']['pbt_result'] = section_12_data['pbt_text']
                         pbt_text = '; '.join([v.get('assessment', '') for v in section_12_data['pbt_vpvb_assessment'].values()])
                         if pbt_text:
                             sds_data['section_12']['pbt_vpvb_info'] = pbt_text

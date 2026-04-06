@@ -172,8 +172,9 @@ class NewSDScomParser:
                 text = get_all_text_from_nodes(stmt, 'FullText')
 
                 if code:
-                    # Prefix with 'P' and add to buffer
-                    code_buffer.append(f"P{code}")
+                    # Prefix with 'P' and remove sub-codes like .4
+                    clean_code = code.split('.')[0]
+                    code_buffer.append(f"P{clean_code}")
 
                 # If text is found, this statement is the end of a (potentially combined) group
                 if text:
@@ -203,7 +204,7 @@ class NewSDScomParser:
             'labelling': {
                 'pictograms': get_all_texts(labelling, 'ClpHazardPictogram/PhraseCode'), 
                 'signal_word': get_text(labelling, 'ClpSignalWord/FullText'), 
-                'hazard_components': hazard_components if hazard_components else None,
+                'hazard_components': ", ".join(hazard_components) if hazard_components else None,
                 'hazard_statements': [{'code': get_text(s, 'PhraseCode'), 'text': get_all_text_from_nodes(s, 'FullText')} for s in labelling.xpath('.//*[local-name()="ClpHazardStatement"]')] if labelling is not None else [],
                 'precautionary_statements': {
                     'prevention': prevention_stmts,
@@ -216,10 +217,18 @@ class NewSDScomParser:
     def _parse_section_3(self, section: etree._Element) -> Dict[str, Any]:
         components = []
         for c in section.xpath('.//*[local-name()="Component"]'):
+            lower_conc = get_text(c, 'Concentration/LowerValue')
+            upper_conc = get_text(c, 'Concentration/UpperValue')
+            unit_conc = get_text(c, 'Concentration/Unit')
+            if lower_conc and upper_conc:
+                conc_str = f"{lower_conc} - < {upper_conc} {unit_conc}"
+            else:
+                conc_str = f"{lower_conc or upper_conc} {unit_conc}"
+                
             component_data = {
-                'name': get_text(c, 'Substance/GenericName'), 'cas': get_text(c, 'Substance/CasNo'), 'ec': get_text(c, 'Substance/EcNo'), 'reach_no': get_text(c, 'Substance/ReachRegistration/RegistrationNumber'),
-                'concentration': f"{get_text(c, 'Concentration/LowerValue')} - {get_text(c, 'Concentration/UpperValue')} {get_text(c, 'Concentration/Unit')}",
-                'classification': [f"{get_text(cl, 'ClpHazardClassCategory')}: {get_all_text_from_nodes(cl, 'ClpHazardStatement/FullText')}" for cl in c.xpath('.//*[local-name()="ClpHazardClassification"]')],
+                'name': get_text(c, 'Substance/GenericName'), 'cas': get_text(c, 'Substance/CasNo'), 'ec': get_text(c, 'Substance/EcNo'), 'reach_no': get_text(c, 'Substance/ReachRegistration/RegistrationNumber'), 'index_no': get_text(c, 'Substance/IndexNo'),
+                'concentration': conc_str,
+                'classification': [f"{get_text(cl, 'ClpHazardClassCategory')} (H{get_text(cl, 'ClpHazardStatement/PhraseCode')}): {get_all_text_from_nodes(cl, 'ClpHazardStatement/FullText')}" for cl in c.xpath('.//*[local-name()="ClpHazardClassification"]')],
                 'toxicological_info': [],
                 'ate_values': [],
                 'pictograms': get_all_texts(c, 'ClpHazardPictogram/PhraseCode'),
@@ -228,7 +237,36 @@ class NewSDScomParser:
             tox_info = self._xpath_single(c, "ToxicologicalInformation")
             if tox_info is not None:
                 for test_result in tox_info.xpath('.//*[local-name()="TestResults"]'):
-                    component_data['toxicological_info'].append(f"{get_text(test_result, 'EffectTested')} {get_text(test_result, 'ExposureRoute')}: {get_all_text_from_nodes(test_result, 'Value')} ({get_text(test_result, 'Species/Value/FullText')})")
+                    effect = get_text(test_result, 'EffectTested')
+                    route = get_text(test_result, 'ExposureRoute')
+                    val_node = test_result.xpath('.//*[local-name()="Value"]')
+                    exact = get_text(val_node[0], 'ExactValue') if val_node else ''
+                    lower = get_text(val_node[0], 'LowerValue') if val_node else ''
+                    upper = get_text(val_node[0], 'UpperValue') if val_node else ''
+                    sym = get_text(val_node[0], 'LowerValueSymbol') or get_text(val_node[0], 'UpperValueSymbol') if val_node else ''
+                    unit = get_text(val_node[0], 'Unit') if val_node else 'mg/kg'
+                    raw_num = exact or lower or upper
+                    try:
+                        num = float(raw_num)
+                        formatted = f"{num:,g}"
+                        if sym in ('>', 'gt', 'GT'):
+                            formatted = f"&gt; {formatted}"
+                    except ValueError:
+                        formatted = raw_num
+                    route_lower = route.lower()
+                    if 'oral' in route_lower:
+                        label = 'ATE (oral)'
+                    elif 'dermal' in route_lower:
+                        label = 'ATE (dermal)'
+                    elif 'vapour' in route_lower or 'vapor' in route_lower:
+                        label = 'ATE (inhalation, vapour)'
+                    elif 'dust' in route_lower or 'mist' in route_lower:
+                        label = 'ATE (inhalation, dust/mist)'
+                    elif 'inhal' in route_lower:
+                        label = 'ATE (inhalation)'
+                    else:
+                        label = f'ATE ({route.lower()})' if route else effect
+                    component_data['ate_values'].append({'label': label, 'value': formatted, 'unit': unit})
             components.append(component_data)
         return {'mixture_components': components}
         
@@ -247,7 +285,7 @@ class NewSDScomParser:
         return {'personal_precautions': get_all_text_from_nodes(section, 'ForNonEmergencyPersonnel/PersonalPrecautions'), 'protective_equipment': get_text(section, 'ForNonEmergencyPersonnel/ProtectiveEquipment'), 'emergency_responders': get_text(section, 'ForEmergencyResponders'), 'environmental_precautions': get_text(section, 'EnvironmentalPrecautions'), 'containment': get_text(section, 'ContainmentAndCleaningUp/Containment'), 'cleaning': get_text(section, 'ContainmentAndCleaningUp/CleaningUp'), 'other_sections': get_all_text_from_nodes(section, 'ReferenceToOtherSections'), 'additional_info': get_text(section, 'AdditionalInformation')}
 
     def _parse_section_7(self, section: etree._Element) -> Dict:
-        return {'safe_handling': get_all_text_from_nodes(section, 'SafeHandling/HandlingPrecautions'), 'fire_prevention': get_all_text_from_nodes(section, 'SafeHandling/PrecautionaryMeasures/MeasuresToPreventFire'), 'occupational_hygiene': get_all_text_from_nodes(section, 'SafeHandling/GeneralOccupationalHygiene'), 'storage_conditions': get_all_text_from_nodes(section, 'ConditionsForSafeStorage/TechnicalMeasuresAndStorageConditions'), 'storage_rooms': get_all_text_from_nodes(section, 'ConditionsForSafeStorage/RequirementsForStorageRoomsAndVessels'), 'storage_assembly': get_all_text_from_nodes(section, 'ConditionsForSafeStorage/HintsOnStorageAssembly'), 'specific_end_use': get_text(section, 'SpecificEndUses')}
+        return {'safe_handling': get_all_text_from_nodes(section, 'SafeHandling/HandlingPrecautions'), 'fire_prevention': get_all_text_from_nodes(section, 'SafeHandling/PrecautionaryMeasures/MeasuresToPreventFire'), 'occupational_hygiene': get_all_text_from_nodes(section, 'SafeHandling/GeneralOccupationalHygiene'), 'storage_conditions': get_all_text_from_nodes(section, 'ConditionsForSafeStorage/TechnicalMeasuresAndStorageConditions'), 'storage_rooms': get_all_text_from_nodes(section, 'ConditionsForSafeStorage/RequirementsForStorageRoomsAndVessels'), 'storage_assembly': get_all_text_from_nodes(section, 'ConditionsForSafeStorage/HintsOnStorageAssembly'), 'further_storage_conditions': get_all_text_from_nodes(section, 'ConditionsForSafeStorage/FurtherInformationOnStorageConditions'), 'specific_end_use': get_text(section, 'SpecificEndUses')}
 
     def _parse_section_8(self, section: etree._Element) -> Dict:
         # Extract Occupational Exposure Limits (OEL) from XML
@@ -290,6 +328,7 @@ class NewSDScomParser:
             'respiratory_protection': get_all_text_from_nodes(section, 'PersonalProtectionEquipment/RespiratoryProtection'),
             'eye_protection': get_all_text_from_nodes(section, 'PersonalProtectionEquipment/EyeProtection'),
             'skin_protection': get_all_text_from_nodes(section, 'PersonalProtectionEquipment/SkinProtection'),
+            'other_protection': get_all_text_from_nodes(section, 'PersonalProtectionEquipment/OtherProtectionMeasures'),
             'environmental_exposure': get_text(section, 'EnvironmentalExposureControls'),
         }
 
@@ -339,13 +378,16 @@ class NewSDScomParser:
             form = get_text(appearance_node, "Form")
             if form and form.lower() != 'other': 
                 appearance_parts.append(f"Form: {form}")
+            state = get_text(appearance_node, "PhysicalState/FullText") or get_text(appearance_node, "PhysicalState")
+            if state:
+                appearance_parts.append(f"Physical state: {state}")
             color = get_text(appearance_node, "ColourDescription/FullText")
             if color: 
                 appearance_parts.append(f"Color: {color}")
             odour = get_text(appearance_node, "Odour/FullText")
             if odour: 
                 appearance_parts.append(f"Odour: {odour}")
-        appearance_str = ", ".join(appearance_parts)
+        appearance_str = "<br>".join(appearance_parts)
 
         return {'appearance': appearance_str, 'safety_data': safety_data}
 
